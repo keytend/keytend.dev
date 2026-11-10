@@ -1,0 +1,263 @@
+---
+// The site footer, a <footer> landmark (contentinfo). Starlight renders it
+// inside <main> (Footer.astro); src/middleware.ts moves it to just after
+// </main>, so it sits in the same column outside the main landmark. The
+// wrapper below repeats Starlight's content-panel padding and width there.
+import KeytendMark from './KeytendMark.astro';
+import { products, project } from '../../data/products';
+
+interface Props {
+  /** Docs pages: a compact footer that fits the content column. */
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
+const java = products['kmip-java'];
+const server = products['kmip-server'];
+
+const columns = [
+  {
+    title: 'Projects',
+    links: [
+      { label: java.title, href: java.overview },
+      { label: server.title, href: server.overview },
+      { label: 'Downloads', href: '/downloads/' },
+      { label: 'News', href: '/news/' },
+    ],
+  },
+  {
+    title: 'Documentation',
+    links: [
+      { label: 'Java SDK docs', href: java.docs },
+      { label: 'Java SDK getting started', href: java.start },
+      { label: 'Server docs', href: server.docs },
+      { label: 'Server quick start', href: server.start },
+    ],
+  },
+  {
+    title: 'Community',
+    links: [
+      { label: 'Questions and bugs', href: '/community/#issues' },
+      { label: 'Reporting a vulnerability', href: '/community/#security' },
+      { label: 'What “experimental” means', href: '/community/#experimental' },
+      { label: 'GitHub', href: project.github },
+    ],
+  },
+];
+---
+
+<footer class="kt-site-footer" data-kt-site-footer data-pagefind-ignore>
+<div class="kt-site-footer__inner">
+{
+  compact ? (
+    <div class="kt-footer kt-footer--compact">
+      <div class="kt-footer__grid">
+        {columns.map((column) => (
+          <nav class="kt-footer__col" aria-label={`Footer: ${column.title.toLowerCase()}`}>
+            <p class="kt-footer__heading">{column.title}</p>
+            <ul>
+              {column.links.map((link) => (
+                <li>
+                  <a href={link.href}>{link.label}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))}
+      </div>
+      <p class="kt-footer__legal">
+        <a class="kt-footer__brand kt-footer__brand--small" href="/">
+          <KeytendMark size={18} />
+          <span>keytend</span>
+        </a>
+        <span>
+          Licensed under the <a href={project.licenseUrl}>Apache License, Version 2.0</a>.
+        </span>
+      </p>
+    </div>
+  ) : (
+    <div class="kt-footer kt-bleed">
+      <div class="kt-footer__grid">
+        <div class="kt-footer__about">
+          <a class="kt-footer__brand" href="/">
+            <KeytendMark size={24} />
+            <span>keytend</span>
+          </a>
+          <p>
+            <span class="kt-nw">keytend-kmip</span> is a Java SDK for connecting to KMIP servers.{' '}
+            <span class="kt-nw">keytend-kmip-server</span> runs a KMIP server for client tests and CI.
+            Both are experimental; do not use them for real keys or data.
+          </p>
+          <p class="kt-footer__mail">
+            Security reports: <a href={`mailto:${project.securityEmail}`}>{project.securityEmail}</a>
+          </p>
+        </div>
+        {columns.map((column) => (
+          <nav class="kt-footer__col" aria-label={`Footer: ${column.title.toLowerCase()}`}>
+            <p class="kt-footer__heading">{column.title}</p>
+            <ul>
+              {column.links.map((link) => (
+                <li>
+                  <a href={link.href}>{link.label}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))}
+      </div>
+      <p class="kt-footer__legal">
+        <span>
+          Licensed under the <a href={project.licenseUrl}>Apache License, Version 2.0</a>.
+        </span>
+      </p>
+    </div>
+  )
+}
+</div>
+</footer>
+
+<style>
+  /* Starlight's content panel, outside <main>. */
+  .kt-site-footer {
+    padding: 0 var(--sl-content-pad-x) 1.5rem;
+  }
+  .kt-site-footer__inner {
+    max-width: var(--sl-content-width);
+  }
+  @media (min-width: 72rem) {
+    .kt-site-footer__inner {
+      margin-inline: var(--sl-content-margin-inline, auto);
+    }
+  }
+
+  .kt-footer {
+    --kt-bleed-bg: var(--kt-bg-raised);
+    font-size: var(--kt-text-sm);
+    color: var(--kt-text-muted);
+  }
+  .kt-footer:not(.kt-footer--compact) {
+    /* Also fill the window below the footer on short pages. */
+    clip-path: inset(0 -100vmax -100vmax);
+    position: relative;
+    /* The content panel above ends with 1.5rem of padding. */
+    margin-top: calc(var(--kt-section-gap) - 1.5rem);
+    padding-block: 3rem 2rem;
+  }
+  .kt-footer:not(.kt-footer--compact)::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    inset-inline: -100vmax;
+    height: 1px;
+    background-color: var(--kt-border);
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  a {
+    color: var(--kt-text);
+    text-decoration: none;
+  }
+  a:hover {
+    color: var(--kt-text-strong);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .kt-footer__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 2rem 1.5rem;
+  }
+  .kt-footer__about {
+    grid-column: 1 / -1;
+    max-width: 24rem;
+  }
+  .kt-footer__about p {
+    margin: 0.75rem 0 0;
+    line-height: 1.6;
+  }
+  .kt-footer__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--kt-text-strong);
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .kt-footer__brand:hover {
+    text-decoration: none;
+    color: var(--kt-text-strong);
+  }
+  .kt-footer__mail a {
+    color: var(--kt-brand);
+  }
+  .kt-footer__heading {
+    margin: 0 0 0.75rem;
+    font-size: var(--kt-text-xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--kt-text-strong);
+  }
+  .kt-footer__col li + li {
+    margin-top: 0.5rem;
+  }
+  .kt-footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.5rem;
+    margin: 2.5rem 0 0;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--kt-border);
+    font-size: var(--kt-text-xs);
+  }
+  .kt-footer__legal a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  /* Phones: the last group spans the row instead of sitting in half of it. */
+  @media (max-width: 39.99rem) {
+    .kt-footer__grid > :last-child {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (min-width: 40rem) {
+    .kt-footer__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (min-width: 62rem) {
+    .kt-footer__grid {
+      grid-template-columns: 1.6fr repeat(3, 1fr);
+    }
+    .kt-footer__about {
+      grid-column: auto;
+    }
+  }
+
+  /* Compact (docs pages): the same link groups, sized for the content column. */
+  .kt-footer--compact {
+    margin-top: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--kt-border);
+  }
+  .kt-footer--compact .kt-footer__grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 10.5rem), 1fr));
+  }
+  .kt-footer--compact .kt-footer__legal {
+    align-items: center;
+    margin-top: 2rem;
+  }
+  .kt-footer__legal .kt-footer__brand--small {
+    margin-inline-end: 0.5rem;
+    font-size: var(--kt-text-sm);
+    gap: 0.375rem;
+    color: var(--kt-text-strong);
+    text-decoration: none;
+  }
+</style>

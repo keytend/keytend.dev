@@ -1,0 +1,371 @@
+---
+// Site header, shared by every page (marketing pages and docs).
+// From 66rem: brand, the main navigation, search, GitHub and the theme
+// picker (search is an icon button until 78rem, where it gets its label).
+// Narrower: brand, search and a menu button that opens the site menu, a
+// layer that fills the window below the header. On docs pages below 50rem
+// Starlight's own sidebar toggle (styled to match, in theme.css) takes the
+// menu button's place, and the site navigation sits at the foot of that menu
+// (MobileMenuFooter).
+import { Icon } from '@astrojs/starlight/components';
+import Search from './Search.astro';
+import ThemeSelect from '@astrojs/starlight/components/ThemeSelect.astro';
+import KeytendMark from '../site/KeytendMark.astro';
+import SiteNavList from '../site/SiteNavList.astro';
+import { isCurrent, navLinks, normalizePath, projectCurrent, projectLinks } from '../site/nav';
+import { project } from '../../data/products';
+
+const pathname = normalizePath(Astro.url.pathname);
+---
+
+<div class="kt-header">
+  <a class="kt-brand" href="/" aria-label="Keytend home">
+    <KeytendMark size={28} />
+    <span class="kt-brand__word" aria-hidden="true">keytend</span>
+  </a>
+
+  <nav class="kt-nav" aria-label="Site">
+    <ul class="kt-nav__list">
+      {
+        projectLinks.map((link) => (
+          <li class="kt-nav__item">
+            <a href={link.href} class="kt-nav__link" aria-current={projectCurrent(pathname, link.slug)}>
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+      <li class="kt-nav__sep" aria-hidden="true"></li>
+      {
+        navLinks.map((link) => (
+          <li class="kt-nav__item">
+            <a
+              href={link.href}
+              class="kt-nav__link"
+              aria-current={isCurrent(pathname, [link.href]) ? 'page' : undefined}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  <div class="kt-actions">
+    <div class="kt-search"><Search /></div>
+    <a class="kt-icon-link kt-wide-only" href={project.github}>
+      <Icon name="github" size="1.25rem" />
+      <span class="sr-only">Keytend on GitHub</span>
+    </a>
+    <div class="kt-theme kt-wide-only"><ThemeSelect /></div>
+    <button
+      type="button"
+      class="kt-menu-toggle"
+      popovertarget="kt-site-menu"
+      aria-label="Site menu"
+    >
+      <Icon name="bars" class="kt-menu-toggle__open" size="1.25rem" />
+      <Icon name="close" class="kt-menu-toggle__close" size="1.25rem" />
+    </button>
+  </div>
+
+  <div id="kt-site-menu" class="kt-site-menu" popover>
+    <SiteNavList />
+    <div class="kt-site-menu__prefs">
+      <span>Theme</span>
+      <ThemeSelect />
+    </div>
+  </div>
+</div>
+
+<script>
+  // Phone and tablet site menu. While it covers the page, everything outside
+  // the header is inert, Tab cycles through the header and the menu, and
+  // closing it (toggle, Escape, outside click) returns focus to the toggle.
+  const menu = document.getElementById('kt-site-menu');
+  const toggle = document.querySelector<HTMLButtonElement>('.kt-menu-toggle');
+  const header = menu?.closest<HTMLElement>('header');
+  if (menu && toggle && header) {
+    const outside = () => {
+      const els: HTMLElement[] = [];
+      for (let el: HTMLElement | null = header; el && el !== document.body; el = el.parentElement) {
+        for (const sibling of Array.from(el.parentElement?.children ?? [])) {
+          if (sibling !== el && sibling instanceof HTMLElement && !['SCRIPT', 'STYLE'].includes(sibling.tagName)) {
+            els.push(sibling);
+          }
+        }
+      }
+      return els;
+    };
+    let made: HTMLElement[] = [];
+    const focusables = () =>
+      Array.from(
+        header.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), select:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      ).filter((el) => el.getClientRects().length > 0 && !el.closest('[hidden], [inert]'));
+    const onKeydown = (event: KeyboardEvent) => {
+      if (event.key !== 'Tab') return;
+      const list = focusables();
+      if (list.length === 0) return;
+      const first = list[0];
+      const last = list[list.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    menu.addEventListener('toggle', (event) => {
+      const open = (event as ToggleEvent).newState === 'open';
+      if (open) {
+        made = outside().filter((el) => !el.inert);
+        for (const el of made) el.inert = true;
+        document.addEventListener('keydown', onKeydown);
+      } else {
+        for (const el of made) el.inert = false;
+        made = [];
+        document.removeEventListener('keydown', onKeydown);
+        const active = document.activeElement;
+        if (!active || active === document.body || menu.contains(active)) toggle.focus();
+      }
+    });
+    // The menu exists only below 66rem: close it when the window grows past.
+    const wide = window.matchMedia('(min-width: 66rem)');
+    wide.addEventListener('change', () => {
+      if (wide.matches && menu.matches(':popover-open')) menu.hidePopover();
+    });
+  }
+</script>
+
+<style>
+  .kt-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: 100%;
+  }
+
+  /* Brand */
+  .kt-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5625rem;
+    padding: 0.25rem;
+    margin: -0.25rem;
+    color: var(--kt-text-strong);
+    text-decoration: none;
+    flex: none;
+  }
+  .kt-brand__word {
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1;
+    padding-bottom: 0.125rem;
+  }
+
+  /* Main navigation (wide screens only) */
+  .kt-nav {
+    display: none;
+  }
+  .kt-nav__list {
+    display: flex;
+    align-items: center;
+    gap: 0.125rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .kt-nav__item {
+    position: relative;
+  }
+  /* Between the projects and the site pages. */
+  .kt-nav__sep {
+    width: 1px;
+    height: 1.25rem;
+    margin-inline: 0.5rem;
+    background-color: var(--kt-border-strong);
+  }
+  .kt-nav__link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    height: 2.25rem;
+    padding: 0 0.75rem;
+    border: 0;
+    border-radius: var(--kt-radius-sm);
+    background: none;
+    color: var(--kt-text);
+    font: inherit;
+    font-size: var(--kt-text-sm);
+    font-weight: 500;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  .kt-nav__link:hover {
+    color: var(--kt-text-strong);
+    background-color: var(--kt-surface-2);
+  }
+  .kt-nav__link[aria-current] {
+    color: var(--kt-text-strong);
+  }
+  .kt-nav__link[aria-current]::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0.75rem;
+    bottom: -0.875rem;
+    height: 2px;
+    border-radius: 2px;
+    background-color: var(--kt-brand);
+  }
+
+
+  /* Actions */
+  .kt-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-inline-start: auto;
+    min-width: 0;
+  }
+  .kt-search {
+    display: flex;
+  }
+  @media (min-width: 50rem) {
+    .kt-search :global(button[data-open-modal]) {
+      width: 13rem;
+      height: 2.25rem;
+      background-color: var(--kt-surface);
+      border-color: var(--kt-border-strong);
+    }
+  }
+  /* Beside the full navigation, search is an icon button until there is room. */
+  @media (min-width: 66rem) and (max-width: 77.99rem) {
+    .kt-search :global(button[data-open-modal]) {
+      justify-content: center;
+      width: 2.25rem;
+      padding: 0;
+      font-size: 1rem;
+    }
+    .kt-search :global(button[data-open-modal] > :not(svg)) {
+      display: none;
+    }
+  }
+  .kt-icon-link {
+    display: inline-flex;
+    padding: 0.5rem;
+    margin-block: -0.25rem;
+    margin-inline: -0.25rem 0.25rem;
+    border-radius: var(--kt-radius-sm);
+    color: var(--kt-text);
+  }
+  .kt-icon-link:hover {
+    color: var(--kt-text-strong);
+  }
+  .kt-theme :global(starlight-theme-select) {
+    display: flex;
+  }
+  .kt-wide-only {
+    display: none;
+  }
+
+  .kt-menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-inline-end: -0.5rem;
+    border: 0;
+    border-radius: var(--kt-radius-sm);
+    background: none;
+    color: var(--kt-text-strong);
+    cursor: pointer;
+  }
+  .kt-menu-toggle:hover,
+  .kt-header:has(.kt-site-menu:popover-open) .kt-menu-toggle {
+    background-color: var(--kt-surface-2);
+  }
+  .kt-menu-toggle :global(.kt-menu-toggle__close),
+  .kt-header:has(.kt-site-menu:popover-open) :global(.kt-menu-toggle__open) {
+    display: none;
+  }
+  .kt-header:has(.kt-site-menu:popover-open) :global(.kt-menu-toggle__close) {
+    display: block;
+  }
+  /* Starlight's sidebar toggle replaces this button on narrow docs pages. */
+  :global([data-has-sidebar]) .kt-menu-toggle {
+    display: none;
+  }
+
+  /* Phone / tablet site menu: a popover (so it closes on Escape and outside
+     clicks) that fills the window below the header, like Starlight's docs
+     menu. The header stays above it at full strength. */
+  .kt-site-menu {
+    position: fixed;
+    inset: var(--sl-nav-height) 0 0 0;
+    width: 100%;
+    height: auto;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 1rem var(--sl-nav-pad-x) 2rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border: 0;
+    border-top: 1px solid var(--kt-border);
+    background-color: var(--kt-bg);
+    color: var(--kt-text);
+  }
+  .kt-site-menu::backdrop {
+    background: none;
+  }
+  .kt-site-menu > :global(*) {
+    max-width: 36rem;
+    margin-inline: auto;
+  }
+  :global(body:has(.kt-site-menu:popover-open)) {
+    overflow: hidden;
+  }
+  .kt-site-menu__prefs {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1rem;
+    padding: 0.75rem 0.75rem 0;
+    border-top: 1px solid var(--kt-border);
+    font-size: var(--kt-text-sm);
+    color: var(--kt-text-muted);
+  }
+
+  @media (min-width: 50rem) {
+    :global([data-has-sidebar]) .kt-menu-toggle {
+      display: inline-flex;
+    }
+  }
+
+  @media (min-width: 66rem) {
+    .kt-header {
+      gap: 1.5rem;
+    }
+    .kt-nav {
+      display: block;
+    }
+    .kt-wide-only {
+      display: inline-flex;
+    }
+    .kt-menu-toggle,
+    :global([data-has-sidebar]) .kt-menu-toggle {
+      display: none;
+    }
+    .kt-site-menu {
+      display: none;
+    }
+  }
+
+</style>

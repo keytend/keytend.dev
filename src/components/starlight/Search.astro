@@ -1,0 +1,173 @@
+---
+// Site search (overrides Starlight's Search). The header button keeps
+// Starlight's markup and classes, so the header's own sizing rules still
+// apply. The dialog is ours: it queries the Pagefind index that Starlight
+// builds (`npm run build`) through Pagefind's JS API and renders results,
+// project chips and section links itself. Logic: ../search/search.ts.
+import { Icon } from '@astrojs/starlight/components';
+import { searchProjects, searchExamples } from '../search/projects';
+import '../search/search.css';
+
+const docs = /^(kmip-java|kmip-server)\/docs\//.exec(Astro.locals.starlightRoute?.id ?? '')?.[1] as keyof typeof searchExamples | undefined;
+const examples = searchExamples[docs ?? 'site'];
+---
+
+<kt-site-search class={Astro.props.class} data-dev={import.meta.env.DEV ? '' : undefined}>
+  <button
+    type="button"
+    data-open-modal
+    disabled
+    aria-label="Search"
+    aria-haspopup="dialog"
+    aria-keyshortcuts="Control+K /"
+  >
+    <Icon name="magnifier" />
+    <span class="sl-hidden md:sl-block" aria-hidden="true">Search</span>
+    <kbd class="sl-hidden md:sl-flex" style="display: none"><kbd>Ctrl</kbd><kbd>K</kbd></kbd>
+  </button>
+
+  <dialog class="kt-sd" aria-label="Search the site">
+    <div class="kt-sd__frame">
+      <form class="kt-sd__bar" role="search" action="javascript:void 0">
+        <Icon name="magnifier" class="kt-sd__bar-icon" size="1.125rem" />
+        <label class="sr-only" for="kt-sd-input">Search the site</label>
+        <input
+          id="kt-sd-input"
+          class="kt-sd__input"
+          type="search"
+          placeholder="Search the site"
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+          enterkeyhint="go"
+          aria-controls="kt-sd-results"
+          aria-describedby="kt-sd-status"
+        />
+        <button type="button" class="kt-sd__close" data-close-modal aria-label="Close search, Esc" aria-keyshortcuts="Escape">
+          <span class="kt-sd__close-wide">Esc</span>
+          <Icon name="close" class="kt-sd__close-narrow" size="1.25rem" />
+        </button>
+      </form>
+
+      <div class="kt-sd__chips" role="group" aria-label="Project">
+        {
+          searchProjects.map((p) => (
+            <button
+              type="button"
+              class="kt-sd__chip"
+              data-project={p.value}
+              aria-pressed={p.value === '' ? 'true' : 'false'}
+            >
+              <span>{p.chip}</span>
+              <span class="kt-sd__chip-count" data-count />
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="kt-sd__body" data-body>
+        <p id="kt-sd-status" class="kt-sd__status" role="status" aria-live="polite" aria-atomic="true"></p>
+        <div class="kt-sd__intro" data-intro>
+          {
+            import.meta.env.DEV ? (
+              <p>Search needs the Pagefind index, which only <code>npm run build</code> creates. Run <code>npm run build && npm run preview</code> to try it.</p>
+            ) : (
+              <>
+                <p>Search the keytend-kmip and keytend-kmip-server docs and the site pages. A word prefix is enough: <q>conf</q> finds configuration.</p>
+                <p class="kt-sd__examples">
+                  <span>Try</span>
+                  {examples.map((q) => (
+                    <button type="button" class="kt-sd__example" data-example={q}>{q}</button>
+                  ))}
+                </p>
+              </>
+            )
+          }
+        </div>
+        <div class="kt-sd__message" data-message hidden></div>
+        <ol id="kt-sd-results" class="kt-sd__results" aria-label="Results" data-results hidden></ol>
+        <button type="button" class="kt-sd__more" data-more data-nav hidden>Show more results</button>
+      </div>
+
+      <div class="kt-sd__foot" aria-hidden="true">
+        <span><kbd>↑</kbd><kbd>↓</kbd> move</span>
+        <span><kbd>Enter</kbd> open</span>
+        <span><kbd>Esc</kbd> close</span>
+        <span class="kt-sd__foot-end"><kbd>/</kbd> or <kbd data-platform-key>Ctrl</kbd><kbd>K</kbd> to search from any page</span>
+      </div>
+    </div>
+  </dialog>
+</kt-site-search>
+
+{/* Inlined (as in Starlight) so the shortcut hint never shows the wrong key. navigator.platform
+    is used on purpose: the user agent is spoofed when devtools are open. */}
+<script is:inline>
+  (() => {
+    const mac = /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform);
+    const openBtn = document.querySelector('button[data-open-modal]');
+    const shortcut = openBtn?.querySelector('kbd');
+    if (!openBtn || !(shortcut instanceof HTMLElement)) return;
+    if (mac) {
+      const key = shortcut.querySelector('kbd');
+      if (key) key.textContent = '⌘';
+      openBtn.setAttribute('aria-keyshortcuts', 'Meta+K /');
+      document.querySelectorAll('[data-platform-key]').forEach((k) => (k.textContent = '⌘'));
+    }
+    shortcut.style.display = '';
+  })();
+</script>
+
+<script>
+  import { defineSiteSearch } from '../search/search';
+  defineSiteSearch();
+</script>
+
+<style>
+  /* The header button, as Starlight draws it; the header's own rules (unlayered) size it. */
+  @layer starlight.core {
+    kt-site-search {
+      display: contents;
+    }
+    button[data-open-modal] {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 0;
+      background-color: transparent;
+      color: var(--sl-color-gray-1);
+      cursor: pointer;
+      height: 2.5rem;
+      font-size: var(--sl-text-xl);
+    }
+    @media (min-width: 50rem) {
+      button[data-open-modal] {
+        border: 1px solid var(--sl-color-gray-5);
+        border-radius: 0.5rem;
+        padding-inline-start: 0.75rem;
+        padding-inline-end: 0.5rem;
+        background-color: var(--sl-color-black);
+        color: var(--sl-color-gray-2);
+        font-size: var(--sl-text-sm);
+        width: 100%;
+        max-width: 22rem;
+      }
+      button[data-open-modal]:hover {
+        border-color: var(--sl-color-gray-2);
+        color: var(--sl-color-white);
+      }
+      button[data-open-modal] > :last-child {
+        margin-inline-start: auto;
+      }
+    }
+    button > kbd {
+      border-radius: 0.25rem;
+      font-size: var(--sl-text-2xs);
+      gap: 0.25em;
+      padding-inline: 0.375rem;
+      background-color: var(--sl-color-gray-6);
+    }
+    kbd {
+      font-family: var(--__sl-font);
+    }
+  }
+</style>

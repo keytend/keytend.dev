@@ -1,0 +1,28 @@
+---
+// Foot of Starlight's sidebar menu on narrow docs pages: the site navigation
+// (which the header hides there), then Starlight's GitHub icon link and theme
+// picker. The GitHub icon link is the menu's only GitHub link.
+import Default from '@astrojs/starlight/components/MobileMenuFooter.astro';
+import SiteNavList from '../site/SiteNavList.astro';
+---
+
+<div class="kt-mobile-site-nav">
+  <p class="kt-mobile-site-nav__title">Keytend site</p>
+  <SiteNavList github={false} />
+</div>
+<Default />
+
+<style>
+  .kt-mobile-site-nav {
+    margin-top: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--kt-border);
+  }
+  .kt-mobile-site-nav__title {
+    margin: 0 0 0.75rem;
+    padding-inline: 0.75rem;
+    font-size: var(--kt-text-sm);
+    font-weight: 600;
+    color: var(--kt-text-strong);
+  }
+</style>

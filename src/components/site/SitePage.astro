@@ -1,0 +1,411 @@
+---
+// Wraps a marketing page in Starlight (same header, search, theme and footer
+// as the docs) with the splash template. The page draws its own heading: the
+// hero frontmatter only switches Starlight to its single-panel hero layout,
+// and the Hero override renders nothing for these routes.
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { keepTokensTogether } from './wrap';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Search label and filter: which project the page is about (the docs use the same values). */
+  project?: 'keytend-kmip (Java)' | 'keytend-kmip-server' | 'Keytend';
+  /** Title shown in search results, when it should differ from `title`. */
+  searchTitle?: string;
+}
+const { title, description, project = 'Keytend', searchTitle = title } = Astro.props;
+const head = [
+  { tag: 'meta' as const, attrs: { 'data-pagefind-meta': 'title[content]', content: `${searchTitle} · ${project}` } },
+  { tag: 'meta' as const, attrs: { 'data-pagefind-filter': 'project[content]', content: project } },
+];
+// Product names and short inline code do not break across lines (wrap.ts).
+const body = keepTokensTogether(await Astro.slots.render('default'));
+---
+
+<StarlightPage frontmatter={{ title, description, template: 'splash', hero: { title }, pagefind: true, head }}>
+  <div class="kt-page not-content">
+    <Fragment set:html={body} />
+  </div>
+</StarlightPage>
+
+<style is:global>
+  /* Marketing-page typography and layout primitives. */
+  .kt-page {
+    color: var(--kt-text);
+    font-size: var(--kt-text-base);
+    line-height: 1.65;
+  }
+  .kt-page :is(h1, h2, h3, h4) {
+    color: var(--kt-text-strong);
+    font-weight: 600;
+    line-height: 1.15;
+    margin: 0;
+  }
+  .kt-page p {
+    margin: 0;
+  }
+  .kt-page code:not(pre code) {
+    padding: 0.0625rem 0.2em;
+    border-radius: 0.25rem;
+    background-color: var(--kt-surface-2);
+    font-family: var(--kt-font-mono);
+    font-size: 0.875em;
+    color: var(--kt-text-strong);
+  }
+  .kt-page :is(p, li, dd, span, strong) > a:not([class*='kt-']) {
+    color: var(--kt-brand);
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
+  .kt-page :is(p, li, dd, span, strong) > a:not([class*='kt-']):hover {
+    text-decoration-thickness: 2px;
+  }
+
+  /* Page heading block */
+  .kt-pagehead {
+    position: relative;
+    padding-block: clamp(1.5rem, 0.75rem + 3vw, 3.25rem) clamp(1rem, 0.5rem + 2vw, 2rem);
+  }
+  .kt-pagehead h1 {
+    margin-top: 0.75rem;
+    font-size: var(--kt-text-display);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+  .kt-pagehead .kt-lead {
+    margin-top: 1rem;
+    max-width: 44rem;
+    font-size: var(--kt-text-lg);
+    line-height: 1.6;
+    color: var(--kt-text);
+  }
+  .kt-pagehead .kt-pills {
+    margin-top: 1.25rem;
+  }
+  .kt-actions-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+  /* The product pages' link to the other project, under the buttons. */
+  .kt-pagehead .kt-prodhero__other {
+    margin-top: 1.25rem;
+    font-size: var(--kt-text-sm);
+    color: var(--kt-text-muted);
+  }
+  /* On a phone the buttons stack at full width rather than leaving one alone on a second row. */
+  @media (max-width: 29.99rem) {
+    .kt-actions-row {
+      flex-direction: column;
+    }
+  }
+  .kt-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  /* Sections */
+  .kt-section {
+    margin-top: var(--kt-section-gap);
+  }
+  .kt-section,
+  .kt-page h2[id] {
+    scroll-margin-top: calc(var(--sl-nav-height) + 1.5rem);
+  }
+  .kt-section-head {
+    max-width: 46rem;
+    margin-bottom: 1.75rem;
+  }
+  .kt-section-head h2 {
+    margin-top: 0.5rem;
+    font-size: var(--kt-text-2xl);
+    letter-spacing: -0.02em;
+  }
+  .kt-section-head p {
+    margin-top: 0.75rem;
+    color: var(--kt-text);
+  }
+  .kt-section h3 {
+    font-size: var(--kt-text-lg);
+    letter-spacing: -0.01em;
+  }
+  .kt-h2-anchor {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* Cards and grids */
+  .kt-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--kt-grid-min, 16rem)), 1fr));
+  }
+  .kt-card {
+    position: relative;
+    padding: 1.25rem 1.25rem 1.375rem;
+    border: 1px solid var(--kt-border);
+    border-radius: var(--kt-radius-lg);
+    background-color: var(--kt-surface);
+    box-shadow: var(--kt-shadow-card);
+  }
+  .kt-card h3 {
+    font-size: var(--kt-text-md);
+  }
+  .kt-card p {
+    margin-top: 0.5rem;
+    font-size: var(--kt-text-sm);
+    line-height: 1.6;
+  }
+
+  /* Plain lists with small brand-color markers */
+  .kt-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .kt-list > li {
+    position: relative;
+    padding-inline-start: 1.25rem;
+  }
+  .kt-list > li + li {
+    margin-top: 0.5rem;
+  }
+  .kt-list > li::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: 0.125rem;
+    top: 0.68em;
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 1px;
+    background-color: var(--kt-brand);
+    transform: rotate(45deg);
+  }
+
+  /* Two-column split: prose + code */
+  .kt-split {
+    display: grid;
+    /* One explicit, shrinkable track below 62rem: an implicit auto track
+       would grow to the longest code line and push content off screen. */
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem 2.5rem;
+    align-items: start;
+  }
+  .kt-split > * {
+    min-width: 0;
+  }
+  @media (min-width: 62rem) {
+    .kt-split {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    }
+    .kt-split--even {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+  }
+  .kt-page .kt-stack > * + * {
+    margin-top: 1rem;
+  }
+  .kt-code-caption {
+    margin-top: 0.5rem !important;
+    font-size: var(--kt-text-xs);
+    color: var(--kt-text-muted);
+  }
+  .kt-code-caption a {
+    color: inherit !important;
+  }
+
+  /* Key/value facts table */
+  .kt-facts {
+    display: grid;
+    margin: 0;
+    border: 1px solid var(--kt-border);
+    border-radius: var(--kt-radius-lg);
+    background-color: var(--kt-surface);
+    overflow: hidden;
+  }
+  .kt-facts > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.25rem 1.5rem;
+    padding: 0.875rem 1.25rem;
+  }
+  .kt-facts > div + div {
+    border-top: 1px solid var(--kt-border);
+  }
+  .kt-facts dt {
+    font-size: var(--kt-text-sm);
+    font-weight: 600;
+    color: var(--kt-text-strong);
+  }
+  .kt-facts dd {
+    margin: 0;
+    font-size: var(--kt-text-sm);
+    line-height: 1.6;
+  }
+  @media (min-width: 40rem) {
+    .kt-facts > div {
+      grid-template-columns: 11rem minmax(0, 1fr);
+    }
+  }
+
+  /* ---- product-page primitives ---- */
+  /* Hero: copy, and the "at a glance" card beside it when there is room
+     (below it, as a multi-column fact grid, when there is not). */
+  .kt-prodhero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem 3.5rem;
+    align-items: start;
+  }
+  /* Under a project bar the page head needs less space above it. */
+  .kt-projbar + .kt-pagehead {
+    padding-top: 0.5rem;
+  }
+  .kt-prodhero > * {
+    min-width: 0;
+  }
+  @media (min-width: 72rem) {
+    .kt-prodhero {
+      grid-template-columns: minmax(0, 1fr) 23rem;
+    }
+  }
+  .kt-mono-title {
+    font-family: var(--kt-font-mono);
+    font-weight: 500 !important;
+    letter-spacing: -0.04em !important;
+  }
+  /* A product name is one long word: size it to fit the narrowest screens
+     on one line instead of breaking it at a hyphen. */
+  .kt-pagehead h1.kt-mono-title {
+    font-size: min(var(--kt-text-display), 8vw);
+  }
+  .kt-h2 {
+    margin-top: 0.5rem !important;
+    font-size: var(--kt-text-2xl);
+    letter-spacing: -0.02em;
+  }
+  .kt-body {
+    margin-top: 1rem !important;
+  }
+  .kt-note {
+    margin-top: 1rem !important;
+    font-size: var(--kt-text-sm);
+    color: var(--kt-text-muted);
+  }
+  .kt-section-head + .kt-facts {
+    margin-top: 0;
+  }
+
+  .kt-layers {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    gap: 0.625rem;
+  }
+  .kt-layer {
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--kt-border);
+    border-radius: var(--kt-radius-lg);
+    background-color: var(--kt-surface);
+  }
+  .kt-layer--app {
+    border-color: var(--kt-brand-line);
+    box-shadow: inset 3px 0 0 var(--kt-brand);
+  }
+  .kt-layer--test {
+    border-style: dashed;
+    background-color: transparent;
+  }
+  .kt-layer__name {
+    font-weight: 600;
+    color: var(--kt-text-strong);
+  }
+  .kt-layer__pkg {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-top: 0.375rem !important;
+  }
+  .kt-layer__desc {
+    margin-top: 0.5rem !important;
+    font-size: var(--kt-text-sm);
+  }
+
+  .kt-versions {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: 1px solid var(--kt-border);
+    border-radius: var(--kt-radius-lg);
+    background-color: var(--kt-surface);
+    overflow: hidden;
+  }
+  .kt-versions li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.5625rem 1.25rem;
+    font-size: var(--kt-text-sm);
+  }
+  .kt-versions li + li {
+    border-top: 1px solid var(--kt-border);
+  }
+  .kt-versions__v {
+    font-family: var(--kt-font-mono);
+    color: var(--kt-text-strong);
+  }
+  .kt-versions__tier {
+    color: var(--kt-text-muted);
+  }
+  .kt-versions--default .kt-versions__tier {
+    color: var(--kt-text-strong);
+    font-weight: 500;
+  }
+  .kt-versions--exp .kt-versions__tier {
+    color: var(--kt-experimental);
+    font-weight: 500;
+  }
+
+  .kt-project-links {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .kt-project-links {
+    gap: 0.5rem 1rem;
+  }
+  .kt-project-links a {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    height: 100%;
+    padding: 0.625rem 0.875rem;
+    border: 1px solid var(--kt-border);
+    border-radius: var(--kt-radius);
+    background-color: transparent;
+    color: var(--kt-text-muted);
+    text-decoration: none;
+    font-size: 1.125rem;
+  }
+  .kt-project-links a:hover {
+    border-color: var(--kt-border-strong);
+    background-color: var(--kt-surface);
+    color: var(--kt-brand);
+  }
+  .kt-project-links a > span {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 0.5rem;
+    font-size: var(--kt-text-sm);
+  }
+  .kt-project-links strong {
+    font-weight: 600;
+    color: var(--kt-text-strong);
+  }
+  .kt-project-links strong + span {
+    color: var(--kt-text-muted);
+  }
+</style>

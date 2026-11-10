@@ -1,0 +1,117 @@
+---
+// A project's own navigation, at the top of its overview and of every page of its docs:
+// the project's name, then plain links to its overview, docs, release notes and source.
+// The current one is underlined. These are ordinary links to other pages, not tabs.
+import { Icon } from '@astrojs/starlight/components';
+import { products, type ProductSlug } from '../../data/products';
+
+interface Props {
+  slug: ProductSlug;
+  /** The page's place in the project: its overview, a docs page, or the release notes. */
+  at: 'overview' | 'docs' | 'notes';
+  /** True on the docs landing page itself (aria-current="page" rather than "true"). */
+  docsHome?: boolean;
+}
+const { slug, at, docsHome = false } = Astro.props;
+const p = products[slug];
+const notesExternal = p.releaseNotes.startsWith('http');
+const links = [
+  { label: 'Overview', href: p.overview, current: at === 'overview' ? 'page' : undefined },
+  { label: 'Docs', href: p.docs, current: at === 'docs' ? (docsHome ? 'page' : 'true') : undefined },
+  // The server has no release notes page of its own: its link is to the GitHub releases.
+  { label: notesExternal ? 'Releases' : 'Release notes', href: p.releaseNotes, current: at === 'notes' ? 'page' : undefined, external: notesExternal },
+  { label: 'GitHub', href: p.repo, external: true },
+];
+---
+
+<nav class="kt-projbar not-content" aria-label={p.title} data-pagefind-ignore>
+  <p class="kt-projbar__name">
+    <strong>{p.title}</strong>
+    <span><span class="kt-nw">{p.name}</span> {p.version}</span>
+  </p>
+  <ul>
+    {
+      links.map((link) => (
+        <li>
+          <a class="kt-projbar__link" href={link.href} aria-current={link.current}>
+            {link.label}
+            {link.external && <Icon name="external" class="kt-projbar__ext" />}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  .kt-projbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.25rem 1.5rem;
+    margin-bottom: 1.75rem;
+    border-bottom: 1px solid var(--kt-border);
+  }
+  .kt-projbar__name {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 0.625rem;
+    margin: 0;
+    padding-block: 0.5rem;
+  }
+  .kt-projbar__name strong {
+    font-size: var(--kt-text-base);
+    font-weight: 600;
+    color: var(--kt-text-strong);
+  }
+  .kt-projbar__name span {
+    font-family: var(--kt-font-mono);
+    font-size: var(--kt-text-xs);
+    color: var(--kt-text-muted);
+  }
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 clamp(0.75rem, 2.5vw, 1.25rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  li {
+    margin: 0;
+  }
+  a {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding-block: 0.75rem;
+    font-size: var(--kt-text-sm);
+    font-weight: 500;
+    color: var(--kt-text);
+    text-decoration: none;
+  }
+  a:hover {
+    color: var(--kt-text-strong);
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+  a[aria-current] {
+    color: var(--kt-text-strong);
+  }
+  a[aria-current]::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: -1px;
+    height: 2px;
+    border-radius: 2px;
+    background-color: var(--kt-brand);
+  }
+  :global(.kt-projbar__ext) {
+    font-size: 0.8125rem;
+    color: var(--kt-text-muted);
+  }
+</style>

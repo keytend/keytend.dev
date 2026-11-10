@@ -1,0 +1,425 @@
+---
+import { Code, Icon } from '@astrojs/starlight/components';
+import SitePage from '../../components/site/SitePage.astro';
+import StatusCallout from '../../components/site/StatusCallout.astro';
+import ProductGlance from '../../components/site/ProductGlance.astro';
+import TaskTable from '../../components/site/TaskTable.astro';
+import ProjectBar from '../../components/site/ProjectBar.astro';
+import {
+  serverBuild,
+  serverClone,
+  serverCreateJson,
+  serverRequest,
+  serverRequestOutput,
+  serverStart,
+  serverStartOutput,
+  serverVerify,
+} from '../../components/site/snippets';
+import { products, repoFile } from '../../data/products';
+
+const p = products['kmip-server'];
+
+const uses = [
+  {
+    title: 'Intended use',
+    body: 'A KMIP server for CI pipelines and test environments, to validate KMIP client libraries and products that use KMIP for key management, such as Percona Server for MongoDB and MySQL.',
+  },
+  {
+    title: 'Keys on the client or the server',
+    body: 'Clients can fetch keys and encrypt locally, or keep keys on the server and call Encrypt, Decrypt, Sign and Verify there.',
+  },
+  {
+    title: 'Storage and access',
+    body: 'Keys live in one SQLite store sealed by a local master-key file, with no other KMS or HSM behind it. A policy file sets access; there is no admin API.',
+  },
+];
+
+const glance = [
+  ['Protocol', 'Partial support for KMIP 1.0 to 1.4, 2.0 and 2.1; the 3.0 draft (CSD02) behind <code>--experimental-v3</code>'],
+  ['Transports', 'Binary TTLV over TLS on 5696; optional HTTPS with TTLV, JSON or XML on 5697'],
+  ['Authentication', 'Mutual TLS; a policy file lists each client certificate and the operations it may call; optional header credentials'],
+  ['Objects', 'Symmetric keys, RSA and EC key pairs, certificates, secret data, opaque objects, split keys, PGP keys'],
+  ['Storage', 'One SQLite database, every object encrypted with AES-256-GCM, tamper-evident'],
+  ['Clients', 'Binary KMIP 1.x libraries; binary 2.x with the Java SDK keytend-kmip or IBM libkmipclient (C); any language over HTTPS JSON/XML'],
+  ['Deployment', 'Docker or Compose. On Kubernetes, a Helm chart runs one replica, backs the store up daily and before every upgrade, and restores a backup, rotates the master key or enters maintenance mode when you set chart values'],
+];
+
+const tested = [
+  ['Unit and engine tests (cargo test), every edition', 'Pass'],
+  ['Six independent client libraries and the keytend-kmip Java SDK', 'Pass for the operations each exercises'],
+  ['Percona Server for MongoDB 8.0 and MySQL 8.4', 'Pass for the tested scope; the MySQL component has client-side issues (<a href="/kmip-server/docs/percona/">Percona notes</a>)'],
+  ['OASIS Profiles XML test traces, 1.3 to 3.0, 439 cases', 'Strict replay: 156 pass. With the variations the Profiles permit: 381 pass'],
+  ['Container image (amd64, arm64) and Helm chart', 'Hardening checks pass; chart workflows pass on single-node kind'],
+];
+
+const clients = [
+  'OVH kmip-go',
+  'PyKMIP',
+  'OpenKMIP libkmip',
+  'NLnet Labs kmip-protocol',
+  'Thales kmip-go',
+  'IBM libkmipclient',
+  'keytend-kmip',
+  'Percona Server for MongoDB',
+  'Percona Server for MySQL',
+];
+
+const tasks = [
+  { want: 'Run it locally and make a first request', read: 'Quick start', href: '/kmip-server/docs/quick-start/' },
+  { want: 'Decide whether it fits my tests', read: 'Project status', href: '/kmip-server/docs/status/' },
+  { want: 'Check an operation or object type', read: 'Support matrix', href: '/kmip-server/docs/support-matrix/' },
+  { want: 'Connect a client in Python, Go, Java, C, Rust or over HTTPS', read: 'Connecting a client', href: '/kmip-server/docs/clients/' },
+  { want: 'Look up a flag or the policy file format', read: 'Configuration', href: '/kmip-server/docs/configuration/' },
+  { want: 'Run it with Docker or Compose', read: 'Deployment', href: '/kmip-server/docs/deployment/' },
+  { want: 'Install it on Kubernetes with Helm', read: 'Helm chart', href: '/kmip-server/docs/deploy/helm/' },
+  { want: 'Test Percona database encryption', read: 'Percona', href: '/kmip-server/docs/percona/' },
+  { want: 'Verify a release before loading it', read: 'Release verification', href: '/kmip-server/docs/release-signing/' },
+  { want: 'Read the threat model or report a vulnerability', read: 'Security', href: '/kmip-server/docs/security/' },
+];
+---
+
+<SitePage
+  project="keytend-kmip-server"
+  searchTitle="Project page"
+  title={p.title}
+  description="keytend-kmip-server, the Keytend KMIP Server, is an experimental KMIP key management server for client tests and CI, written in Rust and shipped as a container image. Current release 0.10.0-rc.1."
+>
+  <ProjectBar slug="kmip-server" at="overview" />
+  <section class="kt-pagehead kt-prodhero">
+    <div class="kt-prodhero__copy">
+      <h1 id="_top">{p.title}</h1>
+      <p class="kt-lead">
+        A key management server that speaks KMIP, the OASIS Key Management Interoperability Protocol,
+        written in Rust and shipped as a container image for Docker and Kubernetes.
+      </p>
+      <div class="kt-actions-row" data-pagefind-ignore>
+        <a class="kt-button kt-button--primary" href={p.start}>Quick start</a>
+        <a class="kt-button kt-button--secondary" href="/downloads/#keytend-kmip-server">Download {p.version}</a>
+      </div>
+      <p class="kt-prodhero__other" data-pagefind-ignore>
+        Also from Keytend: <a href={products['kmip-java'].overview}>{products['kmip-java'].title}</a>, a Java SDK for connecting to KMIP servers.
+      </p>
+    </div>
+    <ProductGlance slug="kmip-server" />
+  </section>
+
+  <StatusCallout title="Experimental">
+    <p>
+      keytend-kmip-server is an experimental KMIP server for CI and for testing KMIP clients. It
+      implements a subset of KMIP 1.0 to 2.1, holds no
+      conformance certification and has had no independent security audit. It stays a server for
+      testing at 1.0 and later. Do not use it to protect real keys or data.
+    </p>
+    <p>
+      To decide whether it fits your tests, read the{' '}
+      <a href="/kmip-server/docs/status/">project status</a> and look up the operations you need in
+      the <a href="/kmip-server/docs/support-matrix/">support matrix</a>. The threat model is in the{' '}
+      <a href="/kmip-server/docs/security/">security policy</a>.
+    </p>
+  </StatusCallout>
+
+  <section class="kt-section" aria-labelledby="uses-title">
+    <h2 id="uses-title" class="sr-only">Uses</h2>
+    <div class="kt-grid kt-uses">
+      {
+        uses.map((u) => (
+          <div class="kt-card">
+            <h3>{u.title}</h3>
+            <p>{u.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="kt-section" aria-labelledby="features">
+    <div class="kt-section-head">
+      <h2 id="features">Features</h2>
+    </div>
+    <dl class="kt-facts">
+      {
+        glance.map(([k, v]) => (
+          <div>
+            <dt>{k}<span class="sr-only">: </span></dt>
+            <dd set:html={v} />
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <section class="kt-section" id="quick-start" aria-labelledby="qs-title">
+    <div class="kt-section-head">
+      <h2 id="qs-title">Run it locally</h2>
+      <p>
+        Start the server with disposable test certificates, then create a 256-bit AES key with a KMIP
+        2.1 request over HTTPS JSON. You need an amd64 Linux host with Docker, Git, curl, Python 3
+        and OpenSSL.
+      </p>
+    </div>
+    <ol class="kt-steps">
+      <li>
+        <div class="kt-steps__text">
+          <h3>Get the source</h3>
+          <p>Run every later command from the checkout.</p>
+        </div>
+        <Code code={serverClone} lang="sh" frame="terminal" title="Clone the repository" />
+      </li>
+      <li>
+        <div class="kt-steps__text">
+          <h3>Get the image</h3>
+          <p>
+            Build it (a few minutes, about 1.5 GB of disk), or load the signed {p.version} release,
+            which needs Python 3.12 or later and gpg.
+          </p>
+        </div>
+        <div class="kt-stack">
+          <Code code={serverBuild} lang="sh" frame="terminal" title="Build the image" />
+          <Code code={serverVerify} lang="sh" frame="terminal" title="Or load the signed release" />
+        </div>
+      </li>
+      <li>
+        <div class="kt-steps__text">
+          <h3>Start it</h3>
+          <p>
+            The script writes test certificates and a master key under <code>.cache/</code>, then
+            runs the container on 127.0.0.1 ports 5696, 5697 and 8080.
+          </p>
+        </div>
+        <div class="kt-stack">
+          <Code code={serverStart} lang="sh" frame="terminal" title="Start the server" />
+          <div class="kt-output"><Code code={serverStartOutput} lang="text" title="Output" wrap hangingIndent={2} /></div>
+        </div>
+      </li>
+      <li>
+        <div class="kt-steps__text">
+          <h3>Make a request</h3>
+          <p>
+            Send <code>create.json</code>, a KMIP 2.1 Create request, over HTTPS JSON. Clean up with{' '}
+            <code>scripts/quick-start.sh --clean</code>.
+          </p>
+        </div>
+        <div class="kt-stack">
+          <Code code={serverRequest} lang="sh" frame="terminal" title="Send create.json" />
+          <div class="kt-output"><Code code={serverRequestOutput} lang="text" title="Output" wrap hangingIndent={2} /></div>
+        </div>
+      </li>
+    </ol>
+    <details class="kt-details">
+      <summary><span>What <code>create.json</code> sends</span></summary>
+      <Code code={serverCreateJson} lang="json" title="examples/https/create.json" />
+    </details>
+    <p class="kt-note">
+      The script uses <code>podman</code> when <code>docker</code> is not installed; add{' '}
+      <code>--format docker</code> to the build. The{' '}
+      <a href="/kmip-server/docs/quick-start/">full quick start</a> fetches the key, covers arm64 and
+      makes a request through a KMIP library.
+    </p>
+  </section>
+
+  <section class="kt-section" id="tested" aria-labelledby="tested-title">
+    <div class="kt-section-head">
+      <h2 id="tested-title">Test results</h2>
+      <p>
+        These results come from the project’s own runs on development builds from October and
+        November 2026. Each covers the operations its suite exercises, and none is a conformance
+        certification.
+      </p>
+    </div>
+    <div class="kt-split kt-split--even">
+      <dl class="kt-facts kt-facts--stack">
+        {
+          tested.map(([k, v]) => (
+            <div>
+              <dt>{k}<span class="sr-only">: </span></dt>
+              <dd set:html={v} />
+            </div>
+          ))
+        }
+      </dl>
+      <div>
+        <h3 class="kt-subhead">Tested clients</h3>
+        <ul class="kt-chips">
+          {clients.map((c) => <li>{c}</li>)}
+        </ul>
+        <p class="kt-note">
+          Six of the libraries are independent implementations. keytend-kmip has the same maintainer
+          as the server, and the two databases use their built-in clients. Versions are pinned in{' '}
+          <a href="/kmip-server/docs/clients/">Connecting a client</a>.
+        </p>
+        <h3 class="kt-subhead">Known gaps</h3>
+        <ul class="kt-list kt-small">
+          <li>Incomplete KMIP semantics: remaining attributes, mechanisms, Locate filters and asynchronous operations.</li>
+          <li>It runs as one replica with one local SQLite store, so there is no high availability, replication or failover.</li>
+          <li>No HSM or external key sealing; the master key is a file.</li>
+          <li>No hot reload of TLS material, CRLs or policy; changes need a restart.</li>
+          <li>Throughput and capacity are not measured or qualified.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="kt-section" id="docs" aria-labelledby="docs-title">
+    <div class="kt-section-head">
+      <h2 id="docs-title">Documentation</h2>
+    </div>
+    <TaskTable rows={tasks} />
+  </section>
+
+  <section class="kt-section" aria-labelledby="project-title">
+    <div class="kt-section-head">
+      <h2 id="project-title">Project links</h2>
+    </div>
+    <ul class="kt-grid kt-project-links" style="--kt-grid-min: 20rem">
+      <li><a class="kt-plink" href={p.repo}><Icon name="github" /><span><strong>Repository</strong><span class="sr-only">: </span><span>keytend/keytend-kmip-server</span></span></a></li>
+      <li><a class="kt-plink" href={p.releases}><Icon name="download" /><span><strong>Releases</strong><span class="sr-only">: </span><span>{p.version}, signed archives</span></span></a></li>
+      <li><a class="kt-plink" href={p.issues}><Icon name="comment-alt" /><span><strong>Issues</strong><span class="sr-only">: </span><span>Questions and bugs</span></span></a></li>
+      <li><a class="kt-plink" href={p.security}><Icon name="padlock" /><span><strong>Security policy</strong><span class="sr-only">: </span><span>Trust boundaries, reporting</span></span></a></li>
+      <li><a class="kt-plink" href="/kmip-server/docs/release-signing/"><Icon name="approve-check" /><span><strong>Release verification</strong><span class="sr-only">: </span><span>cosign and OpenPGP</span></span></a></li>
+      <li><a class="kt-plink" href={repoFile('kmip-server', 'LICENSE')}><Icon name="notes" /><span><strong>License</strong><span class="sr-only">: </span><span>Apache-2.0</span></span></a></li>
+    </ul>
+  </section>
+</SitePage>
+
+<style>
+  .kt-uses {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  }
+  .kt-steps {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+  }
+  .kt-steps > li {
+    counter-increment: step;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.875rem 2.5rem;
+    padding-block: 1.5rem;
+    border-top: 1px solid var(--kt-border);
+  }
+  .kt-steps > li > * {
+    min-width: 0;
+  }
+  .kt-steps > li:last-child {
+    border-bottom: 1px solid var(--kt-border);
+  }
+  .kt-steps__text {
+    position: relative;
+    padding-inline-start: 2.75rem;
+  }
+  .kt-steps__text::before {
+    content: counter(step);
+    position: absolute;
+    inset-inline-start: 0;
+    top: -0.125rem;
+    display: grid;
+    place-items: center;
+    width: 1.875rem;
+    height: 1.875rem;
+    border-radius: 50%;
+    border: 1px solid var(--kt-brand-line);
+    background-color: var(--kt-brand-soft);
+    color: var(--kt-brand);
+    font-family: var(--kt-font-mono);
+    font-size: var(--kt-text-sm);
+    font-weight: 500;
+  }
+  .kt-steps__text p {
+    margin-top: 0.375rem;
+    font-size: var(--kt-text-sm);
+  }
+  @media (min-width: 62rem) {
+    .kt-steps > li {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    }
+  }
+  .kt-details {
+    margin-top: 1.5rem;
+    border: 1px solid var(--kt-border);
+    border-radius: var(--kt-radius-lg);
+    background-color: var(--kt-surface);
+  }
+  .kt-details summary {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.875rem 1.25rem;
+    border-radius: var(--kt-radius-lg);
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--kt-text-strong);
+    list-style: none;
+  }
+  .kt-details summary::-webkit-details-marker {
+    display: none;
+  }
+  /* A chevron that turns down when the block is open. */
+  .kt-details summary::before {
+    content: '';
+    flex: none;
+    width: 0.5rem;
+    height: 0.5rem;
+    margin-inline: 0.125rem 0.25rem;
+    border: solid var(--kt-text-muted);
+    border-width: 0 2px 2px 0;
+    transform: rotate(-45deg);
+    transition: transform 150ms ease;
+  }
+  .kt-details[open] summary::before {
+    transform: rotate(45deg);
+  }
+  .kt-details summary:hover {
+    background-color: var(--kt-surface-2);
+  }
+  .kt-details summary:hover::before {
+    border-color: var(--kt-brand);
+  }
+  .kt-details[open] summary {
+    border-bottom: 1px solid var(--kt-border);
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .kt-details summary::before {
+      transition: none;
+    }
+  }
+  .kt-details :global(.expressive-code) {
+    margin: 1rem;
+  }
+  .kt-facts--stack > div {
+    grid-template-columns: 1fr !important;
+  }
+  .kt-subhead {
+    font-size: var(--kt-text-md) !important;
+  }
+  .kt-subhead + * {
+    margin-top: 0.75rem !important;
+  }
+  #quick-start > .kt-note {
+    max-width: 46rem;
+  }
+  .kt-note + .kt-subhead {
+    margin-top: 2rem !important;
+  }
+  .kt-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0;
+    list-style: none;
+  }
+  /* Flat tags (no border, no raised fill), so they do not read as buttons. */
+  .kt-chips li {
+    padding: 0.125rem 0.5rem;
+    border-radius: var(--kt-radius-sm);
+    background-color: var(--kt-surface-2);
+    font-size: var(--kt-text-sm);
+    color: var(--kt-text);
+  }
+  .kt-small {
+    font-size: var(--kt-text-sm);
+  }
+</style>

@@ -1,0 +1,111 @@
+---
+// The site-wide notice on every page: both projects are experimental, and
+// neither is for protecting real keys or data.
+---
+
+<div class="kt-banner" data-pagefind-ignore role="note" aria-label="Project status">
+  <p>
+    <span class="kt-banner__tag"><span class="kt-banner__dot" aria-hidden="true"></span>Experimental</span>
+    <span class="kt-banner__text kt-banner__wide">For development and testing only. Do not use either project to protect real keys or data.</span>
+    <span class="kt-banner__text kt-banner__narrow">For development and testing only</span>
+    <a href="/community/#experimental"><span class="kt-banner__wide">What “experimental” means</span><span class="kt-banner__narrow">What it means</span></a>
+  </p>
+</div>
+
+<style>
+  .kt-banner {
+    container-type: inline-size;
+    border-bottom: 1px solid var(--kt-experimental-line);
+    background-color: var(--kt-experimental-bg);
+    color: var(--kt-experimental-text);
+    font-size: var(--kt-text-sm);
+    line-height: 1.45;
+  }
+  p {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem 0.75rem;
+    margin: 0;
+    padding: 0.5rem var(--sl-content-pad-x);
+    text-align: center;
+  }
+  .kt-banner__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-weight: 600;
+    font-size: var(--kt-text-xs);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .kt-banner__dot {
+    width: 0.4375rem;
+    height: 0.4375rem;
+    border-radius: 50%;
+    background-color: var(--kt-experimental);
+    box-shadow: 0 0 0 3px var(--kt-experimental-bg);
+  }
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25em;
+    color: inherit;
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    white-space: nowrap;
+  }
+  /* A chevron (a CSS mask, never announced). */
+  a::after {
+    content: '';
+    flex: none;
+    width: 0.75em;
+    height: 0.75em;
+    background-color: currentColor;
+    -webkit-mask: var(--kt-chevron) center / contain no-repeat;
+    mask: var(--kt-chevron) center / contain no-repeat;
+  }
+  a:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  /* Narrow columns (phones, and the docs column beside the sidebar): one
+     compact line, wrapping only on the narrowest phones. */
+  .kt-banner__narrow {
+    display: none;
+  }
+  @container (max-width: 46rem) {
+    p {
+      font-size: var(--kt-text-xs);
+      gap: 0.5rem;
+      padding-block: 0.375rem;
+      white-space: nowrap;
+    }
+    .kt-banner__wide {
+      display: none;
+    }
+    .kt-banner__narrow {
+      display: inline;
+    }
+    .kt-banner__text {
+      margin-inline-start: -0.125rem;
+    }
+  }
+  @container (max-width: 24rem) {
+    p {
+      gap: 0.375rem;
+      padding-inline: 0.75rem;
+      font-size: 0.75rem;
+    }
+    .kt-banner__tag {
+      font-size: 0.75rem;
+      letter-spacing: 0;
+    }
+    a::after {
+      display: none;
+    }
+  }
+</style>

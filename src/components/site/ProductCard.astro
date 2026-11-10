@@ -1,0 +1,111 @@
+---
+import { Icon } from '@astrojs/starlight/components';
+import ProductIcon from './ProductIcon.astro';
+import { products, type ProductSlug } from '../../data/products';
+
+interface Props {
+  slug: ProductSlug;
+  /** What it does, in a sentence or two; the product page has the details. */
+  description: string;
+  /** The current version and how to get it (the page banner carries the experimental notice). */
+  note: string;
+  pills: string[];
+}
+const { slug, description, note, pills } = Astro.props;
+const p = products[slug];
+---
+
+<article class="kt-product">
+  <header class="kt-product__head">
+    <ProductIcon slug={slug} size={2.75} />
+    <div>
+      <h3><a href={p.overview} class="kt-product__title">{p.title}</a></h3>
+      <p class="kt-product__repo">{p.name}</p>
+    </div>
+  </header>
+
+  <div class="kt-pills kt-product__pills" data-pagefind-ignore>
+    {pills.map((pill) => <span class="kt-pill">{pill}</span>)}
+  </div>
+
+  <p class="kt-product__desc" set:html={description} />
+
+  <p class="kt-product__note">
+    <Icon name="information" class="kt-product__note-icon" />
+    <span set:html={note} />
+  </p>
+
+  <div class="kt-product__links" data-pagefind-ignore>
+    <a class="kt-link-arrow" href={p.overview}>
+      Overview<span class="sr-only"> of {p.title}</span>
+    </a>
+    <a class="kt-link-arrow" href={p.start}>
+      {slug === 'kmip-java' ? 'Getting started' : 'Quick start'}<span class="sr-only"> with {p.title}</span>
+    </a>
+  </div>
+</article>
+
+<style>
+  .kt-product {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    border: 1px solid var(--kt-border);
+    border-radius: var(--kt-radius-lg);
+    background-color: var(--kt-surface);
+    box-shadow: var(--kt-shadow-card);
+  }
+  .kt-product__head {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+  }
+  h3 {
+    font-size: var(--kt-text-xl) !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.015em;
+  }
+  .kt-product__title {
+    color: var(--kt-text-strong);
+    text-decoration: none;
+  }
+  .kt-product__title:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .kt-product__repo {
+    margin-top: 0.125rem !important;
+    font-family: var(--kt-font-mono);
+    font-size: var(--kt-text-sm);
+    color: var(--kt-text-muted);
+  }
+  .kt-product__pills {
+    margin-top: 1.125rem;
+  }
+  .kt-product__desc {
+    margin-top: 1rem !important;
+    color: var(--kt-text);
+  }
+  .kt-product__note {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1.25rem !important;
+    padding-top: 1rem;
+    border-top: 1px solid var(--kt-border);
+    font-size: var(--kt-text-sm);
+    line-height: 1.5;
+    color: var(--kt-text-muted);
+  }
+  :global(.kt-product__note-icon) {
+    flex: none;
+    margin-top: 0.15em;
+    font-size: 1rem;
+  }
+  .kt-product__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin-top: auto;
+    padding-top: 1.5rem;
+  }
+</style>

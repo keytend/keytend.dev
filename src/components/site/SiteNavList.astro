@@ -1,0 +1,147 @@
+---
+// The full site navigation as a stacked list: used in the phone menu on
+// marketing pages and at the foot of Starlight's sidebar menu on docs pages.
+import { Icon } from '@astrojs/starlight/components';
+import ProductIcon from './ProductIcon.astro';
+import { isCurrent, navLinks, normalizePath, projectLinks } from './nav';
+import { project } from '../../data/products';
+
+interface Props {
+  /** List the GitHub link (off where a GitHub icon link is already beside the list). */
+  github?: boolean;
+}
+const { github = true } = Astro.props;
+const pathname = normalizePath(Astro.url.pathname);
+---
+
+<div class="kt-navlist">
+  <div class="kt-navlist__group">
+    <p class="kt-navlist__heading">Projects</p>
+    <ul>
+      {
+        projectLinks.map((item) => (
+          <li>
+            <a href={item.href} class="kt-navlist__product" aria-current={pathname === item.href ? 'page' : undefined}>
+              <ProductIcon slug={item.slug} size={2.25} />
+              <span class="kt-navlist__text">
+                <span class="kt-navlist__label">{item.label}</span>
+                <span class="kt-navlist__desc">{item.description}</span>
+              </span>
+            </a>
+            <a
+              href={item.docs}
+              class="kt-navlist__docs"
+              aria-current={isCurrent(pathname, [item.docs]) ? (pathname === item.docs ? 'page' : 'true') : undefined}
+            >
+              Documentation<span class="sr-only">: {item.label}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+  <div class="kt-navlist__group">
+    <ul class="kt-navlist__plain">
+      {
+        navLinks.map((link) => (
+          <li>
+            <a href={link.href} aria-current={isCurrent(pathname, [link.href]) ? 'page' : undefined}>
+              <span class="kt-navlist__label">{link.label}</span>
+            </a>
+          </li>
+        ))
+      }
+      {
+        github && (
+          <li>
+            <a href={project.github}>
+              <span class="kt-navlist__label">
+                GitHub <Icon name="external" class="kt-navlist__ext" />
+              </span>
+            </a>
+          </li>
+        )
+      }
+    </ul>
+  </div>
+</div>
+
+<style>
+  .kt-navlist {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .kt-navlist__heading {
+    margin: 0 0 0.375rem;
+    padding-inline: 0.75rem;
+    font-size: var(--kt-text-xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--kt-text-muted);
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+  a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.0625rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--kt-radius-sm);
+    color: var(--kt-text-strong);
+    text-decoration: none;
+  }
+  a:hover {
+    background-color: var(--kt-surface-2);
+  }
+  /* 'page' on the page itself; 'true' on the docs you are somewhere inside. */
+  a[aria-current] {
+    background-color: var(--kt-brand-soft);
+    box-shadow: inset 2px 0 0 var(--kt-brand);
+  }
+  /* A project's docs link sits under it, in line with its name. */
+  .kt-navlist__docs {
+    margin-inline-start: 3rem;
+    padding-block: 0.375rem;
+    font-size: var(--kt-text-sm);
+    font-weight: 500;
+    color: var(--kt-text);
+  }
+  .kt-navlist__product {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .kt-navlist__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.0625rem;
+    min-width: 0;
+  }
+  .kt-navlist__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-weight: 600;
+    font-size: var(--kt-text-base);
+  }
+  .kt-navlist__desc {
+    font-size: var(--kt-text-sm);
+    color: var(--kt-text-muted);
+  }
+  :global(.kt-navlist__ext) {
+    font-size: 0.875rem;
+    color: var(--kt-text-muted);
+  }
+  .kt-navlist__plain {
+    border-top: 1px solid var(--kt-border);
+    padding-top: 0.75rem;
+  }
+</style>

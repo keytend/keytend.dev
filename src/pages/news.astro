@@ -1,0 +1,168 @@
+---
+import SitePage from '../components/site/SitePage.astro';
+import { products } from '../data/products';
+
+const java = products['kmip-java'];
+const server = products['kmip-server'];
+
+// Only items the product repositories record. Dates are the ones the
+// repositories give (GitHub release dates).
+const items = [
+  {
+    id: 'kmip-java-0.10.0-rc.1',
+    date: '2026-11-10',
+    dateLabel: '10 November 2026',
+    product: java.name,
+    kind: 'Pre-release',
+    title: 'keytend-kmip 0.10.0-rc.1',
+    body: [
+      'A pre-release of 0.10.0, the first release. A Java SDK for KMIP, tested on JDK 17, 21 and 25, with an application API (<code>dev.keytend.kmip.kms</code>) over a protocol layer for KMIP 1.1 to 2.1 and the 3.0 draft (CSD02). It contains envelope encryption, key lifecycle, <code>LocalKeys</code>, TLS identities kept in or issued by the KMS, the in-memory server for tests, metrics modules and <code>keytend-kmip-cli</code>.',
+      'It is a GitHub pre-release signed by the release key. The API compatibility promises start at 0.10.0. keytend-kmip is not on Maven Central.',
+    ],
+    links: [
+      { label: 'GitHub release', href: `${java.releases}/tag/v0.10.0-rc.1` },
+      { label: 'Verify and install it', href: '/downloads/#keytend-kmip' },
+      { label: 'Release notes', href: java.releaseNotes },
+    ],
+  },
+  {
+    id: 'kmip-server-0.10.0-rc.1',
+    date: '2026-11-09',
+    dateLabel: '9 November 2026',
+    product: server.name,
+    kind: 'Release candidate',
+    title: 'keytend-kmip-server 0.10.0-rc.1',
+    body: [
+      'A release candidate of the first release of keytend-kmip-server. It implements part of KMIP 1.0 to 2.1, and the 3.0 draft behind a flag, over binary TTLV on port 5696 and HTTPS on 5697.',
+      'Signed image archives for amd64 and arm64 are on GitHub releases, with the test reports of the release run as a signed artifact. <code>scripts/verify_release.sh 0.10.0-rc.1</code> verifies and loads them. There is no registry image yet.',
+    ],
+    links: [
+      { label: 'GitHub release', href: `${server.releases}/tag/v0.10.0-rc.1` },
+      { label: 'Verify and load it', href: '/downloads/#keytend-kmip-server' },
+    ],
+  },
+];
+---
+
+<SitePage
+  title="News"
+  description="Releases of keytend-kmip and keytend-kmip-server, newest first, from the projects' GitHub releases and release notes."
+>
+  <section class="kt-pagehead">
+    <h1 id="_top">News</h1>
+    <p class="kt-lead">
+      Releases of keytend-kmip and keytend-kmip-server, newest first, from the projects’ GitHub
+      releases and release notes.
+    </p>
+    <p class="kt-news__all" data-pagefind-ignore>
+      Every release is on GitHub: <a href={java.releases}>keytend-kmip releases</a> and{' '}
+      <a href={server.releases}>keytend-kmip-server releases</a>.
+    </p>
+  </section>
+
+  <ol class="kt-news">
+    {
+      items.map((item) => (
+        <li class="kt-news__item" id={item.id}>
+          <div class="kt-news__when">
+            {item.date ? <time datetime={item.date}>{item.dateLabel}</time> : <span class="kt-news__soon">{item.dateLabel}</span>}
+          </div>
+          <article class="kt-news__card">
+            <p class="kt-news__meta">
+              <span class="kt-news__product">{item.product}<span class="sr-only">, </span></span>
+              <span class="kt-news__kind">{item.kind}</span>
+            </p>
+            <h2>{item.title}</h2>
+            {item.body.map((para) => <p set:html={para} />)}
+            <p class="kt-news__links">
+              {item.links.map((link, i) => <>{i > 0 && <span class="sr-only">, </span>}<a class="kt-link-arrow" href={link.href}>{link.label}</a></>)}
+            </p>
+          </article>
+        </li>
+      ))
+    }
+  </ol>
+</SitePage>
+
+<style>
+  .kt-news {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    max-width: 58rem;
+  }
+  .kt-news__item {
+    display: grid;
+    gap: 0.5rem 2rem;
+    scroll-margin-top: calc(var(--sl-nav-height) + 1.5rem);
+  }
+  .kt-news__item + .kt-news__item {
+    margin-top: 1.5rem;
+  }
+  .kt-news__when {
+    padding-top: 1.375rem;
+    font-size: var(--kt-text-sm);
+    font-weight: 600;
+    color: var(--kt-text-strong);
+    font-variant-numeric: tabular-nums;
+  }
+  .kt-news__soon {
+    color: var(--kt-experimental);
+  }
+  .kt-news__card {
+    padding: 1.25rem 1.5rem 1.5rem;
+    border: 1px solid var(--kt-border);
+    border-radius: var(--kt-radius-lg);
+    background-color: var(--kt-surface);
+  }
+  .kt-news__card > * + * {
+    margin-top: 0.75rem !important;
+  }
+  .kt-news__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+    align-items: center;
+    font-size: var(--kt-text-xs);
+  }
+  .kt-news__all {
+    margin-top: 1rem !important;
+    font-size: var(--kt-text-sm);
+    color: var(--kt-text-muted);
+  }
+  .kt-news__product {
+    font-family: var(--kt-font-mono);
+    color: var(--kt-text-strong);
+    font-weight: 500;
+  }
+  .kt-news__kind {
+    padding: 0.0625rem 0.5rem;
+    border: 1px solid var(--kt-border-strong);
+    border-radius: 999px;
+    color: var(--kt-text-muted);
+  }
+  .kt-news__card h2 {
+    font-size: var(--kt-text-xl);
+    letter-spacing: -0.015em;
+  }
+  .kt-news__card p:not(.kt-news__meta):not(.kt-news__links) {
+    font-size: var(--kt-text-base);
+  }
+  .kt-news__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    padding-top: 0.25rem;
+    font-size: var(--kt-text-sm);
+  }
+  @media (min-width: 46rem) {
+    .kt-news__item {
+      grid-template-columns: 10rem minmax(0, 1fr);
+    }
+    .kt-news__when {
+      text-align: end;
+      position: relative;
+    }
+  }
+</style>

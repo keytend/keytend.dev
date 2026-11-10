@@ -1,0 +1,21 @@
+---
+// Docs pages keep Starlight's footer (edit link, pagination) and add a
+// compact site footer that fits the content column. Pages without a sidebar
+// (the marketing pages, 404) get the full-width site footer. Starlight renders
+// this inside <main>; src/middleware.ts moves the site footer after it.
+import Default from '@astrojs/starlight/components/Footer.astro';
+import SiteFooter from '../site/SiteFooter.astro';
+
+const { hasSidebar } = Astro.locals.starlightRoute;
+---
+
+{
+  hasSidebar ? (
+    <>
+      <Default><slot /></Default>
+      <SiteFooter compact />
+    </>
+  ) : (
+    <SiteFooter />
+  )
+}

@@ -1,0 +1,432 @@
+---
+import { Code, Icon } from '@astrojs/starlight/components';
+import SitePage from '../components/site/SitePage.astro';
+import StatusCallout from '../components/site/StatusCallout.astro';
+import {
+  javaBuild,
+  javaDependency,
+  javaVerify,
+  serverBuild,
+  serverClone,
+  serverDownload,
+  serverVerifyOutput,
+} from '../components/site/snippets';
+import { products, project } from '../data/products';
+
+const java = products['kmip-java'];
+const server = products['kmip-server'];
+const key = project.releaseKey;
+// A fingerprint's two halves (five groups each, split at the double space):
+// each half stays on one line, so a phone shows two rows of five.
+const halves = (fpr: string) => fpr.split(/\s{2,}/);
+---
+
+<SitePage
+  title="Downloads"
+  description="How to get keytend-kmip (a signed 0.10.0-rc.1 GitHub pre-release, or build from source) and keytend-kmip-server (signed 0.10.0-rc.1 image archives on GitHub releases), and how to verify them."
+>
+  <section class="kt-pagehead">
+    <h1 id="_top">Downloads</h1>
+    <p class="kt-lead">
+      keytend-kmip {java.version} is a signed GitHub pre-release, or you can build it from source.
+      keytend-kmip-server {server.version} is on GitHub releases as signed image archives, or you can
+      build the image.
+      Neither project is on Maven Central or a container registry yet.
+    </p>
+  </section>
+
+  <div class="kt-dl-summary" role="table" aria-label="Current releases" data-pagefind-ignore>
+    <div class="kt-dl-summary__row kt-dl-summary__head" role="row">
+      <span role="columnheader">Project</span>
+      <span role="columnheader">Current</span>
+      <span role="columnheader">Get it</span>
+      <span role="columnheader">Verify</span>
+    </div>
+    <div class="kt-dl-summary__row" role="row">
+      <span role="cell" class="kt-dl-summary__name"><a class="kt-entity" href="#keytend-kmip">{java.title}</a><small>{java.name}</small></span>
+      <span role="cell"><span class="kt-pill kt-pill--version"><span><span class="kt-pill__v">{java.version}</span>, pre-release</span></span></span>
+      <span role="cell">Signed ZIP on GitHub releases, or build from source with <code>./mvnw install</code></span>
+      <span role="cell">OpenPGP signatures by the release key; every release and pre-release is signed</span>
+    </div>
+    <div class="kt-dl-summary__row" role="row">
+      <span role="cell" class="kt-dl-summary__name"><a class="kt-entity" href="#keytend-kmip-server">{server.title}</a><small>{server.name}</small></span>
+      <span role="cell"><span class="kt-pill kt-pill--version"><span class="kt-pill__v">{server.version}</span></span></span>
+      <span role="cell">Signed image archive on GitHub releases, or build the image</span>
+      <span role="cell">cosign and OpenPGP signatures over <code>SHA256SUMS</code></span>
+    </div>
+  </div>
+
+  <section class="kt-section" id="keytend-kmip" aria-labelledby="java-title">
+    <div class="kt-dl-head">
+      <div>
+        <h2 id="java-title" class="kt-h2">{java.title}</h2>
+        <p class="kt-dl-repo">{java.name}</p>
+      </div>
+      <div class="kt-pills">
+        <span class="kt-pill kt-pill--version"><span><span class="kt-pill__v">{java.version}</span>, pre-release</span></span>{' '}
+        <span class="kt-pill">JDK 17+</span>
+      </div>
+    </div>
+
+    <StatusCallout title={`${java.version} is a pre-release`}>
+      <p>
+        {java.version} is a signed GitHub pre-release of 0.10.0, the first release. The API
+        compatibility promises start at 0.10.0. keytend-kmip is not on Maven Central.
+      </p>
+    </StatusCallout>
+
+    <div class="kt-dl-options">
+      <article class="kt-dl-option">
+        <p class="kt-dl-option__tag"><span class="kt-pill kt-pill--ok">Available now</span></p>
+        <h3>GitHub pre-release</h3>
+        <p>
+          The <a href={java.releases}>releases page</a> holds the distribution and, beside it, the
+          in-memory server for tests:
+        </p>
+        <ul class="kt-files">
+          <li><code>keytend-kmip-{java.version}.zip</code><span>The SDK, the metrics modules and the CLI, with a CycloneDX SBOM of each module in <code>lib/</code> and the release’s test reports in <code>validation/</code></span></li>
+          <li><code>keytend-kmip-{java.version}-src.zip</code><span>The source tree that builds the release</span></li>
+          <li><code>keytend-kmip-testing-{java.version}.jar</code><span>The in-memory KMIP server, with its sources JAR and SBOM. For tests only</span></li>
+          <li><b><code>*.sha256</code>, <code>SHA256SUMS</code></b><span>Checksums of every file</span></li>
+          <li><code>*.asc</code><span>Detached OpenPGP signatures by the release key</span></li>
+        </ul>
+        <p>
+          Download the release, then verify it before you unpack it.
+        </p>
+        <Code code={javaVerify} lang="sh" frame="terminal" title="Download, verify and unpack" />
+        <p class="kt-note">
+          <a href="/kmip-java/docs/getting-started/">Getting started</a> has the install steps, and
+          the <a href="/kmip-java/docs/security/">security policy</a> has the signing rules.
+        </p>
+      </article>
+
+      <article class="kt-dl-option">
+        <p class="kt-dl-option__tag"><span class="kt-pill kt-pill--ok">Available now</span></p>
+        <h3>Build from source</h3>
+        <p>
+          You need JDK 17 or later. Check out the release’s tag, <code>v{java.version}</code>, first. This builds the SDK, runs its unit tests and installs{' '}
+          <code>dev.keytend:keytend-kmip:{java.version}</code> in your local Maven repository, with the other
+          modules, among them <code>keytend-kmip-testing</code>.
+        </p>
+        <Code code={`git clone ${java.repo}\ncd keytend-kmip-java\n${javaBuild}`} lang="sh" frame="terminal" title="Build and install" />
+        <p>Then add the dependency:</p>
+        <Code code={javaDependency} lang="xml" title="pom.xml" />
+      </article>
+    </div>
+  </section>
+
+  <section class="kt-section" id="keytend-kmip-server" aria-labelledby="server-title">
+    <div class="kt-dl-head">
+      <div>
+        <h2 id="server-title" class="kt-h2">{server.title}</h2>
+        <p class="kt-dl-repo">{server.name}</p>
+      </div>
+      <div class="kt-pills">
+        <span class="kt-pill kt-pill--version"><span><span class="kt-pill__v">{server.version}</span>, release candidate</span></span>{' '}
+        <span class="kt-pill">amd64, arm64</span>
+      </div>
+    </div>
+
+    <div class="kt-dl-options">
+      <article class="kt-dl-option">
+        <p class="kt-dl-option__tag"><span class="kt-pill kt-pill--ok">Available now</span></p>
+        <h3>Signed release archive</h3>
+        <p>
+          A GitHub release publishes <code>SHA256SUMS</code>, its cosign signature
+          (<code>SHA256SUMS.sigstore.json</code>) and OpenPGP signature (<code>SHA256SUMS.asc</code>),
+          and the release set as one tar: <code>keytend-kmip-server-{server.version}-signed-release.tar</code>,
+          about 92 MB. It holds a Docker archive, SBOM and provenance for each platform and a
+          multi-architecture OCI image archive.
+        </p>
+        <p>
+          From a checkout, <code>verify_release.sh</code> downloads the release outside the checkout,
+          checks both signatures with the checkout’s keys, then every digest, and only then loads the
+          image:
+        </p>
+        <Code code={`${serverClone}\nscripts/verify_release.sh ${server.version}\n# on an arm64 host:\n# scripts/verify_release.sh ${server.version} arm64`} lang="sh" frame="terminal" title="Verify and load the release" />
+        <div class="kt-output"><Code code={serverVerifyOutput} lang="text" title="Output" wrap hangingIndent={2} /></div>
+        <p class="kt-note">
+          It needs bash, curl, Python 3.12 or later, Docker or Podman, and gpg 2.2 or later; on Linux it
+          fetches a pinned cosign. To fetch every asset yourself, into a new directory:
+        </p>
+        <Code code={serverDownload} lang="sh" frame="terminal" title="Download every asset" />
+      </article>
+
+      <article class="kt-dl-option">
+        <p class="kt-dl-option__tag"><span class="kt-pill kt-pill--ok">Available now</span></p>
+        <h3>Build the image</h3>
+        <p>
+          Build on amd64, from a checkout. The first build takes a few minutes and about 1.5 GB of disk,
+          and needs network access to <code>registry.access.redhat.com</code>, the UBI package
+          repositories and crates.io.
+        </p>
+        <Code code={`${serverClone}\n${serverBuild}`} lang="sh" frame="terminal" title="Build the image" />
+        <p>
+          With Podman, add <code>--format docker</code>. The arm64 build and running from source are
+          in the <a href="/kmip-server/docs/quick-start/">quick start</a>.
+        </p>
+        <h3 class="kt-dl-sub">No registry image yet</h3>
+        <p>
+          Deploy by digest from a registry you control. Copy the verified multi-architecture OCI
+          index there with skopeo, as <a href="/kmip-server/docs/release-signing/">release verification</a>{' '}
+          shows.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section class="kt-section" id="release-key" aria-labelledby="key-title">
+    <div class="kt-section-head">
+      <h2 id="key-title">Release signing key</h2>
+      <p>
+        Both projects sign releases with subkeys of one OpenPGP key, each project with its own
+        subkey. Check signatures against the primary fingerprint below.
+      </p>
+    </div>
+    <div class="kt-key">
+      <div class="kt-key__icon" aria-hidden="true"><Icon name="padlock" size="1.5rem" /></div>
+      <div class="kt-key__body">
+        <p class="kt-key__label">Primary key fingerprint</p>
+        <p class="kt-key__fpr">{halves(key.fingerprint).map((h, i) => <>{i > 0 && '  '}<span class="kt-nw">{h}</span></>)}</p>
+        <p class="kt-key__meta">{key.userId} · {key.algorithm} · expires {key.expires}</p>
+        <dl class="kt-key__subkeys">
+          <div><dt>{server.name} signing subkey<span class="sr-only">: </span></dt><dd>{halves(key.serverSubkey).map((h, i) => <>{i > 0 && '  '}<span class="kt-nw">{h}</span></>)}</dd></div>
+          <div><dt>{java.name} signing subkey<span class="sr-only">: </span></dt><dd>{halves(key.javaSubkey).map((h, i) => <>{i > 0 && '  '}<span class="kt-nw">{h}</span></>)}</dd></div>
+        </dl>
+      </div>
+    </div>
+    <p class="kt-note kt-key-note">
+      The key is published on keys.openpgp.org and keyserver.ubuntu.com. A key with the right name and
+      a different fingerprint is not the release key. A good signature shows that the files are the
+      ones the maintainer published. Signing is offline, with no transparency-log entry or trusted
+      timestamp, so no public log records when a signature was made.
+    </p>
+  </section>
+</SitePage>
+
+<style>
+  .kt-mono {
+    font-family: var(--kt-font-mono);
+    font-weight: 500 !important;
+    letter-spacing: -0.03em !important;
+  }
+  .kt-dl-summary {
+    border: 1px solid var(--kt-border);
+    border-radius: var(--kt-radius-lg);
+    background-color: var(--kt-surface);
+    overflow: hidden;
+    font-size: var(--kt-text-sm);
+  }
+  .kt-dl-summary__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem;
+    padding: 1rem 1.25rem;
+  }
+  .kt-dl-summary__row + .kt-dl-summary__row {
+    border-top: 1px solid var(--kt-border);
+  }
+  .kt-dl-summary__head {
+    display: none;
+  }
+  .kt-dl-summary__name {
+    display: flex;
+    flex-direction: column;
+  }
+  .kt-dl-summary__name a {
+    font-family: var(--kt-font-mono);
+    font-weight: 500;
+    font-size: var(--kt-text-base);
+  }
+  .kt-dl-summary__name small {
+    color: var(--kt-text-muted);
+    font-size: var(--kt-text-xs);
+  }
+  @media (min-width: 52rem) {
+    .kt-dl-summary__row {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr) minmax(0, 1.2fr) minmax(0, 1.4fr);
+      gap: 1.5rem;
+      align-items: center;
+    }
+    .kt-dl-summary__head {
+      display: grid;
+      padding-block: 0.625rem;
+      font-size: var(--kt-text-xs);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--kt-text-muted);
+    }
+  }
+
+  .kt-dl-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--kt-border);
+  }
+  .kt-dl-options {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    gap: 1rem;
+    margin-top: 1.25rem;
+  }
+  /* One option per row: the commands get the full width (no mid-token
+     wrapping, little scrolling) and the prose keeps a readable measure. */
+  .kt-dl-option > :is(p, h3, .kt-files) {
+    max-width: 46rem;
+  }
+  .kt-dl-option {
+    padding: 1.5rem;
+    border: 1px solid var(--kt-border);
+    border-radius: var(--kt-radius-lg);
+    background-color: var(--kt-surface);
+    min-width: 0;
+  }
+  .kt-dl-option > * + * {
+    margin-top: 1rem !important;
+  }
+  .kt-dl-option h3 {
+    margin-top: 0.375rem !important;
+    font-size: var(--kt-text-lg);
+  }
+  .kt-dl-option > p {
+    font-size: var(--kt-text-sm);
+  }
+  .kt-dl-option .kt-dl-sub {
+    margin-top: 1.75rem !important;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--kt-border);
+    font-size: var(--kt-text-md);
+  }
+  .kt-dl-option__tag {
+    display: flex;
+  }
+  @media (max-width: 30rem) {
+    .kt-dl-option {
+      padding: 1.25rem 1rem;
+    }
+    .kt-dl-option > :global(.expressive-code),
+    .kt-dl-option > .kt-output {
+      margin-inline: calc(-1rem - 1px);
+    }
+    .kt-dl-option > :global(.expressive-code .frame),
+    .kt-dl-option > .kt-output :global(.expressive-code .frame) {
+      border-radius: 0;
+    }
+  }
+  .kt-files {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: 1px solid var(--kt-border);
+    border-radius: var(--kt-radius);
+    font-size: var(--kt-text-sm);
+  }
+  .kt-files li {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+    padding: 0.625rem 0.875rem;
+  }
+  .kt-files li + li {
+    border-top: 1px solid var(--kt-border);
+  }
+  .kt-files span {
+    color: var(--kt-text-muted);
+  }
+  .kt-files b {
+    font-weight: inherit;
+  }
+
+  .kt-key {
+    display: flex;
+    gap: 1.125rem;
+    padding: 1.5rem;
+    border: 1px solid var(--kt-border);
+    border-radius: var(--kt-radius-lg);
+    background-color: var(--kt-surface);
+    box-shadow: inset 3px 0 0 var(--kt-brand), var(--kt-shadow-card);
+  }
+  .kt-key__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--kt-radius);
+    background-color: var(--kt-brand-soft);
+    border: 1px solid var(--kt-brand-line);
+    color: var(--kt-brand);
+  }
+  .kt-key__body {
+    min-width: 0;
+  }
+  .kt-key__label {
+    font-size: var(--kt-text-xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--kt-text-muted);
+  }
+  .kt-key__fpr {
+    margin-top: 0.375rem !important;
+    font-family: var(--kt-font-mono);
+    font-size: clamp(0.9375rem, 0.8rem + 0.6vw, 1.25rem);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--kt-text-strong);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .kt-key__meta {
+    margin-top: 0.375rem !important;
+    font-size: var(--kt-text-sm);
+    color: var(--kt-text-muted);
+  }
+  .kt-key-note {
+    max-width: 65ch;
+  }
+  .kt-key__subkeys {
+    display: grid;
+    gap: 0.75rem 2rem;
+    margin: 1.25rem 0 0;
+    padding-top: 1rem;
+    border-top: 1px solid var(--kt-border);
+  }
+  .kt-key__subkeys dt {
+    font-size: var(--kt-text-xs);
+    color: var(--kt-text-muted);
+  }
+  .kt-key__subkeys dd {
+    margin: 0.125rem 0 0;
+    font-family: var(--kt-font-mono);
+    font-size: var(--kt-text-sm);
+    color: var(--kt-text);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  @media (min-width: 52rem) {
+    .kt-key__subkeys {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+  }
+  @media (max-width: 30rem) {
+    .kt-key {
+      flex-direction: column;
+      padding: 1.25rem;
+    }
+  }
+  .kt-dl-repo {
+    margin-top: 0.25rem;
+    font-family: var(--kt-font-mono);
+    font-size: var(--kt-text-sm);
+    color: var(--kt-text-muted);
+  }
+</style>

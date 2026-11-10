@@ -1,0 +1,315 @@
+---
+import { Code, Icon } from '@astrojs/starlight/components';
+import SitePage from '../../components/site/SitePage.astro';
+import StatusCallout from '../../components/site/StatusCallout.astro';
+import ProductGlance from '../../components/site/ProductGlance.astro';
+import TaskTable from '../../components/site/TaskTable.astro';
+import ProjectBar from '../../components/site/ProjectBar.astro';
+import {
+  javaBuild,
+  javaDependency,
+  javaQuickstart,
+  javaTestingDependency,
+  javaTestingGradle,
+} from '../../components/site/snippets';
+import { products, repoFile } from '../../data/products';
+
+const p = products['kmip-java'];
+
+const features = [
+  {
+    title: 'Envelope encryption',
+    body: 'Local AES-GCM under a fresh data key the KMS wraps, for records, streams and files.',
+  },
+  {
+    title: 'Key lifecycle',
+    body: 'Rotate keys with an optional grace period. Retire old keys, reconcile a key name after concurrent rotations, or replace a compromised key, from a plan you can review before it runs.',
+  },
+  {
+    title: 'LocalKeys',
+    body: 'A cache of raw keys for local encryption, such as a database’s encrypted files. It checks a key’s KMIP lease before it hands the key out.',
+  },
+  {
+    title: 'TLS identities from the KMS',
+    body: 'Node certificates and trust kept in the KMS through <code>kms.tls()</code>, renewed and revoked without a restart.',
+  },
+  {
+    title: 'Logging, listeners and metrics',
+    body: 'Logs go through SLF4J under fixed logger names and never include secrets. Optional modules record metrics with Micrometer, or metrics and spans with OpenTelemetry.',
+  },
+  {
+    title: 'keytend-kmip-cli',
+    body: 'List, show, create, rotate, expire, revoke and destroy keys, and store secrets, from a shell.',
+  },
+];
+
+const versions = [
+  { v: '1.1', tier: 'Supported' },
+  { v: '1.2', tier: 'Supported' },
+  { v: '1.3', tier: 'Supported' },
+  { v: '1.4', tier: 'Default range' },
+  { v: '2.0', tier: 'Default range' },
+  { v: '2.1', tier: 'Default range' },
+  { v: '3.0 CSD02', tier: 'Experimental, opt-in' },
+];
+
+const tasks = [
+  { want: 'Connect, handle failures and write tests', read: 'Getting started', href: '/kmip-java/docs/getting-started/' },
+  { want: 'Pick the entry point for a job', read: 'Choosing an API', href: '/kmip-java/docs/choosing-an-api/' },
+  { want: 'Encrypt records, streams and files', read: 'Envelope encryption', href: '/kmip-java/docs/envelope-encryption/' },
+  { want: 'Configure failover, deadlines and credentials', read: 'Runtime configuration', href: '/kmip-java/docs/production/' },
+  { want: 'Manage keys from the command line', read: 'keytend-kmip-cli', href: '/kmip-java/docs/cli/' },
+  { want: 'Know which Java and KMIP versions are covered', read: 'Compatibility and support', href: '/kmip-java/docs/compatibility/' },
+  { want: 'See which servers it was tested against', read: 'Validation', href: '/kmip-java/docs/validation/' },
+  { want: 'Report a vulnerability or verify a release', read: 'Security policy', href: '/kmip-java/docs/security/' },
+  { want: 'Read what 0.10.0 contains', read: 'Release notes', href: '/kmip-java/docs/release-notes/' },
+];
+---
+
+<SitePage
+  project="keytend-kmip (Java)"
+  searchTitle="Project page"
+  title={p.title}
+  description="keytend-kmip, the Keytend KMIP Java SDK, is an experimental Java SDK for connecting to KMIP key management servers, for JDK 17 and later. 0.10.0-rc.1 is a signed GitHub pre-release."
+>
+  <ProjectBar slug="kmip-java" at="overview" />
+  <section class="kt-pagehead kt-prodhero">
+    <div class="kt-prodhero__copy">
+      <h1 id="_top">{p.title}</h1>
+      <p class="kt-lead">{p.tagline}</p>
+      <div class="kt-actions-row" data-pagefind-ignore>
+        <a class="kt-button kt-button--primary" href={p.start}>Getting started</a>
+        <a class="kt-button kt-button--secondary" href="/downloads/#keytend-kmip">Download {p.version}</a>
+      </div>
+      <p class="kt-prodhero__other" data-pagefind-ignore>
+        Also from Keytend: <a href={products['kmip-server'].overview}>{products['kmip-server'].title}</a>, a KMIP server for client tests and CI.
+      </p>
+    </div>
+    <ProductGlance slug="kmip-java" />
+  </section>
+
+  <StatusCallout title="Experimental">
+    <p>
+      keytend-kmip started as an experiment in implementing the KMIP specification, and every
+      release stays experimental
+      (<a href="/community/#experimental">what “experimental” means</a>). The API compatibility
+      promises start at 0.10.0. Use it to test Java code that calls a KMIP server. Do not use it to
+      protect real keys or data.
+    </p>
+  </StatusCallout>
+
+  <section class="kt-section" aria-labelledby="what-title">
+    <div class="kt-section-head">
+      <h2 id="what-title" class="kt-h2">What it does</h2>
+      <p class="kt-body">Use it when a Java application keeps its keys in a KMIP server and needs to:</p>
+      <ul class="kt-list kt-body">
+        <li>create and find keys, and envelope-encrypt records and files with them;</li>
+        <li>load raw keys for local encryption, such as a database’s encrypted files;</li>
+        <li>rotate, retire and replace keys without downtime;</li>
+        <li>take its TLS identity and trust from the KMS.</li>
+      </ul>
+    </div>
+    <div class="kt-layers">
+      <div class="kt-layer kt-layer--app">
+        <p class="kt-layer__name">Application API</p>
+        <p class="kt-layer__pkg"><code>dev.keytend.kmip.kms</code></p>
+        <p class="kt-layer__desc">
+          JCA keys, typed records and one exception hierarchy. The same code runs on every
+          negotiated KMIP version.
+        </p>
+      </div>
+      <div class="kt-layer">
+        <p class="kt-layer__name">Protocol layer</p>
+        <p class="kt-layer__pkg">
+          <code>client</code> <code>model</code> <code>codec</code> <code>transport</code> <code>server</code>
+        </p>
+        <p class="kt-layer__desc">
+          Every KMIP operation from 1.1 to the 3.0 draft, in TTLV, XML or JSON, over mutual TLS or
+          HTTPS. <code>kms.protocol()</code> returns a <code>KmipClient</code> on the same
+          connection, for exact field control and operations the application API does not cover.
+        </p>
+      </div>
+      <div class="kt-layer kt-layer--test">
+        <p class="kt-layer__name">Test artifact</p>
+        <p class="kt-layer__pkg"><code>keytend-kmip-testing</code></p>
+        <p class="kt-layer__desc">
+          An in-memory KMIP server, for testing application code without a real server, with fault
+          injection and a TLS listener.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="kt-section" aria-labelledby="features-title">
+    <div class="kt-section-head">
+      <h2 id="features-title">Features in 0.10</h2>
+    </div>
+    <div class="kt-grid" style="--kt-grid-min: 19rem">
+      {
+        features.map((f) => (
+          <div class="kt-card">
+            <h3>{f.title}</h3>
+            <p set:html={f.body} />
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="kt-section" id="requirements" aria-labelledby="req-title">
+    <div class="kt-split kt-split--even">
+      <div>
+        <div class="kt-section-head">
+          <h2 id="req-title">Requirements</h2>
+        </div>
+        <dl class="kt-facts">
+          <div>
+            <dt>Java<span class="sr-only">: </span></dt>
+            <dd>JDK 17 or later. The SDK is tested on JDK 17, 21 and 25.</dd>
+          </div>
+          <div>
+            <dt>A KMIP server<span class="sr-only">: </span></dt>
+            <dd>
+              By default the SDK negotiates KMIP 1.4 to 2.1. It can also use 1.1 to 1.3 and the 3.0
+              draft when you configure them.
+            </dd>
+          </div>
+          <div>
+            <dt>Logging<span class="sr-only">: </span></dt>
+            <dd>
+              SLF4J 2.0 (<code>slf4j-api</code>), which Maven and Gradle bring with the SDK. Bind it to
+              your logging.
+            </dd>
+          </div>
+          <div>
+            <dt>Other libraries<span class="sr-only">: </span></dt>
+            <dd>
+              None at runtime. Caffeine is bundled and relocated, and the API exposes no other
+              library’s types.
+            </dd>
+          </div>
+        </dl>
+      </div>
+      <div>
+        <div class="kt-section-head">
+          <h2>KMIP versions</h2>
+        </div>
+        <ul class="kt-versions">
+          {
+            versions.map((row) => (
+              <li class:list={{ 'kt-versions--exp': row.tier.startsWith('Experimental'), 'kt-versions--default': row.tier === 'Default range' }}>
+                <span class="kt-versions__v">KMIP {row.v}<span class="sr-only">: </span></span>
+                <span class="kt-versions__tier">{row.tier}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="kt-note">
+          3.0 CSD02 is an OASIS draft of KMIP 3.0.{' '}
+          <a href="/kmip-java/docs/compatibility/">Compatibility</a> lists the servers the SDK’s tests
+          ran against at each version.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="kt-section" id="install" aria-labelledby="install-title">
+    <div class="kt-section-head">
+      <h2 id="install-title">Install {p.version}</h2>
+      <p>
+        {p.version} is a signed GitHub pre-release of 0.10.0. keytend-kmip is not on Maven Central.
+        Build the SDK from the <code>v{p.version}</code> tag of a clone, install it in your local Maven
+        repository, then add the dependency. To install from the release ZIP instead, see{' '}
+        <a href="/kmip-java/docs/getting-started/#from-the-github-release">Getting started</a>.
+      </p>
+    </div>
+    <div class="kt-split kt-split--even">
+      <div class="kt-stack">
+        <Code code={`git clone ${p.repo}\ncd keytend-kmip-java\n${javaBuild}`} lang="sh" frame="terminal" title="Build and install" />
+        <p class="kt-note">
+          Optional modules: <code>keytend-kmip-micrometer</code> for Micrometer metrics,{' '}
+          <code>keytend-kmip-opentelemetry</code> for OpenTelemetry, and{' '}
+          <code>keytend-kmip-testing</code>, the in-memory server, in test scope.
+        </p>
+      </div>
+      <div class="kt-stack">
+        <Code code={javaDependency} lang="xml" title="pom.xml" />
+      </div>
+    </div>
+  </section>
+
+  <section class="kt-section" id="quickstart" aria-labelledby="qs-title">
+    <div class="kt-split">
+      <div class="kt-stack">
+        <h2 id="qs-title" class="kt-h2">Example</h2>
+        <p class="kt-body">
+          These lines connect to a KMS, find or create a key, and seal and open one record.
+        </p>
+        <ul class="kt-list kt-body">
+          <li><code>client.p12</code> holds the client’s certificate and private key. <code>KMS_CLIENT_PASSWORD</code> is its password.</li>
+          <li><code>ca.pem</code> holds the CA certificates that the server’s certificate must chain to.</li>
+          <li>The two endpoints are replicas of one KMS. Reads fail over between them.</li>
+          <li><code>current</code> follows the newest key with that name, also after the key is rotated.</li>
+          <li><code>orderId</code> is bound to the sealed record, so pass the same value to <code>open</code>.</li>
+        </ul>
+        <StatusCallout title="A key name is not access control">
+          <p>
+            On a server where others may create keys, anyone can create one with your name. Keep and
+            use the key’s handle, use a server that enforces unique names, or select keys by an
+            attribute only you can set.
+          </p>
+        </StatusCallout>
+      </div>
+      <div class="kt-stack">
+        <Code code={javaQuickstart} lang="java" title="Quickstart.java" />
+        <p class="kt-code-caption">
+          From the README. The same lines run in the tested sample{' '}
+          <a href={repoFile('kmip-java', 'sdk/src/test/java/dev/keytend/kmip/kms/samples/Quickstart.java')}>Quickstart.java</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="kt-section" id="try-it" aria-labelledby="try-title">
+    <div class="kt-split kt-split--even">
+      <div class="kt-stack">
+        <h2 id="try-title" class="kt-h2">Try it without a server</h2>
+        <p class="kt-body">
+          Replace <code>Kms.connect(config)</code> with{' '}
+          <code><span class="kt-nw">InMemoryKmipServer.of(KmipVersion.V2_1)</span><wbr /><span class="kt-nw">.connect()</span></code>,
+          imported from{' '}
+          <code>dev.keytend.kmip.testing</code>. That server is not in the SDK, so add the{' '}
+          <code>keytend-kmip-testing</code> artifact as well, in test scope. It does not protect the
+          keys it holds, so use it only in tests and to try the SDK.
+        </p>
+        <p><a class="kt-link-arrow" href="/kmip-java/docs/getting-started/#try-it-without-a-server">A complete program in Getting started</a></p>
+      </div>
+      <div class="kt-stack">
+        <Code code={javaTestingDependency} lang="xml" title="pom.xml" />
+        <Code code={javaTestingGradle} lang="kotlin" title="build.gradle.kts" />
+      </div>
+    </div>
+  </section>
+
+  <section class="kt-section" id="docs" aria-labelledby="docs-title">
+    <div class="kt-section-head">
+      <h2 id="docs-title">Documentation</h2>
+    </div>
+    <TaskTable rows={tasks} />
+  </section>
+
+  <section class="kt-section" aria-labelledby="project-title">
+    <div class="kt-section-head">
+      <h2 id="project-title">Project links</h2>
+    </div>
+    <ul class="kt-grid kt-project-links" style="--kt-grid-min: 20rem">
+      <li><a class="kt-plink" href={p.repo}><Icon name="github" /><span><strong>Repository</strong><span class="sr-only">: </span><span>keytend/keytend-kmip-java</span></span></a></li>
+      <li><a class="kt-plink" href={p.releases}><Icon name="download" /><span><strong>Releases</strong><span class="sr-only">: </span><span>{p.version}, signed pre-release</span></span></a></li>
+      <li><a class="kt-plink" href={p.issues}><Icon name="comment-alt" /><span><strong>Issues</strong><span class="sr-only">: </span><span>Questions and bugs</span></span></a></li>
+      <li><a class="kt-plink" href={p.security}><Icon name="padlock" /><span><strong>Security policy</strong><span class="sr-only">: </span><span>Report privately</span></span></a></li>
+      <li><a class="kt-plink" href={p.releaseNotes}><Icon name="document" /><span><strong>Release notes</strong><span class="sr-only">: </span><span>What 0.10.0 contains</span></span></a></li>
+      <li><a class="kt-plink" href={repoFile('kmip-java', 'LICENSE')}><Icon name="notes" /><span><strong>License</strong><span class="sr-only">: </span><span>Apache-2.0</span></span></a></li>
+    </ul>
+  </section>
+</SitePage>
+

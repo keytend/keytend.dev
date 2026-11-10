@@ -1,0 +1,232 @@
+---
+import { Code } from '@astrojs/starlight/components';
+import SitePage from '../components/site/SitePage.astro';
+import ProductCard from '../components/site/ProductCard.astro';
+import { javaQuickstart, serverQuickstart } from '../components/site/snippets';
+import { products, project } from '../data/products';
+
+const java = products['kmip-java'];
+const server = products['kmip-server'];
+
+---
+
+<SitePage
+  title="KMIP tools for development and testing"
+  description="keytend-kmip is a Java SDK for connecting to KMIP servers. keytend-kmip-server runs a KMIP server for client tests and CI. Both are experimental and Apache-2.0 licensed."
+>
+  <section class="kt-pagehead kt-home-hero">
+    <h1 id="_top">KMIP tools for development and testing</h1>
+    <p class="kt-lead">
+      <span class="kt-name">keytend-kmip</span> is a Java SDK for connecting to KMIP servers.{' '}
+      <span class="kt-name">keytend-kmip-server</span> runs a KMIP server for client tests and CI.
+    </p>
+  </section>
+
+  <section class="kt-section" id="projects" aria-labelledby="projects-title">
+    <div class="kt-section-head">
+      <h2 id="projects-title">Projects</h2>
+    </div>
+    <div class="kt-grid kt-home-products" style="--kt-grid-min: 22rem">
+      <ProductCard
+        slug="kmip-java"
+        pills={['Java', 'JDK 17+', java.version]}
+        description="Create and find keys, envelope-encrypt records and files, and rotate and retire keys, over KMIP 1.1 to 2.1 and the 3.0 draft."
+        note={`${java.version} is a signed GitHub pre-release of 0.10.0.`}
+      />
+      <ProductCard
+        slug="kmip-server"
+        pills={['Rust', 'Container image', server.version]}
+        description="A KMIP server for CI pipelines and for testing KMIP clients, for Docker and Kubernetes. It implements part of KMIP 1.0 to 2.1, over binary TTLV on port 5696 and HTTPS on 5697."
+        note={`${server.version}, a release candidate, is on GitHub releases as signed image archives for amd64 and arm64.`}
+      />
+    </div>
+    <div class="kt-home-twoways">
+      <h3>Two ways to test against a KMIP server</h3>
+      <p>
+        For unit tests, <code>keytend-kmip-testing</code>, part of the Java SDK, runs an in-memory
+        KMIP server inside the test JVM. For anything over the network, run Keytend KMIP Server in a
+        container; it accepts KMIP clients in any language.
+      </p>
+      <p><a class="kt-link-arrow" href="/kmip-java/docs/getting-started/#try-it-without-a-server">Try the Java SDK in memory</a></p>
+    </div>
+  </section>
+
+  <section class="kt-section" aria-labelledby="code-title">
+    <div class="kt-section-head">
+      <h2 id="code-title">Examples from the READMEs</h2>
+    </div>
+
+    <div class="kt-split kt-home-sample">
+      <div class="kt-stack">
+        <h3>Seal a record with keytend-kmip</h3>
+        <p>
+          These lines connect to a KMS, find or create a key, and seal and open one record. The
+          same lines run in the tested sample <code>Quickstart.java</code>.
+        </p>
+        <ul class="kt-list">
+          <li><code>findOrCreate</code> returns the Active key named <code>orders-kek</code>, or creates it.</li>
+          <li>
+            <code>seal</code> encrypts the record locally with AES-256-GCM under a fresh data key. The
+            named key wraps the data key on the server and never leaves it.
+          </li>
+          <li>
+            To run it without a server, replace <code>Kms.connect(config)</code> with{' '}
+            <code>InMemoryKmipServer.of(KmipVersion.V2_1).connect()</code> from{' '}
+            <code>keytend-kmip-testing</code>.
+          </li>
+        </ul>
+        <p><a class="kt-link-arrow" href={java.start}>Java SDK getting started</a></p>
+      </div>
+      <div>
+        <Code code={javaQuickstart} lang="java" title="Quickstart.java" />
+      </div>
+    </div>
+
+    <div class="kt-split kt-home-sample">
+      <div class="kt-stack">
+        <h3>Run keytend-kmip-server and create a key</h3>
+        <p>
+          The quick-start script starts the server with disposable test certificates. The request
+          creates a 256-bit AES key with KMIP 2.1 over HTTPS JSON. You need an amd64 Linux host
+          with Docker, Git, curl, Python 3 and OpenSSL.
+        </p>
+        <ul class="kt-list">
+          <li>Build the image from the checkout, or load the signed {server.version} release.</li>
+          <li>The script uses <code>podman</code> when <code>docker</code> is not installed; add <code>--format docker</code> to the build.</li>
+          <li><code>scripts/quick-start.sh --clean</code> removes the container and the test state.</li>
+        </ul>
+        <p><a class="kt-link-arrow" href={server.start}>Server quick start</a></p>
+      </div>
+      <div>
+        <Code code={serverQuickstart} lang="sh" title="Start the server and create a key" frame="terminal" />
+      </div>
+    </div>
+  </section>
+
+  <section class="kt-section" aria-labelledby="tested-title">
+    <div class="kt-section-head">
+      <h2 id="tested-title">What they are tested with</h2>
+      <p>
+        Each project runs its own test suites against the servers or clients below. No third party
+        has certified either project.
+      </p>
+    </div>
+    <dl class="kt-facts">
+      <div>
+        <dt class="kt-name">keytend-kmip<span class="sr-only">: </span></dt>
+        <dd>
+          PyKMIP, PQCToday, Krypton and keytend-kmip-server {server.version},
+          on JDK 17, 21 and 25
+          (<a href="/kmip-java/docs/validation/">validation</a>).
+        </dd>
+      </div>
+      <div>
+        <dt class="kt-name">keytend-kmip-server<span class="sr-only">: </span></dt>
+        <dd>
+          Six independent KMIP libraries in Python, Go, C and Rust; keytend-kmip, for KMIP 1.1 to 2.1
+          over binary and HTTPS; and Percona Server for MongoDB 8.0 and MySQL 8.4. Clients in other
+          languages can use HTTPS with JSON or XML
+          (<a href="/kmip-server/docs/clients/#tested-clients">tested clients</a>).
+        </dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="kt-section kt-home-exp" aria-labelledby="exp-title">
+    <div class="kt-home-exp__inner">
+      <div class="kt-home-exp__head">
+        <h2 id="exp-title">Project status</h2>
+        <p>
+          Both projects started as experiments in implementing the KMIP specification, and they stay
+          experimental in every release. keytend-kmip {java.version} is a signed GitHub pre-release
+          of 0.10.0. keytend-kmip-server is at {server.version}.
+        </p>
+        <p><a class="kt-link-arrow" href="/community/#experimental">What “experimental” means</a></p>
+      </div>
+      <ul class="kt-home-exp__points">
+        <li>
+          Use keytend-kmip to test Java code that calls a KMIP server, and keytend-kmip-server as the
+          KMIP server in CI and client tests.
+        </li>
+        <li>
+          The server implements a subset of KMIP 1.0 to 2.1. It holds no conformance certification
+          and has had no independent security audit.
+        </li>
+        <li>
+          Both projects are maintained as a best effort, with no service level agreement. keytend-kmip’s API compatibility promises start at 0.10.0.
+        </li>
+      </ul>
+    </div>
+  </section>
+
+</SitePage>
+
+<style>
+  .kt-home-hero h1 {
+    max-width: 20ch;
+    text-wrap: balance;
+  }
+  .kt-home-twoways {
+    margin-top: 2rem;
+    padding: 1.25rem 1.5rem;
+    border-inline-start: 3px solid var(--kt-brand);
+    background-color: var(--kt-surface-2);
+    border-radius: 0 var(--kt-radius) var(--kt-radius) 0;
+  }
+  .kt-home-twoways h3 {
+    font-size: var(--kt-text-lg);
+  }
+  .kt-home-twoways p {
+    margin-top: 0.5rem;
+    max-width: 48rem;
+  }
+  .kt-home-hero .kt-lead .kt-name {
+    color: var(--kt-text-strong);
+  }
+
+  .kt-home-sample + .kt-home-sample {
+    margin-top: 3rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--kt-border);
+  }
+  .kt-home-sample h3 {
+    font-size: var(--kt-text-xl);
+  }
+
+  .kt-home-exp__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem 3rem;
+    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    border: 1px solid var(--kt-experimental-line);
+    border-radius: var(--kt-radius-lg);
+    background-color: var(--kt-experimental-bg);
+  }
+  .kt-home-exp__head h2 {
+    margin-top: 0;
+    font-size: var(--kt-text-2xl);
+  }
+  .kt-home-exp__head p:not(.kt-eyebrow) {
+    margin-top: 0.75rem;
+  }
+  .kt-home-exp__points {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .kt-home-exp__points li {
+    padding-inline-start: 1rem;
+    border-inline-start: 2px solid var(--kt-experimental);
+    font-size: var(--kt-text-sm);
+    line-height: 1.6;
+  }
+  @media (min-width: 62rem) {
+    .kt-home-exp__inner {
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      align-items: center;
+    }
+  }
+
+</style>

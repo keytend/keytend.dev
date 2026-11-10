@@ -1,0 +1,615 @@
+/* Starlight tweaks for the imported documentation pages (owned by the docs pipeline).
+   Colors, radii and type come from the --kt-* tokens in theme.css. */
+
+:root {
+	--kt-table-shadow: rgb(0 0 0 / 0.85);
+	--kt-danger: #f87171;
+	--kt-danger-text: #fecaca;
+	--kt-danger-bg: rgb(248 113 113 / 0.08);
+	--kt-danger-line: rgb(248 113 113 / 0.32);
+}
+:root[data-theme='light'] {
+	--kt-table-shadow: rgb(16 24 40 / 0.16);
+	--kt-danger: #b91c1c;
+	--kt-danger-text: #7f1d1d;
+	--kt-danger-bg: #fef2f2;
+	--kt-danger-line: #fecaca;
+}
+
+/* ------------------------------------------------------------------ links */
+
+/* A light underline that firms up on hover and focus, so link-dense pages are not a wall of
+   full-strength brand underlines. */
+.sl-markdown-content a:not(:where(.not-content *)) {
+	text-decoration-line: underline;
+	text-decoration-thickness: 1px;
+	text-underline-offset: 0.2em;
+	text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+	transition: text-decoration-color 120ms ease;
+}
+.sl-markdown-content a:is(:hover, :focus-visible):not(:where(.not-content *)) {
+	color: var(--kt-brand-strong);
+	text-decoration-color: currentColor;
+}
+
+/* Long unbroken tokens (paths, URLs, option names) in running text wrap instead of widening the
+   page on small screens, as a last resort: inline code breaks at the points the plugin allows
+   (below), and only a piece too long for the column breaks anywhere. Table cells are excluded:
+   their table scrolls instead. */
+.sl-markdown-content :is(p, li, dd, blockquote, .starlight-aside__content) > :is(code, a):not(:where(.not-content *)) {
+	overflow-wrap: anywhere;
+}
+
+/* ------------------------------------------------------------ inline code */
+
+/* Code spans in the docs: a quieter fill than Starlight's and less side padding, so option-dense
+   prose does not turn into a row of chips, and "(`a`, `b`)" keeps its punctuation close. */
+:root[data-has-sidebar] .sl-markdown-content code:not(:where(.not-content *, pre *)) {
+	padding: 0.0625rem 0.2em;
+	border-radius: 0.25rem;
+	background-color: color-mix(in srgb, var(--kt-surface-2) 60%, transparent);
+	box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--kt-border) 60%, transparent);
+}
+
+/* Inline code stays whole (src/plugins/docs-markdown.mjs): short code is one .kt-nw, longer code
+   is .kt-nw pieces with a <wbr> after each ".", "(", "/", ",", "_" or space. */
+.sl-markdown-content code.kt-nw,
+.sl-markdown-content code .kt-nw {
+	white-space: nowrap;
+}
+
+/* ------------------------------------------------------------------ lists */
+
+/* Bullet lists with the small brand-color diamond of the marketing pages' lists (SitePage .kt-list);
+   nested lists get an outlined one. The plugin gives these lists role="list". */
+:root[data-has-sidebar] .sl-markdown-content ul:not(.contains-task-list, :where(.not-content *)) {
+	padding-inline-start: 1.25rem;
+	list-style: none;
+}
+:root[data-has-sidebar] .sl-markdown-content ul:not(.contains-task-list, :where(.not-content *)) > li {
+	position: relative;
+}
+:root[data-has-sidebar] .sl-markdown-content ul:not(.contains-task-list, :where(.not-content *)) > li::before {
+	content: '';
+	position: absolute;
+	inset-inline-start: -1.125rem;
+	top: 0.68em;
+	width: 0.375rem;
+	height: 0.375rem;
+	border-radius: 1px;
+	background-color: var(--kt-brand);
+	transform: rotate(45deg);
+}
+:root[data-has-sidebar] .sl-markdown-content :is(ul, ol) ul:not(.contains-task-list, :where(.not-content *)) > li::before {
+	border: 1px solid var(--kt-brand);
+	background-color: transparent;
+}
+
+/* ----------------------------------------------------------------- tables */
+
+/* Every Markdown table is wrapped (src/plugins/docs-markdown.mjs) in
+   <div class="kt-table" role="region" tabindex="0">: the site's bordered table container. A
+   table wider than the column scrolls inside it, with a shadow at an edge that has more. */
+.sl-markdown-content .kt-table {
+	max-width: 100%;
+	overflow: auto;
+	overscroll-behavior-x: contain;
+	-webkit-overflow-scrolling: touch;
+	border: 1px solid var(--kt-border);
+	border-radius: var(--kt-radius-lg);
+	/* Scroll shadows: the two covers move with the content and hide the shadows at an end. */
+	background:
+		linear-gradient(to right, var(--kt-surface) 40%, transparent) left / 2.5rem 100% no-repeat local,
+		linear-gradient(to left, var(--kt-surface) 40%, transparent) right / 2.5rem 100% no-repeat local,
+		radial-gradient(farthest-side at 0 50%, var(--kt-table-shadow), transparent) left / 1rem 100% no-repeat scroll,
+		radial-gradient(farthest-side at 100% 50%, var(--kt-table-shadow), transparent) right / 1rem 100% no-repeat scroll,
+		var(--kt-surface);
+}
+.sl-markdown-content .kt-table:focus-visible {
+	border-radius: var(--kt-radius-lg);
+	outline-offset: 2px;
+}
+.sl-markdown-content .kt-table > table {
+	display: table;
+	width: 100%;
+	margin: 0;
+	border-collapse: separate;
+	border-spacing: 0;
+	font-size: var(--kt-text-sm);
+	line-height: 1.55;
+}
+.sl-markdown-content .kt-table :is(th, td) {
+	min-width: 6rem;
+	padding: 0.625rem 0.875rem;
+	border-bottom: 1px solid var(--kt-border);
+	vertical-align: top;
+}
+.sl-markdown-content .kt-table :is(th, td):first-child {
+	min-width: 9rem;
+	padding-inline-start: 1rem;
+}
+.sl-markdown-content .kt-table :is(th, td):last-child {
+	padding-inline-end: 1rem;
+}
+/* In a wide column, the last column (usually prose: "Meaning", "Notes") keeps a readable width
+   beside long code in the columns before it. 11.5rem is the most every docs table has room for
+   at 1440px without scrolling. */
+@container kt-docs (min-width: 40rem) {
+	.sl-markdown-content .kt-table:not(.kt-table--matrix) :is(th, td):last-child {
+		min-width: 11.5rem;
+	}
+}
+.sl-markdown-content .kt-table th {
+	background-color: var(--kt-surface-2);
+	color: var(--kt-text-strong);
+	font-size: var(--kt-text-xs);
+	font-weight: 600;
+	letter-spacing: 0.01em;
+	vertical-align: bottom;
+}
+.sl-markdown-content .kt-table th:not([style*='text-align']) {
+	text-align: start;
+}
+.sl-markdown-content .kt-table tbody tr:last-child > * {
+	border-bottom: 0;
+}
+.sl-markdown-content .kt-table tbody tr:hover > * {
+	background-color: color-mix(in srgb, var(--kt-surface-2) 70%, transparent);
+}
+/* Inline code in cells breaks only where the plugin allows (short code never, longer code after
+   ".", "/", ",", "_" or a space), so a table of long names fits its column. */
+.sl-markdown-content .kt-table code {
+	font-size: 0.8125rem;
+}
+/* The corner cells stay inside the rounded border, also where nothing clips them (below). */
+.sl-markdown-content .kt-table thead th:first-child {
+	border-start-start-radius: calc(var(--kt-radius-lg) - 1px);
+}
+.sl-markdown-content .kt-table thead th:last-child {
+	border-start-end-radius: calc(var(--kt-radius-lg) - 1px);
+}
+.sl-markdown-content .kt-table tbody tr:last-child > :first-child {
+	border-end-start-radius: calc(var(--kt-radius-lg) - 1px);
+}
+.sl-markdown-content .kt-table tbody tr:last-child > :last-child {
+	border-end-end-radius: calc(var(--kt-radius-lg) - 1px);
+}
+
+/* A long matrix never scrolls down inside itself. Where the docs column is at least as wide as
+   its kt-fit-<rem> class says (the plugin's estimate of the table's width), it does not scroll at
+   all: its header row sticks under the page header, and under the "On this page" bar below 72rem,
+   while the page scrolls. In a narrower column it scrolls sideways, with its name column pinned. */
+:root[data-has-sidebar] .sl-markdown-content {
+	container: kt-docs / inline-size;
+}
+/* Each container query below switches its bucket to the page-sticky header (three variables). */
+.sl-markdown-content [class*='kt-fit-'] {
+	--kt-head-offset: calc(var(--sl-nav-height) + var(--sl-mobile-toc-height));
+	overflow: var(--kt-fit-overflow, auto);
+}
+.sl-markdown-content [class*='kt-fit-'] thead th {
+	position: var(--kt-fit-position, static);
+	top: var(--kt-fit-top, auto);
+	z-index: 2;
+}
+@container kt-docs (min-width: 24rem) {
+	.kt-fit-24 { --kt-fit-overflow: visible; --kt-fit-position: sticky; --kt-fit-top: var(--kt-head-offset); --kt-repeat: none; }
+}
+@container kt-docs (min-width: 28rem) {
+	.kt-fit-28 { --kt-fit-overflow: visible; --kt-fit-position: sticky; --kt-fit-top: var(--kt-head-offset); --kt-repeat: none; }
+}
+@container kt-docs (min-width: 32rem) {
+	.kt-fit-32 { --kt-fit-overflow: visible; --kt-fit-position: sticky; --kt-fit-top: var(--kt-head-offset); --kt-repeat: none; }
+}
+@container kt-docs (min-width: 36rem) {
+	.kt-fit-36 { --kt-fit-overflow: visible; --kt-fit-position: sticky; --kt-fit-top: var(--kt-head-offset); --kt-repeat: none; }
+}
+@container kt-docs (min-width: 40rem) {
+	.kt-fit-40 { --kt-fit-overflow: visible; --kt-fit-position: sticky; --kt-fit-top: var(--kt-head-offset); --kt-repeat: none; }
+}
+@container kt-docs (min-width: 44rem) {
+	.kt-fit-44 { --kt-fit-overflow: visible; --kt-fit-position: sticky; --kt-fit-top: var(--kt-head-offset); --kt-repeat: none; }
+}
+
+/* Where a long table scrolls sideways (a kt-fit-<rem> table in a narrower column, or any other
+   long table on a phone), its real header row cannot stick to the page: the plugin's copies of it,
+   every ten rows, keep the column labels in view while the page scrolls. They sit in the same
+   scroller, so they move sideways with the cells, and their first columns are pinned like the
+   others'. */
+.sl-markdown-content .kt-table .kt-head-repeat {
+	display: none;
+}
+.sl-markdown-content [class*='kt-fit-'] .kt-head-repeat {
+	display: var(--kt-repeat, table-row);
+}
+@media (max-width: 39.99rem) {
+	.sl-markdown-content .kt-table--tall:not([class*='kt-fit-']) .kt-head-repeat {
+		display: table-row;
+	}
+}
+.sl-markdown-content .kt-table .kt-head-repeat > th {
+	border-top: 1px solid var(--kt-border);
+}
+.sl-markdown-content .kt-table tbody tr.kt-head-repeat:hover > th {
+	background-color: var(--kt-surface-2);
+}
+
+/* Matrices (most columns one short value: the support matrix): compact, one line per row, the
+   name column pinned while the value columns scroll. */
+.sl-markdown-content .kt-table--matrix :is(th, td) {
+	min-width: 0;
+	padding: 0.4375rem 0.625rem;
+	white-space: nowrap;
+	vertical-align: middle;
+}
+.sl-markdown-content .kt-table--matrix :is(th, td):first-child {
+	min-width: 0;
+	padding-inline-start: 0.875rem;
+}
+.sl-markdown-content .kt-table--matrix :is(th, td):first-child,
+.sl-markdown-content .kt-table--numbered :is(th, td):nth-child(2) {
+	position: sticky;
+	left: 0;
+	z-index: 1;
+	background-color: var(--kt-surface);
+	box-shadow: inset -1px 0 0 var(--kt-border);
+}
+.sl-markdown-content .kt-table--matrix th:first-child,
+.sl-markdown-content .kt-table--numbered th:nth-child(2) {
+	z-index: 3;
+	background-color: var(--kt-surface-2);
+}
+.sl-markdown-content .kt-table--matrix tbody tr:hover > :first-child,
+.sl-markdown-content .kt-table--numbered tbody tr:hover > :nth-child(2) {
+	background-color: var(--kt-surface-2);
+}
+/* "No.": a narrow number column, pinned with the name after it. */
+.sl-markdown-content .kt-table--numbered :is(th, td):first-child {
+	width: 3.25rem;
+	min-width: 3.25rem;
+	max-width: 3.25rem;
+	padding-inline: 0.5rem 0.625rem;
+	color: var(--kt-text-muted);
+	font-variant-numeric: tabular-nums;
+	box-shadow: none;
+}
+.sl-markdown-content .kt-table--numbered :is(th, td):nth-child(2) {
+	left: 3.25rem;
+}
+@media (max-width: 39.99rem) {
+	/* On a phone the pinned name column may wrap, leaving room for the values. */
+	.sl-markdown-content .kt-table--matrix td:is(:first-child, :nth-child(2)) {
+		min-width: 8.5rem;
+		max-width: 9.5rem;
+		white-space: normal;
+	}
+	.sl-markdown-content .kt-table--numbered td:first-child {
+		min-width: 3.25rem;
+		max-width: 3.25rem;
+	}
+}
+
+/* yes / no / opt-in cells: the word stays the text, the marker adds shape and color. */
+.kt-cellmark {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3125rem;
+	padding: 0 0.5rem;
+	border: 1px solid transparent;
+	border-radius: 999px;
+	font-size: var(--kt-text-xs);
+	font-weight: 600;
+	line-height: 1.5;
+	white-space: nowrap;
+}
+.kt-cellmark::before {
+	font-size: 0.8125em;
+	line-height: 1;
+}
+.kt-cellmark--yes {
+	border-color: var(--kt-ok-line);
+	background-color: var(--kt-ok-bg);
+	color: var(--kt-ok);
+}
+.kt-cellmark--yes::before {
+	content: '✓';
+	content: '✓' / '';
+}
+.kt-cellmark--no {
+	border-color: var(--kt-border-strong);
+	color: var(--kt-text-muted);
+}
+.kt-cellmark--no::before {
+	content: '✕';
+	content: '✕' / '';
+}
+.kt-cellmark--opt-in {
+	border-color: var(--kt-brand-line);
+	border-style: dashed;
+	background-color: var(--kt-brand-soft);
+	color: var(--kt-brand);
+}
+.kt-cellmark--opt-in::before {
+	content: '';
+	width: 0.375rem;
+	height: 0.375rem;
+	border-radius: 50%;
+	background-color: currentColor;
+}
+.kt-cellmark--none {
+	padding: 0;
+	border: 0;
+	color: var(--sl-color-gray-4);
+	font-weight: 400;
+}
+
+/* Column labels for the stacked phone layout (aria-hidden: assistive tech reads the header row). */
+.kt-cell-label {
+	display: none;
+}
+
+/* Phones: a wide text table becomes one labeled block per row, instead of a table scrolled
+   sideways one column at a time. */
+@media (max-width: 39.99rem) {
+	.sl-markdown-content .kt-table--stack {
+		max-height: none;
+		overflow: visible;
+		background: var(--kt-surface);
+	}
+	.sl-markdown-content .kt-table--stack > table,
+	.sl-markdown-content .kt-table--stack :is(tbody, tr, td) {
+		display: block;
+	}
+	/* The header row stays for screen readers only (visually hidden, like .sr-only). */
+	.sl-markdown-content .kt-table--stack thead,
+	.sl-markdown-content .kt-table--stack thead :is(tr, th) {
+		display: block;
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+	/* Starlight spaces adjacent blocks in content; rows and the body need none. */
+	.sl-markdown-content .kt-table--stack :is(tbody, tr) {
+		margin: 0;
+	}
+	.sl-markdown-content .kt-table--stack tr {
+		padding: 0.75rem 1rem;
+		border-bottom: 1px solid var(--kt-border);
+	}
+	.sl-markdown-content .kt-table--stack tr:last-child {
+		border-bottom: 0;
+	}
+	.sl-markdown-content .kt-table--stack tbody tr:hover > * {
+		background-color: transparent;
+	}
+	.sl-markdown-content .kt-table--stack td,
+	.sl-markdown-content .kt-table--stack td:is(:first-child, :last-child) {
+		min-width: 0;
+		padding: 0;
+		border: 0;
+		text-align: start !important;
+	}
+	.sl-markdown-content .kt-table--stack td + td {
+		margin-top: 0.25rem;
+	}
+	.sl-markdown-content .kt-table--stack td:empty {
+		display: none;
+	}
+	.sl-markdown-content .kt-table--stack td:first-child {
+		color: var(--kt-text-strong);
+		font-weight: 600;
+	}
+	.sl-markdown-content .kt-table--stack td code:not(.kt-nw) {
+		white-space: normal;
+	}
+	.sl-markdown-content .kt-table--stack .kt-cell-label {
+		display: inline;
+		margin-inline-end: 0.125rem;
+		color: var(--kt-text-muted);
+		font-size: var(--kt-text-xs);
+		font-weight: 600;
+	}
+	.sl-markdown-content .kt-table--stack td :is(code, a) {
+		overflow-wrap: anywhere;
+	}
+}
+
+/* ----------------------------------------------------------------- asides */
+
+/* Starlight's asides in the site's callout style: rounded, lightly tinted, and in the site's
+   colors (note neutral, tip brand, caution the amber "experimental" signal, danger red). */
+.starlight-aside {
+	--kt-aside-line: var(--kt-border-strong);
+	--kt-aside-bg: var(--kt-surface);
+	--kt-aside-icon: var(--kt-text-muted);
+	--sl-color-asides-text-accent: var(--kt-text-strong);
+	--sl-color-asides-border: var(--kt-aside-line);
+	padding: 0.875rem 1.125rem 1rem;
+	border: 1px solid var(--kt-aside-line);
+	border-radius: var(--kt-radius-lg);
+	background-color: var(--kt-aside-bg);
+	color: var(--kt-text-strong);
+}
+.starlight-aside--tip {
+	--kt-aside-line: var(--kt-brand-line);
+	--kt-aside-bg: var(--kt-brand-soft);
+	--kt-aside-icon: var(--kt-brand);
+	--sl-color-asides-text-accent: var(--kt-brand-strong);
+}
+.starlight-aside--caution {
+	--kt-aside-line: var(--kt-experimental-line);
+	--kt-aside-bg: var(--kt-experimental-bg);
+	--kt-aside-icon: var(--kt-experimental);
+	--sl-color-asides-text-accent: var(--kt-experimental-text);
+}
+.starlight-aside--danger {
+	--kt-aside-line: var(--kt-danger-line);
+	--kt-aside-bg: var(--kt-danger-bg);
+	--kt-aside-icon: var(--kt-danger);
+	--sl-color-asides-text-accent: var(--kt-danger-text);
+}
+.starlight-aside__title {
+	gap: 0.5rem;
+	font-size: var(--kt-text-sm);
+	letter-spacing: 0;
+}
+.starlight-aside__icon {
+	font-size: 1.125rem;
+	color: var(--kt-aside-icon);
+}
+.starlight-aside__title + .starlight-aside__content {
+	margin-top: 0.375rem;
+}
+.starlight-aside__content {
+	font-size: var(--kt-text-sm);
+	line-height: 1.65;
+}
+.sl-markdown-content .starlight-aside__content a:not(:where(.not-content *)) {
+	color: var(--kt-brand);
+}
+.sl-markdown-content .starlight-aside--caution .starlight-aside__content a:not(:where(.not-content *)),
+.sl-markdown-content .starlight-aside--danger .starlight-aside__content a:not(:where(.not-content *)) {
+	color: inherit;
+	font-weight: 600;
+}
+
+/* ---------------------------------------------------------------- sidebar */
+
+/* The current page: a tint of the brand with a bar, not a filled pill. */
+.sidebar-content a[aria-current='page'],
+.sidebar-content a[aria-current='page']:is(:hover, :focus) {
+	border-radius: 0 var(--kt-radius-sm) var(--kt-radius-sm) 0;
+	background-color: color-mix(in srgb, var(--kt-brand) 15%, transparent);
+	box-shadow: inset 2px 0 0 var(--kt-brand);
+	color: var(--kt-brand-strong);
+	font-weight: 600;
+}
+
+/* ---------------------------------------------------------- landing pages */
+
+/* "Start here" cards at the top of each docs landing page (scripts/sync-docs.mjs). */
+.kt-doc-cards ul {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr));
+	gap: 0.75rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.kt-doc-card {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	height: 100%;
+	padding: 1rem 1.125rem;
+	border: 1px solid var(--kt-border);
+	border-radius: var(--kt-radius-lg);
+	background-color: var(--kt-surface);
+	box-shadow: var(--kt-shadow-card);
+	color: var(--kt-text);
+	text-decoration: none;
+	transition: border-color 120ms ease, background-color 120ms ease;
+}
+.kt-doc-card:hover {
+	border-color: var(--kt-brand-line);
+	background-color: var(--kt-surface-2);
+}
+.kt-doc-card:focus-visible {
+	border-radius: var(--kt-radius-lg);
+}
+.kt-doc-card__eyebrow {
+	color: var(--kt-brand);
+	font-size: 0.75rem;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+.kt-doc-card__title {
+	color: var(--kt-text-strong);
+	font-weight: 600;
+}
+.kt-doc-card__title::after {
+	/* The same chevron as the marketing pages' "go" links, drawn as a CSS mask over no-break
+	   spaces so it never wraps onto a line of its own (and is never announced). */
+	content: '\a0\a0\a0\a0';
+	content: '\a0\a0\a0\a0' / '';
+	color: transparent;
+	background-color: var(--kt-brand);
+	-webkit-mask: var(--kt-chevron) right 0.05em center / 0.7em 0.7em no-repeat;
+	mask: var(--kt-chevron) right 0.05em center / 0.7em 0.7em no-repeat;
+}
+.kt-doc-card__summary {
+	color: var(--kt-text-muted);
+	font-size: var(--kt-text-sm);
+	line-height: 1.5;
+}
+@media (max-width: 29.99rem) {
+	/* Phones: two compact columns, title only. */
+	.kt-doc-cards ul {
+		grid-template-columns: 1fr 1fr;
+		gap: 0.5rem;
+	}
+	.kt-doc-card {
+		padding: 0.75rem 0.875rem;
+	}
+	.kt-doc-card__summary {
+		display: none;
+	}
+	.kt-doc-card__title {
+		font-size: var(--kt-text-sm);
+		line-height: 1.35;
+	}
+}
+
+/* One-line project status on a landing page. */
+.sl-markdown-content .kt-doc-status {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.375rem 0.625rem;
+	color: var(--kt-text-muted);
+	font-size: var(--kt-text-sm);
+	text-wrap: balance;
+}
+
+/* ------------------------------------------------------------------ other */
+
+/* Program output (```text after a shell block, titled "Output" by the sync): not something to
+   paste back, so no copy button, as on the marketing pages. */
+.sl-markdown-content .kt-output .expressive-code .copy {
+	display: none;
+}
+
+/* Collapsible blocks copied from the repositories (<details><summary>). */
+.sl-markdown-content details:not(:where(.not-content *)) {
+	border: 1px solid var(--kt-border);
+	border-radius: var(--kt-radius);
+	padding: 0.5rem 1rem;
+}
+.sl-markdown-content details > summary:not(:where(.not-content *)) {
+	cursor: pointer;
+	font-weight: 600;
+}
+
+/* "Imported from <file> at commit <sha>" line at the end of every imported page. */
+.sl-markdown-content .kt-doc-source {
+	margin-top: 3rem;
+	padding-top: 1rem;
+	border-top: 1px solid var(--sl-color-hairline);
+	color: var(--sl-color-gray-3);
+	font-size: var(--sl-text-xs);
+}
+.sl-markdown-content .kt-doc-source code {
+	font-size: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.sl-markdown-content a,
+	.kt-doc-card {
+		transition: none;
+	}
+}

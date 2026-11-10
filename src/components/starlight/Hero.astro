@@ -1,0 +1,113 @@
+---
+// The marketing pages in src/pages/ draw their own heading, so their (empty)
+// hero renders nothing. The 404 page gets a branded hero with ways back in.
+// Any other page with a hero falls back to Starlight's.
+import Default from '@astrojs/starlight/components/Hero.astro';
+import { normalizePath, sitePages } from '../site/nav';
+import { products } from '../../data/products';
+
+const route = Astro.locals.starlightRoute;
+const isSitePage = sitePages.includes(normalizePath(Astro.url.pathname));
+const is404 = route.id === '404' || route.id.endsWith('/404');
+const java = products['kmip-java'];
+const server = products['kmip-server'];
+const links = [
+  { label: 'Home', href: '/', desc: 'Both projects on one page' },
+  { label: java.title, href: java.overview, desc: java.kind },
+  { label: server.title, href: server.overview, desc: server.kind },
+  { label: 'Java SDK docs', href: java.docs, desc: 'Getting started and the API guides' },
+  { label: 'Server docs', href: server.docs, desc: 'Quick start and configuration' },
+  { label: 'Downloads', href: '/downloads/', desc: 'Source, images and release signatures' },
+];
+---
+
+{
+  isSitePage ? null : is404 ? (
+    <div class="kt-404 not-content">
+      <p class="kt-404__code" aria-hidden="true">404</p>
+      <h1 id="_top" data-page-title>Page not found</h1>
+      <p class="kt-404__lead">
+        There is no page at this address. Use search in the header, or start from one of these
+        pages.
+      </p>
+      <ul class="kt-404__links">
+        {links.map((link) => (
+          <li>
+            <a href={link.href}>
+              <span class:list={['kt-404__label', { 'kt-404__label--entity': link.entity }]}>{link.label}</span>
+              <span class="kt-404__desc">{link.desc}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ) : (
+    <Default />
+  )
+}
+
+<style>
+  .kt-404 {
+    padding-block: clamp(2rem, 1rem + 6vw, 5rem) 1rem;
+    max-width: 44rem;
+  }
+  .kt-404__code {
+    margin: 0;
+    font-family: var(--kt-font-mono);
+    font-size: var(--kt-text-sm);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: var(--kt-brand);
+  }
+  h1 {
+    margin: 0.5rem 0 0;
+    font-size: var(--kt-text-display);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--kt-text-strong);
+  }
+  .kt-404__lead {
+    margin: 1rem 0 0;
+    font-size: var(--kt-text-lg);
+    line-height: 1.6;
+    color: var(--kt-text);
+  }
+  .kt-404__links {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+    gap: 0.75rem;
+    margin: 2rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .kt-404__links a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    height: 100%;
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--kt-border);
+    border-radius: var(--kt-radius);
+    background-color: var(--kt-surface);
+    text-decoration: none;
+  }
+  .kt-404__links a:hover {
+    border-color: var(--kt-brand-line);
+  }
+  .kt-404__label {
+    font-weight: 600;
+    line-height: 1.625rem;
+    color: var(--kt-text-strong);
+  }
+  /* Product names: the mono entity treatment used everywhere else. */
+  .kt-404__label--entity {
+    font-family: var(--kt-font-mono);
+    font-size: var(--kt-text-sm);
+    font-weight: 500;
+  }
+  .kt-404__desc {
+    font-size: var(--kt-text-sm);
+    color: var(--kt-text-muted);
+  }
+</style>

@@ -1,0 +1,16 @@
+---
+// Docs pages open with their project's bar (ProjectBar), so every docs page, phones
+// included, shows which project it belongs to and links back to the project's overview.
+import Default from '@astrojs/starlight/components/PageTitle.astro';
+import ProjectBar from '../site/ProjectBar.astro';
+import { products, type ProductSlug } from '../../data/products';
+
+const id = Astro.locals.starlightRoute.id;
+const slug = (Object.keys(products) as ProductSlug[]).find((s) => id.startsWith(`${s}/docs`));
+const p = slug && products[slug];
+const at = p && Astro.url.pathname.replace(/\/?$/, '/') === p.releaseNotes ? 'notes' : 'docs';
+const docsHome = !!p && Astro.url.pathname.replace(/\/?$/, '/') === p.docs;
+---
+
+{slug && <ProjectBar slug={slug} at={at} docsHome={docsHome} />}
+<Default />
