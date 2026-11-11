@@ -88,7 +88,9 @@ const columns = [
             Both are experimental; do not use them for real keys or data.
           </p>
           <p class="kt-footer__mail">
-            Security reports: <a href={`mailto:${project.securityEmail}`}>{project.securityEmail}</a>
+            Report a vulnerability privately on GitHub:{' '}
+            <a href={products['kmip-java'].reportVulnerability}><span class="kt-nw">keytend-kmip</span></a>,{' '}
+            <a href={products['kmip-server'].reportVulnerability}><span class="kt-nw">keytend-kmip-server</span></a>
           </p>
         </div>
         {columns.map((column) => (

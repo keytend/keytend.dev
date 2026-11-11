@@ -19,6 +19,8 @@ export const products = {
     repo: 'https://github.com/keytend/keytend-kmip-java',
     releases: 'https://github.com/keytend/keytend-kmip-java/releases',
     issues: 'https://github.com/keytend/keytend-kmip-java/issues',
+    /** GitHub private vulnerability reporting: the only way to report a vulnerability. */
+    reportVulnerability: 'https://github.com/keytend/keytend-kmip-java/security/advisories/new',
     security: '/kmip-java/docs/security/',
     releaseNotes: '/kmip-java/docs/release-notes/',
     overview: '/kmip-java/',
@@ -50,6 +52,8 @@ export const products = {
     repo: 'https://github.com/keytend/keytend-kmip-server',
     releases: 'https://github.com/keytend/keytend-kmip-server/releases',
     issues: 'https://github.com/keytend/keytend-kmip-server/issues',
+    /** GitHub private vulnerability reporting: the only way to report a vulnerability. */
+    reportVulnerability: 'https://github.com/keytend/keytend-kmip-server/security/advisories/new',
     security: '/kmip-server/docs/security/',
     releaseNotes: 'https://github.com/keytend/keytend-kmip-server/releases',
     overview: '/kmip-server/',
@@ -73,7 +77,6 @@ export type ProductSlug = keyof typeof products;
 
 /** Shared facts about the project as a whole. */
 export const project = {
-  securityEmail: 'security@keytend.dev',
   github: 'https://github.com/keytend',
   license: 'Apache-2.0',
   licenseUrl: 'https://www.apache.org/licenses/LICENSE-2.0',

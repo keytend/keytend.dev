@@ -60,10 +60,18 @@ const server = products['kmip-server'];
       <div class="kt-security__main">
         <h2 id="security-title">Reporting a vulnerability</h2>
         <p>
-          Email the report to{' '}
-          <a class="kt-security__mail" href={`mailto:${project.securityEmail}`}>{project.securityEmail}</a>.
-          Do not open a public issue, pull request or discussion for a suspected vulnerability.
+          Report it privately on GitHub, with the form for the project it affects. Only you and
+          the maintainer can see the report.
         </p>
+        <ul class="kt-security__forms">
+          <li>
+            <a class="kt-security__link" href={java.reportVulnerability}>Report a vulnerability in keytend-kmip</a>
+          </li>
+          <li>
+            <a class="kt-security__link" href={server.reportVulnerability}>Report a vulnerability in keytend-kmip-server</a>
+          </li>
+        </ul>
+        <p>Do not open a public issue, pull request or discussion for a suspected vulnerability.</p>
         <p>Please include:</p>
         <ul class="kt-list">
           <li>the affected version or commit (and, for keytend-kmip, the JDK version);</li>
@@ -81,12 +89,6 @@ const server = products['kmip-server'];
             keytend-kmip aims to acknowledge within 7 days, assess within 14 days, and ship a fixed
             release within 90 days of a confirmed report. No service level agreement backs these
             goals. keytend-kmip-server has no response-time commitment yet.
-          </dd>
-        </div>
-        <div>
-          <dt>Encryption<span class="sr-only">: </span></dt>
-          <dd>
-            Reports cannot be encrypted yet. The Keytend OpenPGP key has signing subkeys only.
           </dd>
         </div>
         <div>
@@ -304,17 +306,24 @@ const server = products['kmip-server'];
     margin-top: 0 !important;
     font-size: var(--kt-text-2xl);
   }
-  .kt-security__mail {
-    font-family: var(--kt-font-mono);
-    font-weight: 500;
+  .kt-security__link {
+    font-weight: 600;
     color: var(--kt-brand);
     text-decoration: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 0.2em;
     overflow-wrap: anywhere;
   }
-  .kt-security__mail:hover {
+  .kt-security__link:hover {
     text-decoration-thickness: 2px;
+  }
+  .kt-security__forms {
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style: none;
+  }
+  .kt-security__forms li + li {
+    margin-top: 0.375rem;
   }
   .kt-security__facts {
     margin: 0;
