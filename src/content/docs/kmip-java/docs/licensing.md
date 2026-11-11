@@ -6,8 +6,8 @@ head: [{"tag":"title","content":"Licensing | Keytend KMIP Java SDK"},{"tag":"met
 ---
 
 keytend-kmip's own code and documentation are licensed under the
-[Apache License 2.0](https://github.com/keytend/keytend-kmip-java/blob/0c5c725ae9b700f6e754643c3c21fde811680039/LICENSE).
-[NOTICE](https://github.com/keytend/keytend-kmip-java/blob/0c5c725ae9b700f6e754643c3c21fde811680039/NOTICE) names the project and keeps the standards and third-party attributions.
+[Apache License 2.0](https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/LICENSE).
+[NOTICE](https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/NOTICE) names the project and keeps the standards and third-party attributions.
 
 ## What the JARs contain
 
@@ -64,4 +64,4 @@ ships, and that NOTICE names the Caffeine version the build bundles.
 - Each server used in the integration tests keeps its own license. Downloading or running one
   does not place it under Apache-2.0.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/0c5c725ae9b700f6e754643c3c21fde811680039/docs/licensing.md"><code>docs/licensing.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>0c5c725</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/docs/licensing.md"><code>docs/licensing.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>c6c8eb9</code>.</p>

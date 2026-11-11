@@ -134,12 +134,14 @@ such as `0.10.0`, or a pre-release's, such as `0.10.0-rc.1`:
   `keytend-kmip-testing-X.Y.Z-sources.jar` and its SBOM,
   `keytend-kmip-testing-X.Y.Z-cyclonedx.json`, which lists the SDK and
   slf4j-api. They are not in the ZIPs. Use them in tests only.
-- A `.sha256` of each ZIP and of each of those three files.
+- `keytend-kmip-X.Y.Z-central-bundle.zip`, the signed Maven artifacts exactly
+  as they are uploaded to Maven Central. Users do not need it.
+- A `.sha256` of each ZIP and of each of those four files.
 - `SHA256SUMS`. It lists the SHA-256 of each file in the binary ZIP, under
   `keytend-kmip-X.Y.Z/`, then of the binary ZIP's own `SHA256SUMS`, then of the
-  two ZIPs and the three files beside them. The binary ZIP's own `SHA256SUMS`
+  two ZIPs and the four files beside them. The binary ZIP's own `SHA256SUMS`
   lists its contents only.
-- A `.asc` of each ZIP, of each of the three files and of `SHA256SUMS`:
+- A `.asc` of each ZIP, of each of the four files and of `SHA256SUMS`:
   detached OpenPGP signatures by the release key.
 
 Checksums show that a download is intact. Only the signatures show who
@@ -196,4 +198,4 @@ keytend-kmip is not on Maven Central. A release deployed there would be the
 same build: its JARs and SBOMs would have the SHA-256 values `SHA256SUMS`
 lists.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/0c5c725ae9b700f6e754643c3c21fde811680039/SECURITY.md"><code>SECURITY.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>0c5c725</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/SECURITY.md"><code>SECURITY.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>c6c8eb9</code>.</p>

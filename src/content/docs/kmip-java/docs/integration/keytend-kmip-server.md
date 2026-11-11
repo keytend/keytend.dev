@@ -19,7 +19,7 @@ module or test runs it. The release checks run it when given the server image (`
 
 - To check an SDK build against a real server on every protocol version.
 - To check a new server image before you change the pin in
-  [`pinned-image.properties`](https://github.com/keytend/keytend-kmip-java/blob/0c5c725ae9b700f6e754643c3c21fde811680039/tools/kmip-server/pinned-image.properties).
+  [`pinned-image.properties`](https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/tools/kmip-server/pinned-image.properties).
 
 ## Requirements
 
@@ -186,4 +186,4 @@ To run it yourself, use the commands above with `--setup configured`, then with 
 and a new `--work`. For the suite's per-version results and how to read them, see
 [How to read the results](/kmip-java/docs/validation/#how-to-read-the-results).
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/0c5c725ae9b700f6e754643c3c21fde811680039/integration/keytend-kmip-server/README.md"><code>integration/keytend-kmip-server/README.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>0c5c725</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/integration/keytend-kmip-server/README.md"><code>integration/keytend-kmip-server/README.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>c6c8eb9</code>.</p>

@@ -215,16 +215,6 @@ containers. JSON reports go to `integration/reports`, which Git ignores.
 The script runs `verify` once per JDK. Set `JDK17_HOME`, `JDK21_HOME` and `JDK25_HOME`, or install
 the JDKs with SDKMAN. The release check runs this matrix too ([Releasing](/kmip-java/docs/releasing/)).
 
-To reuse the exact server images the catalog was qualified on, add:
-
-```sh frame="code"
-./tools/verify-jdks.sh -Pintegration \
-  -Dkmip.catalog.imagesFile=integration/catalog/qualified-images.properties
-```
-
-That file names immutable local image IDs, and nothing is downloaded. On a fresh machine, omit
-the property, and the images are built from the checked-in recipes.
-
 ### The catalog
 
 The catalog runs within the same integration build. [Catalog](/kmip-java/docs/catalog/#running-the-catalog)
@@ -297,4 +287,4 @@ The release checks run both, and the catalog's (`tools/summarize-catalog.py` and
 carries ([Where the results are](#where-the-results-are)). Nothing is committed: results are not
 part of the source tree.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/0c5c725ae9b700f6e754643c3c21fde811680039/docs/validation.md"><code>docs/validation.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>0c5c725</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/docs/validation.md"><code>docs/validation.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>c6c8eb9</code>.</p>

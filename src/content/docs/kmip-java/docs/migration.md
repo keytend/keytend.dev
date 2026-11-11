@@ -97,4 +97,4 @@ Notes on the mapping:
 - The SDK chooses GCM, CBC and CTR IVs itself. You cannot pass one.
 - Retrieved secret keys are `DestroyableSecretKey`s. Destroy them when you are done.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/0c5c725ae9b700f6e754643c3c21fde811680039/docs/migration.md"><code>docs/migration.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>0c5c725</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/docs/migration.md"><code>docs/migration.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>c6c8eb9</code>.</p>

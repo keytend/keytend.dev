@@ -124,7 +124,7 @@ so nothing is left running after a failure.
 
 ## Configuration
 
-[`pinned-image.properties`](https://github.com/keytend/keytend-kmip-java/blob/0c5c725ae9b700f6e754643c3c21fde811680039/tools/kmip-server/pinned-image.properties) names one build: keytend-kmip-server
+[`pinned-image.properties`](https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/tools/kmip-server/pinned-image.properties) names one build: keytend-kmip-server
 0.10.0-rc.1, its linux/amd64 Docker archive by SHA-256, and the image that archive loads by ID.
 `run-server.sh` starts only that image ID. It loads an archive only if its SHA-256 matches.
 
@@ -146,4 +146,4 @@ so nothing is left running after a failure.
 - Stores written by early development builds of the server do not open (`invalid master key`). Every tool makes a fresh store per run.
 - The pin covers one platform, linux/amd64.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/0c5c725ae9b700f6e754643c3c21fde811680039/tools/kmip-server/README.md"><code>tools/kmip-server/README.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>0c5c725</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/tools/kmip-server/README.md"><code>tools/kmip-server/README.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>c6c8eb9</code>.</p>

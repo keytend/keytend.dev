@@ -7,8 +7,8 @@ head: [{"tag":"title","content":"Releasing keytend-kmip | Keytend KMIP Java SDK"
 
 This is the maintainer's runbook. A release is a GitHub release holding two
 reproducible ZIPs, the binary distribution and its source, and beside them the
-in-memory test server's JAR. No release is deployed to Maven Central for now.
-Step 3 says how one would be, and the release checks run that deploy dry.
+in-memory test server's JAR. A release X.Y.Z is also deployed to Maven Central
+(step 3). A pre-release X.Y.Z-rc.N never is.
 
 A release is built, tested, reported, then packaged. The release checks build
 the distribution, run every test against it, and write the results to a reports
@@ -16,8 +16,10 @@ directory. The packaging puts those reports in the binary ZIP's `validation/`
 ([Where the results are](/kmip-java/docs/validation/#where-the-results-are)). The docs hold no
 results.
 
-Nothing here runs in CI. The maintainer runs every step locally, with JDK 17.
-The signing policy is in [SECURITY.md](/kmip-java/docs/security/#verifying-release-artifacts).
+The maintainer prepares the version (step 1) and pushes its tag. The release
+workflow then runs steps 1 to 3 on GitHub Actions
+([The release workflow](#the-release-workflow)). Every step can also run
+locally, with JDK 17, as this page describes it. The signing policy is in [SECURITY.md](/kmip-java/docs/security/#verifying-release-artifacts).
 This page says how to follow it.
 
 "The release checks" on this page means `tools/release-check.sh`, which runs
@@ -81,9 +83,100 @@ off Central too.
 - [x] The GitHub organization `keytend` exists.
 - [x] The Central namespace `dev.keytend` is verified, by DNS on
   `keytend.dev` (step 3, "Namespace").
+- [ ] The repository's CI signing subkey is made, given to the workflows and
+  published on both keyservers, and the Central Portal token is a repository
+  secret ([The release workflow](#the-release-workflow), "Settings").
 
 keytend-kmip lives in `keytend/keytend-kmip-java`. The POM's `url`, `scm` and
 `issueManagement`, the README, SECURITY.md and the tools all name it.
+
+## The release workflow
+
+Two GitHub Actions workflows build and publish a release. They run in
+`keytend/keytend-kmip-java` only.
+
+`.github/workflows/release.yml` starts when a tag `vX.Y.Z` or
+`vX.Y.Z-rc.N` is pushed. It runs three jobs:
+
+1. **check.** The tag must name the POMs' version, a release version, and a
+   commit on `main`.
+2. **release-check.** It runs the full release checks on the tagged commit:
+   `tools/release-check.sh --jdks "17 21 25" --integration --server` with the
+   pinned keytend-kmip-server build
+   ([The pinned keytend-kmip-server build](#the-pinned-keytend-kmip-server-build)).
+   It downloads that build from the server's GitHub release and checks the
+   release asset's and the archive's SHA-256 against
+   `tools/kmip-server/pinned-image.properties`. The JDKs are Temurin 17, 21 and
+   25. The job keeps the reports, `summary.txt` and `run.txt` as the artifact
+   `release-check`, the first distribution build's JARs and SBOMs with the
+   second build's unsigned Central bundle as `tested-build`, and the logs as
+   `release-check-logs` when a check fails. This job holds no secret.
+3. **release.** It builds nothing. It puts the `tested-build` files back into
+   the checkout, packages them with the release checks' reports and signs them
+   with the CI signing subkey, so what is signed is what was tested. It signs
+   every file of the Central bundle too, whose JARs must be those same files,
+   into the asset `keytend-kmip-X.Y.Z-central-bundle.zip`.
+   `tools/package-release.py` refuses to unless the release checks passed on
+   this commit. The signing keyring is removed before the next step. Then it
+   fetches the release key from keyserver.ubuntu.com, as users do, and runs
+   `tools/publish-release.sh X.Y.Z --publish --draft`, which verifies every
+   signature and creates a **draft** release. An `-rc.N` is marked a
+   pre-release.
+
+A manual run of `release` (Actions, release, Run workflow) runs the first two
+jobs on the branch's commit, and releases nothing. With `central_drop`, the
+third job then signs as on a tag but makes no GitHub release: it uploads the
+signed Central bundle to the Central Portal, waits for its validation and drops
+it (`tools/central-upload.py --drop`), so nothing reaches Central. This tries a
+bundle before a tag is pushed.
+
+The maintainer reviews the draft: its notes, its assets and the
+`release-check` artifact. Then the maintainer publishes it, or deletes it and
+its tag. Publishing a release X.Y.Z starts `.github/workflows/publish-central.yml`
+(step 3). Publishing a pre-release starts nothing.
+
+`publish-central.yml` builds and signs nothing. It verifies the release's
+`SHA256SUMS` signature against SECURITY.md's fingerprint, downloads the
+release's `keytend-kmip-X.Y.Z-central-bundle.zip` and checks it against
+`SHA256SUMS`. Then it uploads that bundle to the Central Portal as it is, and
+publishes it once the Portal has validated it
+(`tools/central-upload.py --publish`). So Central gets the JARs the release
+checks tested, the GitHub release's own. A manual run takes a
+published release's version and `drop` or `publish`. `drop` uploads the
+bundle, waits for the Portal's validation and drops it, so nothing reaches
+Central; it works for a pre-release too. `publish` takes a release X.Y.Z
+only, and `tools/central-upload.py` refuses a bundle of any other version
+before it uploads anything.
+
+### Settings
+
+Once, by the release key's holder, with the primary key at hand:
+
+```sh title="Settings"
+tools/ci-signing-subkey.sh
+```
+
+It asks once for the release key's passphrase and adds an Ed25519 signing
+subkey to the release key, valid for two years. It removes the passphrase from
+a copy of the subkey's secret in a temporary keyring, checks that the copy signs,
+and stores it as the repository secret `KEYTEND_SIGNING_KEY`, with its
+fingerprint as the variable `KEYTEND_SIGNING_SUBKEY`. The subkey in your own
+keyring keeps its passphrase. If a run stops after adding the subkey, run it
+again with `--subkey FINGERPRINT`, the fingerprint it printed, to use that
+subkey rather than add another. Then publish the key on both keyservers, with the
+commands it prints, before the first tag. The draft step and Central both
+verify against the published key. The subkey belongs to this repository alone.
+If the secret leaks, revoke that subkey ([the release key](#the-release-key)).
+
+The Central Portal user token goes in two repository secrets. `gh secret set`
+reads each value from the terminal, not from an argument:
+
+```sh frame="code"
+gh secret set CENTRAL_TOKEN_USERNAME -R keytend/keytend-kmip-java
+gh secret set CENTRAL_TOKEN_PASSWORD -R keytend/keytend-kmip-java
+```
+
+The workflows pin each action they use by commit, with its release in a comment.
 
 ## The first release
 
@@ -108,15 +201,14 @@ one off in order:
    link its form in SECURITY.md's "Reporting a vulnerability", beside the email
    address: `https://github.com/keytend/keytend-kmip-java/security/advisories/new`.
 3. [ ] For each pre-release `0.10.0-rc.N`, and then for 0.10.0: make the
-   `Prepare version` commit (step 1), run the full release checks on it, with
-   `--server`, in a clone of the public repository. Every check must pass. Tag
-   that commit `v0.10.0-rc.N` (or `v0.10.0`).
-4. [ ] Build, package with that run's reports, sign and publish the GitHub
-   release (step 2). Push the tag, then run
-   `tools/publish-release.sh 0.10.0-rc.N --publish`, which publishes it as a
-   pre-release (0.10.0 itself as a normal release). It checks that the tag
-   names the packaged commit, verifies the signatures against SECURITY.md's
-   fingerprint and attaches every asset. Verify the release as a user would.
+   `Prepare version` commit (step 1) on `main`, and push its tag
+   `v0.10.0-rc.N` (or `v0.10.0`). The release workflow runs the full release
+   checks, with `--server`, and every check must pass. It then signs the release
+   and creates its draft ([The release workflow](#the-release-workflow)).
+4. [ ] Review the draft, publish it, and verify the release as a user would.
+   A pre-release stays on GitHub. Publishing 0.10.0 deploys it to Maven Central
+   (step 3). Once it is on Central, change "not on Maven Central" in README.md,
+   docs/getting-started.md and SECURITY.md to the Central dependency.
 5. [ ] Once 0.10.0 itself is published, make it the API baseline (the end of
    step 1). Set `api.baseline.name`, `api.baseline.version` (0.10.0) and its
    SHA-256 in `sdk/pom.xml`. Its stored-format fixtures,
@@ -415,8 +507,7 @@ Each value comes from the release's own files: the asset's SHA-256 from its
 source commit from `release/linux-amd64/image.json` in the signed tar.
 
 Give `--server` the archive or the loaded image. For the archive, its SHA-256 is
-checked, it is loaded, and the loaded ID is checked. For an image, its ID is
-checked. Every live check fails for any other image.
+checked, then it is loaded. For an image, its ID is checked. Every live check fails for any other image.
 `--server-unpinned` runs another, for experiments, and records the check as
 `UNPIN`, which is not a pass.
 
@@ -509,11 +600,19 @@ release checks (step 1):
 
 ```sh title="Build, package and sign the GitHub release"
 release_epoch=$(git show -s --format=%ct HEAD)
-TZ=UTC ./mvnw -B clean -Pdistribution verify \
-  -Dproject.build.outputTimestamp="$release_epoch"
+TZ=UTC ./mvnw -B clean -Pdistribution,central deploy -DskipUpload=true \
+  -Dmaven.install.skip=true -Dproject.build.outputTimestamp="$release_epoch"
 python3 tools/package-release.py --check-signing   # the signing setup, on a scratch file
-python3 tools/package-release.py --sign --reports <the run directory>/validation
+python3 tools/package-release.py --sign --reports <the run directory>/validation \
+  --central-bundle target/central-publishing/central-bundle.zip
 ```
+
+The `central` profile writes the Maven Central bundle of the same build,
+`target/central-publishing/central-bundle.zip`, and `-DskipUpload=true` keeps
+it from uploading anything. Without a key name (`-Dgpg.keyname`) it signs
+nothing: `--central-bundle` signs every file of it but the checksums, refuses
+it unless its JARs are the ones in each module's `target/`, and publishes it as
+`keytend-kmip-X.Y.Z-central-bundle.zip` (step 3).
 
 Build online. The CycloneDX plugin skips the SBOMs when Maven is offline (`-o`), and the
 packaging script then stops and names the SBOM that is missing.
@@ -573,6 +672,9 @@ The script writes two ZIPs to `target/releases/`:
 - `keytend-kmip-X.Y.Z-src.zip`, the source: the committed tree of the tag as
   `git archive` gives it, under `keytend-kmip-X.Y.Z-src/`.
 
+With `--central-bundle`, it also writes the signed Central bundle,
+`keytend-kmip-X.Y.Z-central-bundle.zip`.
+
 Before writing them, the script checks:
 
 - each module JAR's `META-INF/LICENSE` and `META-INF/NOTICE` are the repository's
@@ -616,7 +718,10 @@ Beside the ZIPs the script writes:
 The signatures are made by the release key's **signing subkey**
 `AAE2AF4DD7F2427F52B800D494E026FE1BF6C09E` (Ed25519, signing only). Its primary
 key fingerprint is `3A84912AFBE7D2B04EBA2A8A51E65DD49C6F987F`, the one
-SECURITY.md publishes. Step 3's `-Dgpg.keyname` names the same subkey.
+SECURITY.md publishes. Step 3's `-Dgpg.keyname` names the same subkey. The
+release workflow signs with the repository's CI signing subkey instead,
+another subkey of the same release key (`--sign-key`, and `-Dgpg.keyname` in
+step 3), so users verify against the same primary fingerprint.
 
 How the script signs:
 
@@ -747,12 +852,18 @@ gh release create vX.Y.Z --verify-tag --title "keytend-kmip X.Y.Z" \
   target/releases/keytend-kmip-testing-X.Y.Z-sources.jar.sha256 \
   target/releases/keytend-kmip-testing-X.Y.Z-cyclonedx.json \
   target/releases/keytend-kmip-testing-X.Y.Z-cyclonedx.json.sha256 \
+  target/releases/keytend-kmip-X.Y.Z-central-bundle.zip \
+  target/releases/keytend-kmip-X.Y.Z-central-bundle.zip.sha256 \
   target/releases/SHA256SUMS \
   target/releases/keytend-kmip-X.Y.Z.zip.asc target/releases/keytend-kmip-X.Y.Z-src.zip.asc \
   target/releases/keytend-kmip-testing-X.Y.Z.jar.asc \
   target/releases/keytend-kmip-testing-X.Y.Z-sources.jar.asc \
-  target/releases/keytend-kmip-testing-X.Y.Z-cyclonedx.json.asc target/releases/SHA256SUMS.asc
+  target/releases/keytend-kmip-testing-X.Y.Z-cyclonedx.json.asc \
+  target/releases/keytend-kmip-X.Y.Z-central-bundle.zip.asc target/releases/SHA256SUMS.asc
 ```
+
+`--publish` refuses a release without its Central bundle. A check without
+`--publish` takes it when it is there.
 
 A pre-release's command also has `--prerelease`.
 
@@ -813,14 +924,17 @@ SBOMs and save its output as `osv-scanner.txt` in the run directory's
 
 ## 3. Deploy to Maven Central
 
-No release is deployed to Maven Central for now. The release checks run this
-step's deploy as a dry run (`central-bundle`), so it stays ready.
+A release X.Y.Z is deployed to Maven Central once its GitHub release is
+published. A pre-release X.Y.Z-rc.N never is. `publish-central.yml` does it
+([The release workflow](#the-release-workflow)), and the commands below do the
+same by hand. Nothing is built in this step: the bundle is the release's
+signed `keytend-kmip-X.Y.Z-central-bundle.zip` (step 2). The release checks
+build it as a dry run (`central-bundle`), so it stays ready.
 
-The `central` profile signs every artifact with GnuPG (`maven-gpg-plugin`). It
-uploads one bundle to the [Central Portal](https://central.sonatype.com) with
-Sonatype's `central-publishing-maven-plugin`, with `autoPublish=false`. The
-Portal validates the upload, which then waits until someone publishes it by
-hand.
+`tools/central-upload.py` uploads the bundle to the
+[Central Portal](https://central.sonatype.com), waits until the Portal has
+validated it, and publishes it (`--publish`) or drops it (`--drop`).
+`--publish` refuses a bundle of any version but X.Y.Z before it uploads anything.
 
 Without a key name (`-Dgpg.keyname`), the `no-signing-key` profile skips
 signing, so `-Pcentral verify` works on any machine. Central refuses an
@@ -855,39 +969,27 @@ unsigned bundle at validation.
 
 ### Each release
 
-From the same clean checkout of the tag, with the same `release_epoch`:
+Download the published release's bundle and `SHA256SUMS`, check them as
+[Verifying a release](#verifying-a-release) does, then upload the bundle:
 
 ```sh title="Each release"
-signing=${KEYTEND_SIGNING_HOME:-~/.config/keytend-kmip-java/signing/gnupg}
-passphrase=${KEYTEND_SIGNING_PASSPHRASE_FILE:-~/.config/keytend-kmip-java/signing/passphrase}
-# The passphrase goes from the file into this one command's environment, never into an argument.
-GNUPGHOME=$signing MAVEN_GPG_PASSPHRASE=$(cat "$passphrase") \
-  ./mvnw -B clean -Pdistribution,central deploy \
-  -Dproject.build.outputTimestamp="$release_epoch" \
-  -Dgpg.keyname='AAE2AF4DD7F2427F52B800D494E026FE1BF6C09E!' -DskipUpload=true
+gpg --verify SHA256SUMS.asc SHA256SUMS   # Good signature, from SECURITY.md's fingerprint
+sha256sum -c --ignore-missing SHA256SUMS
+python3 tools/central-upload.py keytend-kmip-X.Y.Z-central-bundle.zip \
+  --name "keytend-kmip X.Y.Z" --publish
 ```
 
-This is a dry run. `-DskipUpload=true` writes the signed bundle and sends
-nothing. The bundle is `central-bundle.zip` under `target/central-publishing/`,
-and the build log names it. Check that it holds the parent POM and the
-`keytend-kmip` artifacts with their `.asc` signatures, and nothing of
-`keytend-kmip-integration`.
-
-Then run the same command without `-DskipUpload=true`. The build waits until
-the Portal has validated the deployment. Open **Deployments** in the Portal,
-check it, and **Publish** it (or **Drop** it). Artifacts appear on Central some
-minutes after publishing.
+`tools/central-upload.py` reads the Portal user token from
+`CENTRAL_TOKEN_USERNAME` and `CENTRAL_TOKEN_PASSWORD`, or else from the server
+`central` of `~/.m2/settings.xml` ("One-time setup"). It uploads the bundle for
+the user to publish, waits until the Portal has validated it, then publishes it
+and waits until it is published. With `--drop` instead, it drops the validated
+deployment, and nothing is published. Artifacts appear on Central some minutes
+after publishing.
 
 :::caution[Publishing to Central cannot be undone]
 A version published on Central can never be changed or removed.
 :::
-
-If the GitHub ZIPs should come from the same build, run
-`python3 tools/package-release.py --reports <the run directory>/validation`
-after the deploy. The `.asc` files the deploy
-adds are not packaged. Its JARs are the bundle's, byte for byte, whatever the
-umask ([Reproducible builds](#reproducible-builds)). The release check's
-`central-bundle` compares them.
 
 ## The release key
 
@@ -900,6 +1002,13 @@ publish the key again on both keyservers. The primary key expires 2031-10-31.
 Extend its expiry before then and publish the key again. Sign a release only
 with a subkey that is valid when the release is published. A signature by an
 expired subkey no longer verifies as good.
+
+The CI signing subkey ([The release workflow](#the-release-workflow), "Settings")
+also expires two years after it is made. Before it expires, run
+`tools/ci-signing-subkey.sh` again. It adds a new subkey and replaces the
+repository's secret and variable. Publish the key again, then let the old CI
+subkey expire. A GitHub secret cannot be read back, so a CI subkey is never
+used anywhere else.
 
 If a subkey's secret is exposed, revoke that subkey with the primary key, and
 publish the revocation on both keyservers. Add a new signing subkey and publish
@@ -980,4 +1089,4 @@ release checks run them.
   release has none, and, while no baseline is pinned, while the release the
   tree builds has none. The first set is `formats/0.10.0/`.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/0c5c725ae9b700f6e754643c3c21fde811680039/docs/releasing.md"><code>docs/releasing.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>0c5c725</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/docs/releasing.md"><code>docs/releasing.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>c6c8eb9</code>.</p>

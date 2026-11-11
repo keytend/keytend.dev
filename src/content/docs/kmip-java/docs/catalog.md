@@ -73,7 +73,6 @@ Options, added to either command:
 | Property | Effect |
 |---|---|
 | `-Dkmip.catalog.strict=true` | Fail the build when a profile is not fully qualified. |
-| `-Dkmip.catalog.imagesFile=…` | Reuse the qualified local images ([Running the tests](/kmip-java/docs/validation/#every-jdk)). |
 | `-Dkmip.catalog.p95Millis=…`, `-Dkmip.catalog.p99Millis=…` | Change the Get latency budget. |
 | `-Dkmip.catalog.soak=PT24H` | Run the 24-hour soak case (at least 24 hours). |
 | `-Dkmip.catalog.previousArtifact=…` | The previous release's SDK JAR, for the upgrade case. |
@@ -94,7 +93,7 @@ java -Dkmip.server.build=EXACT_BUILD -Dkmip.server.image=sha256:IMAGE_DIGEST \
 ```
 
 - `SERVER_ID` is a live profile ID from
-  [the inventory](https://github.com/keytend/keytend-kmip-java/blob/0c5c725ae9b700f6e754643c3c21fde811680039/integration/catalog/server-inventory.json).
+  [the inventory](https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/integration/catalog/server-inventory.json).
 - The certificate directory holds PKCS12 client and server identities and CA files. Generate
   them with `./integration/catalog/generate-pki.sh "$PWD/integration/certs"`.
 - The extra Compose targets start with
@@ -126,9 +125,8 @@ writes these to a directory, `target/validation/catalog` by default (`--out`):
 and `policy-coverage.html`. They are self-contained; download them and open them locally.
 
 The release checks run both into their run directory's `validation/catalog/`, which each
-release's binary ZIP carries ([Where the results are](/kmip-java/docs/validation/#where-the-results-are)). The
-summary records the configuration hashes and image IDs the runs used. With
-`-Dkmip.catalog.imagesFile`, they are the ones in `integration/catalog/qualified-images.properties`.
+release's binary ZIP carries ([Where the results are](/kmip-java/docs/validation/#where-the-results-are)). Each
+run's record file holds the fixture's configuration hash and the image ID the run used.
 
 ## Outcome rules
 
@@ -273,4 +271,4 @@ These cases are recorded as blocked, not as failures:
 - JAVA-06 needs a completed 24-hour soak run.
 - JAVA-07 needs a released SDK JAR.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/0c5c725ae9b700f6e754643c3c21fde811680039/docs/catalog.md"><code>docs/catalog.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>0c5c725</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/docs/catalog.md"><code>docs/catalog.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>c6c8eb9</code>.</p>

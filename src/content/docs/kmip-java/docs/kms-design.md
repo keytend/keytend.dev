@@ -571,4 +571,4 @@ is in [TLS identities](/kmip-java/docs/tls-identities/). The choices behind it:
 - The SDK does not share intermediates across identities, retire unused
   intermediates, or keep an on-disk cache for starting while the KMS is down.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/0c5c725ae9b700f6e754643c3c21fde811680039/docs/kms-design.md"><code>docs/kms-design.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>0c5c725</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/docs/kms-design.md"><code>docs/kms-design.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>c6c8eb9</code>.</p>
