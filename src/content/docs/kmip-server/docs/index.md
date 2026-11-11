@@ -63,7 +63,7 @@ Running the server:
 | --- | --- |
 | [Issue server and client certificates](/kmip-server/docs/tls-setup/#issuing-them-with-openssl) | [cert-manager](/kmip-server/docs/tls-setup/#issuing-them-with-cert-manager), [revoke with a CRL](/kmip-server/docs/tls-setup/#crl) |
 | [Run it with Docker Compose](/kmip-server/docs/deployment/#docker-compose) | [upgrade it](/kmip-server/docs/operations/#upgrading-with-compose) |
-| [Install on Kubernetes with Helm](/kmip-server/docs/kubernetes/#install) | `helm test`, [check a client certificate](/kmip-server/docs/kubernetes/#client-namespaces) with [`kmip-check.yaml`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/deploy/kubernetes/tools/kmip-check.yaml) |
+| [Install on Kubernetes with Helm](/kmip-server/docs/kubernetes/#install) | `helm test`, [check a client certificate](/kmip-server/docs/kubernetes/#client-namespaces) with [`kmip-check.yaml`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/deploy/kubernetes/tools/kmip-check.yaml) |
 | [Reach the server from outside Kubernetes](/kmip-server/docs/kubernetes/#clients-outside-the-cluster) | [allow Notify and Put delivery](/kmip-server/docs/server-to-client/#configuration) |
 | [Add or move the health check](/kmip-server/docs/deployment/#health-check) | |
 | [Add a client or change its operations](/kmip-server/docs/operations/#changing-the-policy) | [role templates](/kmip-server/docs/configuration/#role-templates) |
@@ -145,4 +145,4 @@ page.
 - [Release builds](/kmip-server/docs/release-builds/): what a release set contains and how it
   is built.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/docs/README.md"><code>docs/README.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>770ad85</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/README.md"><code>docs/README.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>

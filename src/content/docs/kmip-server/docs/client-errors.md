@@ -78,4 +78,4 @@ succeeded, for example with Locate by the Name you gave the object; otherwise
 you can end up with two objects, or a Name collision. Restarts are described
 in [shutdown and restarts](/kmip-server/docs/operations/#shutdown-and-restarts).
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/docs/client-errors.md"><code>docs/client-errors.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>770ad85</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/client-errors.md"><code>docs/client-errors.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>

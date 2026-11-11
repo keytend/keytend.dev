@@ -9,8 +9,8 @@ Part of [connecting a client](/kmip-server/docs/clients/).
 
 [PyKMIP](https://github.com/OpenKMIP/PyKMIP), tested at commit `4815637`,
 binary KMIP 1.1–1.4, and the standard library for HTTPS JSON. The complete
-programs are in [`examples/clients/python`](https://github.com/keytend/keytend-kmip-server/tree/770ad850a3498544ef7a2259cece1a220e3d4520/examples/clients/python);
-its [`requirements.txt`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/examples/clients/python/requirements.txt)
+programs are in [`examples/clients/python`](https://github.com/keytend/keytend-kmip-server/tree/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/clients/python);
+its [`requirements.txt`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/clients/python/requirements.txt)
 pins PyKMIP.
 
 ## Run the examples
@@ -39,7 +39,7 @@ CA that issues only its certificates, or use the standard library's
 [HTTPS client](#server-side-encrypt-over-https-json), which checks the name.
 :::
 
-[`connect.py`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/examples/clients/python/connect.py) has the settings
+[`connect.py`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/clients/python/connect.py) has the settings
 for the quick-start server; every program repeats them, so that it runs on
 its own. `CLIENT` is `KMIP_CLIENT`, default `client`:
 
@@ -105,7 +105,7 @@ echo KMIP_USERS=/policy/app-users.json >> "$S/kmip.env"
 From source, stop the server and add `--users .cache/dev-pki/app-users.json`
 to its [`serve` command](/kmip-server/docs/manual-install/#run-from-source).
 
-[`credentials.py`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/examples/clients/python/credentials.py) connects
+[`credentials.py`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/clients/python/credentials.py) connects
 as `app`, once with the right password and once with a wrong one:
 
 ```python
@@ -137,7 +137,7 @@ administrators and the other credential types are in
 
 ## Common tasks
 
-[`common_tasks.py`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/examples/clients/python/common_tasks.py) creates a
+[`common_tasks.py`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/clients/python/common_tasks.py) creates a
 named key and finds it by Name, encrypts locally with the fetched key,
 registers outside key material, re-keys, and retires the keys. Each run uses
 a new Name, so it can run any number of times. Finding a key by Name:
@@ -174,10 +174,10 @@ authentication tag; send those requests over HTTPS JSON
 
 ## Server-side Encrypt over HTTPS JSON
 
-[`https_encrypt.py`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/examples/clients/python/https_encrypt.py) needs
+[`https_encrypt.py`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/clients/python/https_encrypt.py) needs
 only the standard library. It posts the
 [request files](/kmip-server/docs/examples/https/) to the HTTPS listener, filling in
-their `$NAME` placeholders as [`kmip.sh`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/examples/https/kmip.sh) does: it creates and
+their `$NAME` placeholders as [`kmip.sh`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/kmip.sh) does: it creates and
 activates an AES key, encrypts with AES-GCM on the server, decrypts, and
 shows the refusal when the Additional Data changes. It accepts Success in
 either [text encoding](/kmip-server/docs/configuration/#json-and-xml-response-forms): `Success` with the
@@ -221,7 +221,7 @@ what is safe to repeat
 
 PyKMIP raises `KmipOperationFailure` for a refused operation, with the
 Result Status, Result Reason and Result Message.
-[`errors.py`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/examples/clients/python/errors.py) asks for a key that
+[`errors.py`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/clients/python/errors.py) asks for a key that
 does not exist:
 
 ```python
@@ -249,4 +249,4 @@ TLS and connection failures raise other exceptions (`ssl.SSLError`,
 
 Next: [beyond the test setup](/kmip-server/docs/clients/#beyond-the-test-setup).
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/docs/clients/python.md"><code>docs/clients/python.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>770ad85</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/clients/python.md"><code>docs/clients/python.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>

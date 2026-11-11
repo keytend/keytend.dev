@@ -9,7 +9,7 @@ Part of [connecting a client](/kmip-server/docs/clients/).
 
 [OVH kmip-go](https://github.com/ovh/kmip-go) v0.9.2, binary KMIP 1.0–1.4.
 The complete programs are a Go module in
-[`examples/clients/go`](https://github.com/keytend/keytend-kmip-server/tree/770ad850a3498544ef7a2259cece1a220e3d4520/examples/clients/go), whose `go.mod` and
+[`examples/clients/go`](https://github.com/keytend/keytend-kmip-server/tree/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/clients/go), whose `go.mod` and
 `go.sum` pin the library. It requires Go 1.25.5 or later. A `go` command
 from Go 1.21 on downloads that toolchain by itself when `GOTOOLCHAIN` is
 `auto` (the default) and it can reach the Go module proxy; with an older
@@ -36,7 +36,7 @@ Get after Destroy: IllegalOperation: Key value has been destroyed
 
 </div>
 
-[`main.go`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/examples/clients/go/main.go) dials with the test
+[`main.go`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/clients/go/main.go) dials with the test
 certificates, creates, activates and fetches an AES key, encrypts and
 decrypts with AES-GCM on the server, then revokes and destroys the key:
 
@@ -111,7 +111,7 @@ exit status 1
 
 ## Find a key by Name
 
-[`locate/main.go`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/examples/clients/go/locate/main.go), in the same
+[`locate/main.go`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/clients/go/locate/main.go), in the same
 module, finds `orders-kek` or creates it on the first run, and activates a key
 that an interrupted run left Pre-Active. In the same directory:
 
@@ -145,8 +145,8 @@ object, invisible here
 filters on other attributes too ([Locate](/kmip-server/docs/locate/)).
 
 More operations (Register, CBC and ECB encryption) are in the project's
-adapter, [`interop/ovh-release/main.go`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/interop/ovh-release/main.go).
+adapter, [`interop/ovh-release/main.go`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/interop/ovh-release/main.go).
 
 Next: [beyond the test setup](/kmip-server/docs/clients/#beyond-the-test-setup).
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/docs/clients/go.md"><code>docs/clients/go.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>770ad85</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/clients/go.md"><code>docs/clients/go.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>

@@ -75,10 +75,10 @@ podman build --format docker -t localhost/keytend-kmip-server:dev .
 
 ### Use the signed release instead
 
-[`scripts/verify_release.sh`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/scripts/verify_release.sh) downloads a
+[`scripts/verify_release.sh`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/scripts/verify_release.sh) downloads a
 release into a new directory outside the checkout, checks the cosign
 signature of its `SHA256SUMS` with the checkout's
-[`signing/cosign.pub`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/signing/cosign.pub) and its OpenPGP signature,
+[`signing/cosign.pub`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/signing/cosign.pub) and its OpenPGP signature,
 then every digest, and only then loads the image for this host's
 architecture, tagged with its version. [Verifying a release](/kmip-server/docs/release-signing/#verifying-a-release) shows
 each step and the other ways to verify.
@@ -146,7 +146,7 @@ the certificates, master key, data and image.
 
 KMIP over HTTPS is a `POST` of one request message to `/kmip`, authenticated by
 the client certificate.
-[`examples/https/create.json`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/examples/https/create.json) is a KMIP 2.1
+[`examples/https/create.json`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/create.json) is a KMIP 2.1
 Create request for a 256-bit AES key (the format is in
 [JSON, XML and HTTPS bindings](/kmip-server/docs/encodings/)). Send it with the test `client`
 certificate:
@@ -170,7 +170,7 @@ curl -sS --cacert $P/ca.pem --cert $P/client.pem --key $P/client.key \
 If `curl` fails the TLS handshake, the test certificates have probably expired
 ([renew them](/kmip-server/docs/manual-install/#renew-the-test-certificates)).
 
-[`examples/https/kmip.sh`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/examples/https/kmip.sh) wraps that command in
+[`examples/https/kmip.sh`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/kmip.sh) wraps that command in
 shell functions (bash or zsh): `kmip FILE [NAME=VALUE …]` sends a request
 file from that directory, filling in its `$NAME` placeholders, and
 `field TAG` prints a value from the JSON response. Create another key and
@@ -194,7 +194,7 @@ Success
 
 If the status is not `Success`, `field ResultReason <<<"$R"` and
 `field ResultMessage <<<"$R"` say why. Fetch the key with Get
-([`get.json`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/examples/https/get.json), with `$ID` where the identifier
+([`get.json`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/get.json), with `$ID` where the identifier
 goes); `pretty <<<"$R"` shows the whole response:
 
 ```bash frame="code"
@@ -243,7 +243,7 @@ XML, Locate, batches and AES-GCM Encrypt with the same functions are in
 Most applications speak binary KMIP on port 5696 through a library. Install
 [PyKMIP](https://github.com/OpenKMIP/PyKMIP) at the commit this project tests,
 pinned in
-[`examples/clients/python/requirements.txt`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/examples/clients/python/requirements.txt).
+[`examples/clients/python/requirements.txt`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/clients/python/requirements.txt).
 This needs Python's `venv` module (the `python3-venv` package on Debian and
 Ubuntu), `git` and access to GitHub; offline, use the
 [curl requests](#make-a-request-with-curl).
@@ -253,7 +253,7 @@ python3 -m venv .cache/pykmip
 .cache/pykmip/bin/pip install -r examples/clients/python/requirements.txt
 ```
 
-[`examples/clients/python/quickstart.py`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/examples/clients/python/quickstart.py)
+[`examples/clients/python/quickstart.py`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/clients/python/quickstart.py)
 creates, fetches and destroys a key:
 
 ```python
@@ -346,4 +346,4 @@ above the `release files:` path it printed, such as
 Next: [connect your client](/kmip-server/docs/clients/), [configure](/kmip-server/docs/configuration/),
 [deploy](/kmip-server/docs/deployment/).
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/docs/quick-start.md"><code>docs/quick-start.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>770ad85</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/quick-start.md"><code>docs/quick-start.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>

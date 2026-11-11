@@ -50,11 +50,11 @@ keys that are themselves stored wrapped.
 
 With the [quick-start server](/kmip-server/docs/quick-start/) and the
 [HTTPS shell functions](/kmip-server/docs/clients/https/) loaded:
-[`create-kek.json`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/examples/https/create-kek.json) creates and activates
+[`create-kek.json`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/create-kek.json) creates and activates
 an AES-256 wrapping key with the Wrap Key and Unwrap Key bits and a stored
 AES Key Wrap parameter;
-[`create-sensitive.json`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/examples/https/create-sensitive.json) creates a
-Sensitive data key; [`get-wrapped.json`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/examples/https/get-wrapped.json)
+[`create-sensitive.json`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/create-sensitive.json) creates a
+Sensitive data key; [`get-wrapped.json`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/get-wrapped.json)
 fetches it wrapped under the first key, without encoding (`NoEncoding`).
 
 ```sh title="Example: fetch a Sensitive key wrapped"
@@ -115,12 +115,12 @@ The server cannot enforce usage limits on exported key material.
 
 With the [quick-start server](/kmip-server/docs/quick-start/) and the
 [HTTPS shell functions](/kmip-server/docs/clients/https/) loaded:
-[`export.json`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/examples/https/export.json) exports a key's record, and
-[`import.json`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/examples/https/import.json) imports a symmetric key's
+[`export.json`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/export.json) exports a key's record, and
+[`import.json`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/import.json) imports a symmetric key's
 `Attributes` and `SymmetricKey` structures under its identifier, with Replace
 Existing True. `field` prints a structure as the JSON list that `import.json`
 takes. This exports a new key, retires it with
-[`retire.json`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/examples/https/retire.json) (Activate, Revoke, Destroy),
+[`retire.json`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/retire.json) (Activate, Revoke, Destroy),
 then restores it:
 
 ```bash title="Example: export a key and import it again"
@@ -157,4 +157,4 @@ Unavailable, or Private/Public Protection Storage Unavailable for key pairs;
 Feature Not Supported for Derive Key) rather than downgrading. Each object
 records its own selection, which is read-only.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/docs/key-transfer.md"><code>docs/key-transfer.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>770ad85</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/key-transfer.md"><code>docs/key-transfer.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>

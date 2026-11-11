@@ -155,7 +155,7 @@ the runbooks, with rootless Podman:
 
 ### Docker Compose
 
-[`deploy/compose/compose.yaml`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/deploy/compose/compose.yaml) runs the
+[`deploy/compose/compose.yaml`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/deploy/compose/compose.yaml) runs the
 container with a read-only root, a `/tmp` tmpfs, no capabilities, resource
 limits, the `/srv/kmip` volumes and env file, log rotation and the health
 check in exec form. The runbooks use it. From the checkout:
@@ -247,4 +247,4 @@ image has no shell, so a check you add must be in exec form:
   when the server is ready. To turn off a check the image carries, add
   `--no-healthcheck`.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/docs/deployment.md"><code>docs/deployment.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>770ad85</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/deployment.md"><code>docs/deployment.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>

@@ -144,7 +144,7 @@ key and the pre-rotation copy as step 6 says.
 
 ## Rotate with Docker
 
-[`scripts/docker-rotate-master-key.sh`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/scripts/docker-rotate-master-key.sh)
+[`scripts/docker-rotate-master-key.sh`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/scripts/docker-rotate-master-key.sh)
 runs the steps above for the `/srv/kmip` layout of
 [deployment](/kmip-server/docs/deployment/#docker-or-podman). Take a verified
 [backup](/kmip-server/docs/backup-restore/#back-up-with-docker) first, then run it on the
@@ -360,4 +360,4 @@ kubectl -n $NS logs keytend-kmip-server-0 -c rotate-master-key
   - Otherwise the ConfigMap holds a checkpoint of neither key generation: put
     back the one from your checkpoint store.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/docs/master-key-rotation.md"><code>docs/master-key-rotation.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>770ad85</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/master-key-rotation.md"><code>docs/master-key-rotation.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>

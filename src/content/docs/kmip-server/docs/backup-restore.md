@@ -293,7 +293,7 @@ a backup.
 
 ### Restore with Docker
 
-[`scripts/docker-restore.sh`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/scripts/docker-restore.sh) runs the steps
+[`scripts/docker-restore.sh`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/scripts/docker-restore.sh) runs the steps
 above for the `/srv/kmip` layout and Compose file of
 [deployment](/kmip-server/docs/deployment/#docker-compose). Run it on the host from the
 checkout, as a user who can run `sudo` and `docker`, and set:
@@ -623,4 +623,4 @@ Verify the backup with its key (and checkpoint) as in step 1 of
   [restore on Kubernetes](#restore-on-kubernetes), enabling the checkpoint
   in the same upgrade.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/docs/backup-restore.md"><code>docs/backup-restore.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>770ad85</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/backup-restore.md"><code>docs/backup-restore.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>

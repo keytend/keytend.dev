@@ -18,4 +18,4 @@ The release key file holds the primary key and two signing subkeys, one for
 this project and one for the keytend-kmip Java client. How to verify a
 release: [verifying a release](/kmip-server/docs/release-signing/#verifying-a-release).
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/signing/README.md"><code>signing/README.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>770ad85</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/signing/README.md"><code>signing/README.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>

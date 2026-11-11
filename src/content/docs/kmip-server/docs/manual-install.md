@@ -7,7 +7,7 @@ head: [{"tag":"title","content":"Manual installation | Keytend KMIP Server"},{"t
 
 Part of [getting started](/kmip-server/docs/#getting-started).
 
-The commands [`scripts/quick-start.sh`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/scripts/quick-start.sh) runs, step
+The commands [`scripts/quick-start.sh`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/scripts/quick-start.sh) runs, step
 by step, and how to run the server from source instead of the container. Like
 the [quick start](/kmip-server/docs/quick-start/), this is for evaluation only.
 
@@ -220,4 +220,4 @@ key and `.cache/dev-data` together.
 Next: [connect your client](/kmip-server/docs/clients/), [configure](/kmip-server/docs/configuration/),
 [deploy](/kmip-server/docs/deployment/).
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/docs/manual-install.md"><code>docs/manual-install.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>770ad85</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/manual-install.md"><code>docs/manual-install.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>

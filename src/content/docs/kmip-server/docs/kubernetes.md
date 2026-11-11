@@ -147,7 +147,7 @@ kubectl label namespace orders kmip-client=true
 Clients dial `keytend-kmip-server.keytend-kmip-server.svc:5696` (or `:5697`
 for HTTPS) with a client certificate from the policy. To check a client
 certificate and the labels from the client's namespace, put the certificate in
-a Secret and run the [check pod](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/deploy/kubernetes/tools/kmip-check.yaml)
+a Secret and run the [check pod](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/deploy/kubernetes/tools/kmip-check.yaml)
 (it reads `client.pem`, `client.key` and `ca.pem` from the Secret
 `orders-db-kmip` in `orders`):
 
@@ -175,7 +175,7 @@ and a 64 MiB memory-backed `/tmp` (counted against the 512 Mi limit); the
 Services `keytend-kmip-server` (clients) and `keytend-kmip-server-headless`;
 the NetworkPolicy (no egress); the policy, backup PVC, backup CronJob and
 pre-upgrade backup Job. Every value is described in
-[`values.yaml`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/deploy/helm/keytend-kmip-server/values.yaml).
+[`values.yaml`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/deploy/helm/keytend-kmip-server/values.yaml).
 
 ## Clients outside the cluster
 
@@ -419,4 +419,4 @@ StatefulSet, a Service, a NetworkPolicy and a PodDisruptionBudget with
 `minAvailable: 1`. Unlike the chart's default, it makes drains wait until you
 scale the StatefulSet to 0.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/docs/kubernetes.md"><code>docs/kubernetes.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>770ad85</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/kubernetes.md"><code>docs/kubernetes.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>

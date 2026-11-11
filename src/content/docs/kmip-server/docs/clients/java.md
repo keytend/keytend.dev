@@ -11,8 +11,8 @@ Part of [connecting a client](/kmip-server/docs/clients/).
 project's Java client, for JDK 17, 21 and 25. It negotiates KMIP 1.4–2.1 by
 default (2.1 against this server) and can be pinned to 1.1–1.3, over binary
 KMIP or HTTPS. The complete programs are in
-[`examples/clients/java`](https://github.com/keytend/keytend-kmip-server/tree/770ad850a3498544ef7a2259cece1a220e3d4520/examples/clients/java), with
-[`run.sh`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/examples/clients/java/run.sh) to run them against the
+[`examples/clients/java`](https://github.com/keytend/keytend-kmip-server/tree/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/clients/java), with
+[`run.sh`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/clients/java/run.sh) to run them against the
 client jar.
 
 ## Install
@@ -45,7 +45,7 @@ pgp_verify: good signature by the Keytend release key: keytend-kmip-0.10.0-rc.1.
 
 </div>
 
-[`signing/pgp_verify.sh`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/signing/pgp_verify.sh) accepts only a good
+[`signing/pgp_verify.sh`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/signing/pgp_verify.sh) accepts only a good
 signature whose primary key is the
 [Keytend release key](/kmip-server/docs/release-signing/#openpgp-signature), and refuses
 one by an expired or revoked key, which plain `gpg --verify` accepts. That
@@ -64,7 +64,7 @@ binds slf4j-api to its own logging.
 
 ## Binary KMIP
 
-[`Quickstart.java`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/examples/clients/java/Quickstart.java) uses the
+[`Quickstart.java`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/clients/java/Quickstart.java) uses the
 high-level `Kms` API: it finds or creates a named AES key and encrypts with
 AES-GCM on the server. Run from `examples/clients/java`, with the quick-start
 server running and `KMIP_PKI` set as above:
@@ -110,7 +110,7 @@ Extractable back ([role templates](/kmip-server/docs/configuration/#role-templat
 
 ## Sign and verify
 
-[`Sign.java`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/examples/clients/java/Sign.java) finds or creates an EC
+[`Sign.java`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/clients/java/Sign.java) finds or creates an EC
 P-256 key pair whose private key signs on the server and whose public key
 verifies:
 
@@ -147,7 +147,7 @@ pair. `KeyPairSpec.rsa(3072)` with `SignatureSpec.rsaPss(Hash.SHA_256)` (or
 ## HTTPS
 
 The lower-level `KmipClient` takes any transport.
-[`HttpsQuickstart.java`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/examples/clients/java/HttpsQuickstart.java)
+[`HttpsQuickstart.java`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/clients/java/HttpsQuickstart.java)
 uses the HTTPS listener with JSON bodies (`Encoding.TTLV` and `Encoding.XML`
 also work); it reads the client identity as PKCS#12, `client.p12` (or the
 `KMIP_CLIENT` name):
@@ -184,7 +184,7 @@ Every `Kms` failure is an unchecked `KmsException`. Branch on `category()`
 enum, empty when no server answered. One constant can cover several KMIP
 reasons with the same remedy: Item Not Found and Object Not Found are both
 `NOT_FOUND`.
-[`Errors.java`](https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/examples/clients/java/Errors.java) reads a key that
+[`Errors.java`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/clients/java/Errors.java) reads a key that
 does not exist and prints the category, the reason and the message:
 
 ```java
@@ -251,4 +251,4 @@ envelopes, connection pooling, credentials and the lower-level API.
 
 Next: [beyond the test setup](/kmip-server/docs/clients/#beyond-the-test-setup).
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/770ad850a3498544ef7a2259cece1a220e3d4520/docs/clients/java.md"><code>docs/clients/java.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>770ad85</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/clients/java.md"><code>docs/clients/java.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>
