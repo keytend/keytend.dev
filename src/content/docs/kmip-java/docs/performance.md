@@ -315,4 +315,4 @@ Logs go to `<work>/<topology>.log` and `<work>/live-v<version>/bench.log`. Each 
 rows as one Markdown table. [The benchmark's README](/kmip-java/docs/tools/bench/) lists the options
 and the output.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/docs/performance.md"><code>docs/performance.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>c6c8eb9</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/c5da4f1f409914da3790bbad79b37a6296585520/docs/performance.md"><code>docs/performance.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>c5da4f1</code>.</p>

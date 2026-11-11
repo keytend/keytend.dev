@@ -2,9 +2,9 @@
   "kmip-java": {
     "repo": "https://github.com/keytend/keytend-kmip-java",
     "branch": "main",
-    "commit": "c6c8eb9febaf9fd7da7fd2328d6879dda23aa968",
-    "shortCommit": "c6c8eb9",
-    "commitDate": "2026-11-10T20:23:16-06:00",
+    "commit": "c5da4f1f409914da3790bbad79b37a6296585520",
+    "shortCommit": "c5da4f1",
+    "commitDate": "2026-11-11T08:11:13-06:00",
     "syncedAt": "2026-11-11",
     "pageCount": 32,
     "pages": {

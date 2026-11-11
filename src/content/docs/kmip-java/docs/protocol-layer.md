@@ -406,9 +406,9 @@ decoder forbids DTDs and external entities. Its JSON decoder keeps exact integer
 duplicate properties. Text values must fit their type, or they are rejected rather than truncated.
 
 The class Javadoc has the full contracts: deadlines, cancellation, pool reuse checks and changing
-credentials. See [`TlsTransport`](https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/sdk/src/main/java/dev/keytend/kmip/transport/TlsTransport.java),
-[`HttpsTransport`](https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/sdk/src/main/java/dev/keytend/kmip/transport/HttpsTransport.java) and
-[`CallContext`](https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/sdk/src/main/java/dev/keytend/kmip/transport/CallContext.java).
+credentials. See [`TlsTransport`](https://github.com/keytend/keytend-kmip-java/blob/c5da4f1f409914da3790bbad79b37a6296585520/sdk/src/main/java/dev/keytend/kmip/transport/TlsTransport.java),
+[`HttpsTransport`](https://github.com/keytend/keytend-kmip-java/blob/c5da4f1f409914da3790bbad79b37a6296585520/sdk/src/main/java/dev/keytend/kmip/transport/HttpsTransport.java) and
+[`CallContext`](https://github.com/keytend/keytend-kmip-java/blob/c5da4f1f409914da3790bbad79b37a6296585520/sdk/src/main/java/dev/keytend/kmip/transport/CallContext.java).
 
 ## Callbacks
 
@@ -449,7 +449,7 @@ var listener = CallbackServer.builder(bind, kmsOnlyContext, handler)
 
 Handshakes, frames and idle connections have deadlines. `pendingHandshakes` (default 16) bounds
 the handshakes in progress. The
-[`CallbackServer`](https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/sdk/src/main/java/dev/keytend/kmip/server/CallbackServer.java) Javadoc
+[`CallbackServer`](https://github.com/keytend/keytend-kmip-java/blob/c5da4f1f409914da3790bbad79b37a6296585520/sdk/src/main/java/dev/keytend/kmip/server/CallbackServer.java) Javadoc
 describes which handshake a new connection evicts when every thread is busy.
 
 ## KMIP 3.0 KEM workflow
@@ -526,4 +526,4 @@ Usernames and passwords are KMIP Text Strings, so they are `String`s inside the 
 true even when built from a `char[]`, as with `Credentials.usernamePassword(user, chars)` or
 `RequestOptions.passwordAuthentication(user, chars)`.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/docs/protocol-layer.md"><code>docs/protocol-layer.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>c6c8eb9</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/c5da4f1f409914da3790bbad79b37a6296585520/docs/protocol-layer.md"><code>docs/protocol-layer.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>c5da4f1</code>.</p>

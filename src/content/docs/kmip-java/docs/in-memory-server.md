@@ -329,4 +329,4 @@ It follows keytend-kmip-server's observable rules:
 - `failNext(ServerOperation.RE_PROVISION, Fault.REPLY_LOST)` commits the message and then closes
   the connection without a reply, as a lost reply after the commit does.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/docs/in-memory-server.md"><code>docs/in-memory-server.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>c6c8eb9</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/c5da4f1f409914da3790bbad79b37a6296585520/docs/in-memory-server.md"><code>docs/in-memory-server.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>c5da4f1</code>.</p>

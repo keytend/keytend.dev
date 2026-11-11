@@ -22,7 +22,11 @@ A fix ships as a new release. Upgrading keeps the API and stored data compatible
 
 ## Reporting a vulnerability
 
-Email the report to <security@keytend.dev>.
+Report it privately on GitHub:
+[Report a vulnerability](https://github.com/keytend/keytend-kmip-java/security/advisories/new),
+also on the repository's Security tab. The report becomes a draft security
+advisory that only you and the maintainer can see. It is discussed and fixed
+there, and the advisory is published from it.
 
 Do not open a public issue, pull request or discussion for a suspected
 vulnerability.
@@ -198,4 +202,4 @@ keytend-kmip is not on Maven Central. A release deployed there would be the
 same build: its JARs and SBOMs would have the SHA-256 values `SHA256SUMS`
 lists.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/SECURITY.md"><code>SECURITY.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>c6c8eb9</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/c5da4f1f409914da3790bbad79b37a6296585520/SECURITY.md"><code>SECURITY.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>c5da4f1</code>.</p>

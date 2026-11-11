@@ -93,7 +93,7 @@ java -Dkmip.server.build=EXACT_BUILD -Dkmip.server.image=sha256:IMAGE_DIGEST \
 ```
 
 - `SERVER_ID` is a live profile ID from
-  [the inventory](https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/integration/catalog/server-inventory.json).
+  [the inventory](https://github.com/keytend/keytend-kmip-java/blob/c5da4f1f409914da3790bbad79b37a6296585520/integration/catalog/server-inventory.json).
 - The certificate directory holds PKCS12 client and server identities and CA files. Generate
   them with `./integration/catalog/generate-pki.sh "$PWD/integration/certs"`.
 - The extra Compose targets start with
@@ -271,4 +271,4 @@ These cases are recorded as blocked, not as failures:
 - JAVA-06 needs a completed 24-hour soak run.
 - JAVA-07 needs a released SDK JAR.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/docs/catalog.md"><code>docs/catalog.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>c6c8eb9</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/c5da4f1f409914da3790bbad79b37a6296585520/docs/catalog.md"><code>docs/catalog.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>c5da4f1</code>.</p>

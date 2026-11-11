@@ -528,7 +528,7 @@ data encryption, takes raw keys out of the KMS
 `LocalKeys` per node, which follows the [lease rules](#leases) and bounds every copy by its TTL.
 
 The sample
-[`TdeKeyProvider`](https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/sdk/src/test/java/dev/keytend/kmip/kms/samples/TdeKeyProvider.java) is such
+[`TdeKeyProvider`](https://github.com/keytend/keytend-kmip-java/blob/c5da4f1f409914da3790bbad79b37a6296585520/sdk/src/test/java/dev/keytend/kmip/kms/samples/TdeKeyProvider.java) is such
 a provider for a commit log and hints, in the shape of Cassandra's `KeyProvider`. Its test runs it
 on KMIP 1.4, 2.1 and 3.0, with no Lease Time, Lease Time 0 and Lease Time 3600 s, and on a server
 that leases only Active keys. The
@@ -656,4 +656,4 @@ key:
   with it the setting changes nothing. Configure it for the recovery only, and remove it
   once the data is re-encrypted.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/docs/local-keys.md"><code>docs/local-keys.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>c6c8eb9</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/c5da4f1f409914da3790bbad79b37a6296585520/docs/local-keys.md"><code>docs/local-keys.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>c5da4f1</code>.</p>

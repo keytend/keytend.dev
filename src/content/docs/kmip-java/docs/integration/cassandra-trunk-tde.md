@@ -13,7 +13,7 @@ not use it to encrypt real data.
 This is a `KeyProvider` for Apache Cassandra's transparent data encryption of the commit log and
 hints. Its keys live in a KMIP server and are used through the SDK's
 [`LocalKeys`](/kmip-java/docs/local-keys/). It is trial code for Apache Cassandra trunk at `275a3a5`,
-with the four Cassandra patches in [`patches/`](https://github.com/keytend/keytend-kmip-java/tree/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/integration/cassandra-trunk-tde/patches). It is built separately, is not part of
+with the four Cassandra patches in [`patches/`](https://github.com/keytend/keytend-kmip-java/tree/c5da4f1f409914da3790bbad79b37a6296585520/integration/cassandra-trunk-tde/patches). It is built separately, is not part of
 the SDK artifact, and the SDK has no Cassandra dependency.
 
 Each new file records the exact KMIP identifier of its key. An operator tool, `KmipTool`,
@@ -478,4 +478,4 @@ nodes, other KMS products, and performance.
 
 To reproduce, run the commands in [Build and run](#build-and-run), with the server image.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/integration/cassandra-trunk-tde/README.md"><code>integration/cassandra-trunk-tde/README.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>c6c8eb9</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/c5da4f1f409914da3790bbad79b37a6296585520/integration/cassandra-trunk-tde/README.md"><code>integration/cassandra-trunk-tde/README.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>c5da4f1</code>.</p>

@@ -38,7 +38,7 @@ never rewrites the manifest. To run the catalog and read its results, see
 - `VER-11` uses a hypothetical KMIP 4.0 to test that a future version is rejected.
 - `reference.py` provisions and reads back a known synthetic AES key over mutual TLS. It checks
   the CA and the host name, with no insecure fallback.
-- The Krypton fixture under [`../krypton`](https://github.com/keytend/keytend-kmip-java/tree/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/integration/krypton) runs a restricted profile with one known
+- The Krypton fixture under [`../krypton`](https://github.com/keytend/keytend-kmip-java/tree/c5da4f1f409914da3790bbad79b37a6296585520/integration/krypton) runs a restricted profile with one known
   AES-256 key. It does not claim administrative, rotation or general lifecycle support.
 
 ## Test data
@@ -47,4 +47,4 @@ Only disposable synthetic keys are used. Cleanup deletes only the object IDs a r
 8 seconds plus 250 ms for each (at most 60 seconds), and records any that remain.
 Testcontainers then removes the fixture. Licensed servers run only within their license terms.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/c6c8eb9febaf9fd7da7fd2328d6879dda23aa968/integration/catalog/README.md"><code>integration/catalog/README.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>c6c8eb9</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-java/blob/c5da4f1f409914da3790bbad79b37a6296585520/integration/catalog/README.md"><code>integration/catalog/README.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-java</span> at commit <code>c5da4f1</code>.</p>
