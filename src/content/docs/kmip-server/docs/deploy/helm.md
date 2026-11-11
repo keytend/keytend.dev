@@ -49,8 +49,8 @@ The full procedure, with a values file and the test, is in
 
 ## Values
 
-Every value is described in [`values.yaml`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/deploy/helm/keytend-kmip-server/values.yaml) and checked by
-[`values.schema.json`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/deploy/helm/keytend-kmip-server/values.schema.json). The main ones:
+Every value is described in [`values.yaml`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/deploy/helm/keytend-kmip-server/values.yaml) and checked by
+[`values.schema.json`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/deploy/helm/keytend-kmip-server/values.schema.json). The main ones:
 
 | Value | Default | Meaning |
 | --- | --- | --- |
@@ -125,4 +125,4 @@ Every value is described in [`values.yaml`](https://github.com/keytend/keytend-k
   restore a backup from before a master-key rotation with `--no-hooks`
   ([restore on Kubernetes](/kmip-server/docs/backup-restore/#restore-on-kubernetes)).
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/deploy/helm/keytend-kmip-server/README.md"><code>deploy/helm/keytend-kmip-server/README.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/deploy/helm/keytend-kmip-server/README.md"><code>deploy/helm/keytend-kmip-server/README.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>802895e</code>.</p>

@@ -249,7 +249,7 @@ and so on. Objects created without a mask get 0, which permits nothing.
 | `FPEDecrypt` | `0x00800000` | 2.0 and later | none |
 
 In JSON and XML a mask can be written as names joined by `|` (JSON) or spaces
-(XML), as in the [request examples](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/create.json). Bits that
+(XML), as in the [request examples](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/examples/https/create.json). Bits that
 no operation needs are stored, returned and matched by Locate and Check. In
 2.x `0x00080000` is reserved.
 
@@ -258,4 +258,4 @@ type and algorithm allow. It does not override ownership, state, dates,
 extraction settings, key roles (a public key still cannot decrypt) or a
 certificate's Key Usage extension. In 1.x the same bit has no meaning.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/lifecycle.md"><code>docs/lifecycle.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/docs/lifecycle.md"><code>docs/lifecycle.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>802895e</code>.</p>

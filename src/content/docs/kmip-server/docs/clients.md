@@ -37,7 +37,7 @@ Pick by the KMIP version and transport you need:
 
 - For binary KMIP 2.x, use Java ([keytend-kmip](/kmip-server/docs/clients/java/)), or C with
   [IBM libkmipclient](#tested-clients). libkmipclient has no page here, but
-  [`integration/ibm/client.c`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/integration/ibm/client.c) is the program the
+  [`integration/ibm/client.c`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/integration/ibm/client.c) is the program the
   project's tests run with it.
 - For binary KMIP 1.x, use the Python, Go, C or Rust libraries below.
 - From any language, use [HTTPS with JSON or XML](/kmip-server/docs/clients/https/), KMIP
@@ -135,4 +135,4 @@ tests cover; the results are in each release's
 | Percona Server for MongoDB | 8.0.34-15 | built-in KMIP client ([integration](/kmip-server/docs/percona/)) |
 | Percona Server for MySQL | 8.4.11-11 | `component_keyring_kmip`, 1.4 ([integration](/kmip-server/docs/percona/)) |
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/clients.md"><code>docs/clients.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/docs/clients.md"><code>docs/clients.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>802895e</code>.</p>

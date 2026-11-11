@@ -12,11 +12,15 @@ use, and it stays a test server at 1.0 and beyond. It has not had an independent
 
 ## Reporting a vulnerability
 
-Email **security@keytend.dev**. Do not open a public issue. Include the
-affected version or commit, a synthetic reproducer and the impact; never
-include real keys, master keys or database key material. Reports cannot be
-encrypted yet: the Keytend OpenPGP key has signing subkeys only. There is no
-security-response time commitment yet.
+Report it privately on GitHub:
+[Report a vulnerability](https://github.com/keytend/keytend-kmip-server/security/advisories/new),
+also on the repository's Security tab. The report becomes a draft security
+advisory that only you and the maintainer can see. It is discussed and fixed
+there, and the advisory is published from it.
+
+Do not open a public issue. Include the affected version or commit, a
+synthetic reproducer and the impact; never include real keys, master keys or
+database key material. There is no security-response time commitment yet.
 
 ### Supported versions
 
@@ -223,4 +227,4 @@ then every digest
 ([release verification](/kmip-server/docs/release-signing/#verifying-a-release)). How
 releases are built: [release builds](/kmip-server/docs/release-builds/).
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/SECURITY.md"><code>SECURITY.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/SECURITY.md"><code>SECURITY.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>802895e</code>.</p>

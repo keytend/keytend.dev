@@ -43,7 +43,7 @@ directories). Other assets, such as a `.sha256` of the tar or a copy of
 ## How releases are built
 
 Pushing a tag `v<version>` on `main` starts the release workflow
-([`.github/workflows/release.yml`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/.github/workflows/release.yml)). The tag
+([`.github/workflows/release.yml`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/.github/workflows/release.yml)). The tag
 must match the version in `Cargo.toml`. The workflow:
 
 1. runs Clippy and `cargo test` in the pinned UBI builder image, which has
@@ -58,7 +58,7 @@ must match the version in `Cargo.toml`. The workflow:
 4. creates a draft GitHub release with the assets below.
 
 Publishing the draft starts
-[`.github/workflows/publish-image.yml`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/.github/workflows/publish-image.yml).
+[`.github/workflows/publish-image.yml`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/.github/workflows/publish-image.yml).
 It verifies the published release with `scripts/verify_release.sh`, pushes
 the same images to `ghcr.io/keytend/keytend-kmip-server` as `<version>` (a
 multi-architecture index), `<version>-amd64` and `<version>-arm64` (and
@@ -105,4 +105,4 @@ probes of the [Helm chart](/kmip-server/docs/kubernetes/) (or of the minimal Kus
 [deploy/kubernetes](/kmip-server/docs/deploy/kubernetes/)) instead, and
 [deployment](/kmip-server/docs/deployment/#without-compose) covers `docker run`.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/release-builds.md"><code>docs/release-builds.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/docs/release-builds.md"><code>docs/release-builds.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>802895e</code>.</p>

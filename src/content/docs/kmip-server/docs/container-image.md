@@ -52,7 +52,7 @@ records the base and those terms. Redistribute the image under the UBI EULA.
 ## OpenSSL configuration
 
 The image sets `OPENSSL_CONF=/etc/keytend-kmip-server/openssl.cnf`
-([`image/openssl.cnf`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/image/openssl.cnf)) and never reads RHEL's
+([`image/openssl.cnf`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/image/openssl.cnf)) and never reads RHEL's
 `/etc/pki/tls/openssl.cnf`, which applies the system crypto policy. Default
 mode therefore behaves like a native build. In the file:
 
@@ -77,7 +77,7 @@ default KMIP operations may use only the four NIST curves, and
 
 ## Reviewed findings
 
-[`image/trivyignore.yaml`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/image/trivyignore.yaml) lists every scanner
+[`image/trivyignore.yaml`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/image/trivyignore.yaml) lists every scanner
 finding that was reviewed and left in the image. Each entry says why the
 finding needs no image change, including whether and when the server can
 reach it. The release scan fails on a finding without an entry, and on a
@@ -88,4 +88,4 @@ Both platforms are built natively from the same sources and RPM versions. The
 base-image pins are in the `Dockerfile` and the package inventory in each
 release's SBOM.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/container-image.md"><code>docs/container-image.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/docs/container-image.md"><code>docs/container-image.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>802895e</code>.</p>

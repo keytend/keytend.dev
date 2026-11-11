@@ -73,7 +73,7 @@ result. Results are in each release's [test reports](/kmip-server/docs/testing/#
 | FIPS mode (RHEL 9 OpenSSL FIPS provider) | The same tests with the FIPS provider, where only the refusals FIPS requires may differ ([FIPS](/kmip-server/docs/fips/)) |
 | Container image (amd64, arm64) and Helm chart | Image hardening checks ([findings](/kmip-server/docs/container-image/#reviewed-findings)); the chart's install, test, backup, upgrade, restore, rotation and maintenance workflows on single-node kind; multi-node, NetworkPolicy enforcement, cert-manager and Prometheus Operator resources are not tested |
 
-The clause-level [requirement matrix](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/specs/requirement-matrix.json) of the
+The clause-level [requirement matrix](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/docs/specs/requirement-matrix.json) of the
 pinned KMIP documents is incomplete; many clauses are open.
 
 ## Known gaps
@@ -107,4 +107,4 @@ Both build the server first (`--skip-build` uses an existing
 outcome without failing. How to run the full test suite is in
 [testing](/kmip-server/docs/testing/).
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/status.md"><code>docs/status.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/docs/status.md"><code>docs/status.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>802895e</code>.</p>

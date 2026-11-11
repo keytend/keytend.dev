@@ -245,7 +245,7 @@ CNI, so test both the probes and the scrape after applying the policy.
 
 ## Alerts
 
-[`deploy/prometheus/keytend-kmip-server-rules.yaml`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/deploy/prometheus/keytend-kmip-server-rules.yaml)
+[`deploy/prometheus/keytend-kmip-server-rules.yaml`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/deploy/prometheus/keytend-kmip-server-rules.yaml)
 holds suggested alert rules, ready for a Prometheus `rule_files` entry or a
 PrometheusRule resource; the chart's `metrics.prometheusRule.enabled` creates
 that resource for the release's namespace and volume, with `KmipBackupStale`
@@ -329,4 +329,4 @@ it; watch `kmip_object_census_duration_seconds` and raise the interval (or set
 - `commit` is `unknown` unless the build sets `KEYTEND_KMIP_SERVER_COMMIT`; use
   `binary_sha256` to match a running server to a build or to test evidence.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/metrics.md"><code>docs/metrics.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/docs/metrics.md"><code>docs/metrics.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>802895e</code>.</p>

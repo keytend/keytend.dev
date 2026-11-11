@@ -142,7 +142,7 @@ python3 scripts/oasis_conformance.py
 turns a failure into a pass.
 
 It replays the cases of the Profiles XML test traces, 1.3 to 3.0, recorded in
-the [case inventory](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/specs/oasis-case-inventory.json) (the other
+the [case inventory](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/docs/specs/oasis-case-inventory.json) (the other
 [specification data](/kmip-server/docs/specs/) files are listed there). Each case falls
 in one category:
 
@@ -174,7 +174,7 @@ pinned UBI release.
 ## Reviewing image scanner findings
 
 `scripts/scan_image.py` scans a packaged archive with the pinned Trivy and
-[`image/trivyignore.yaml`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/image/trivyignore.yaml), and fails on any
+[`image/trivyignore.yaml`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/image/trivyignore.yaml), and fails on any
 finding without an entry or with a fixed version
 ([reviewed findings](/kmip-server/docs/container-image/#reviewed-findings)).
 To add an entry, read the finding in the scan summary and the vendor record
@@ -222,7 +222,7 @@ rotation Job and cutover. kind's default CNI does not enforce NetworkPolicy.
 
 `scripts/test_helm_chart.py` runs the chart end to end in its own namespace
 (`keytend-helm`, deleted at the end) on the same kind cluster, with the pinned
-Helm ([`scripts/helm_tool.py`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/scripts/helm_tool.py) downloads it into
+Helm ([`scripts/helm_tool.py`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/scripts/helm_tool.py) downloads it into
 `.cache/bin` and checks its SHA-256) and the native executable for the
 operator's local steps:
 
@@ -245,4 +245,4 @@ The kind node pulls the pinned busybox and curl images from Docker Hub.
 `scripts/test_helm_tool.py` holds the unit tests of the chart's template
 logic (they skip without the pinned Helm).
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/testing.md"><code>docs/testing.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/docs/testing.md"><code>docs/testing.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>802895e</code>.</p>

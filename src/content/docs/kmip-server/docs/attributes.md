@@ -69,9 +69,9 @@ Denied in 1.x and Attribute Read Only or Read Only Attribute from 2.0:
 
 With the [quick-start server](/kmip-server/docs/quick-start/) and the
 [HTTPS shell functions](/kmip-server/docs/clients/https/) loaded:
-[`set-attribute.json`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/set-attribute.json) sets Contact
+[`set-attribute.json`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/examples/https/set-attribute.json) sets Contact
 Information with Set Attribute (KMIP 2.0 and later; in 1.x use Add or Modify
-Attribute), and [`get-attributes.json`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/get-attributes.json)
+Attribute), and [`get-attributes.json`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/examples/https/get-attributes.json)
 reads it back with the key's State:
 
 ```bash title="Example: set and read an attribute"
@@ -226,4 +226,4 @@ filterable in Locate.
   would leave a non-qualifying object marked True fails with General Failure
   ([Quantum Safe reason](/kmip-server/docs/interpretations/#result-reasons)).
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/attributes.md"><code>docs/attributes.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/docs/attributes.md"><code>docs/attributes.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>802895e</code>.</p>

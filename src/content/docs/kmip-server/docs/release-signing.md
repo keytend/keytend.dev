@@ -40,7 +40,7 @@ next: IMAGE=localhost/keytend-kmip-server:0.10.0-rc.1 scripts/quick-start.sh
 
 </div>
 
-[`scripts/verify_release.sh`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/scripts/verify_release.sh) trusts only the
+[`scripts/verify_release.sh`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/scripts/verify_release.sh) trusts only the
 checkout's keys and cosign pin, and downloads the release into a new
 directory outside the checkout, so nothing in the archive can replace the
 keys or tools that check it. It stops at the first failure, removing what it
@@ -51,7 +51,7 @@ downloaded, and loads nothing unless every check passes:
    `SHA256SUMS.asc`, with [`pgp_verify`](#openpgp-signature). A keyless
    cosign signature must be by the release workflow for the tag
    `v<version>` and have a transparency-log entry; a key signature must be by
-   [`signing/cosign.pub`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/signing/cosign.pub).
+   [`signing/cosign.pub`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/signing/cosign.pub).
 3. It checks the digest of every file that `SHA256SUMS` lists.
 4. It loads the image for this host's architecture (or the one named). The
    amd64 image loads as `localhost/keytend-kmip-server:<version>`; the arm64
@@ -171,7 +171,7 @@ for amd64 and arm64 (`<version>-amd64` and `<version>-arm64` name each
 platform). They are the images of the signed release, not a rebuild: the
 image IDs match `linux-<arch>/image.json` in the release set. From
 v0.10.0-rc.2 on, the index is signed with cosign keyless by
-[`publish-image.yml`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/.github/workflows/publish-image.yml):
+[`publish-image.yml`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/.github/workflows/publish-image.yml):
 
 ```sh title="Images on ghcr.io"
 cosign verify ghcr.io/keytend/keytend-kmip-server:0.10.0-rc.2 \
@@ -254,7 +254,7 @@ Ed25519 [S], expires 2028-11-03
 ```
 
 The public key is committed as
-[`signing/keytend-release-key.asc`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/signing/keytend-release-key.asc)
+[`signing/keytend-release-key.asc`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/signing/keytend-release-key.asc)
 (with the other [public signing material](/kmip-server/docs/signing/)) and
 published on keys.openpgp.org (verified user ID) and keyserver.ubuntu.com.
 Check the fingerprint against a copy that did not come from this repository:
@@ -271,7 +271,7 @@ A signature is accepted when gpg reports a good signature (`GOODSIG`,
 `VALIDSIG`) whose primary key, the last field of `VALIDSIG`, is the release key,
 whichever subkey made it. A signature by any other key, by an expired or revoked
 key (`EXPKEYSIG`, `REVKEYSIG`), an expired signature or one over altered bytes
-is refused. [`signing/pgp_verify.sh`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/signing/pgp_verify.sh) (its
+is refused. [`signing/pgp_verify.sh`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/signing/pgp_verify.sh) (its
 `RELEASE_KEY` is the fingerprint above) and `release_artifacts.py verify` both
 apply this rule. gpg's "not certified with
 a trusted signature" warning only means you have not certified the key
@@ -306,4 +306,4 @@ most ([how releases are built](/kmip-server/docs/release-builds/#how-releases-ar
 Release provenance gives this section's address as its `buildType`. The
 build type is described in [release builds](/kmip-server/docs/release-builds/#build-type-podman-dockerfile-v1).
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/release-signing.md"><code>docs/release-signing.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/docs/release-signing.md"><code>docs/release-signing.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>802895e</code>.</p>

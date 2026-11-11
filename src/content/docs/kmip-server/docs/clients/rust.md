@@ -10,7 +10,7 @@ Part of [connecting a client](/kmip-server/docs/clients/).
 [NLnet Labs kmip-protocol](https://github.com/NLnetLabs/kmip-protocol) 0.4.3,
 binary KMIP 1.0–1.2 (it picks the version per operation). Upstream describes
 it as a partial implementation. The complete program is a Cargo package in
-[`examples/clients/rust`](https://github.com/keytend/keytend-kmip-server/tree/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/clients/rust); its `Cargo.toml` pins
+[`examples/clients/rust`](https://github.com/keytend/keytend-kmip-server/tree/802895e20231a5c04fc97b7a6b29f59232f280a6/examples/clients/rust); its `Cargo.toml` pins
 the crate and `Cargo.lock` the tested dependency versions.
 
 ## Create, Get and retire a key
@@ -35,7 +35,7 @@ Get after Destroy: Server error: Operation Get failed: Key value has been destro
 
 </div>
 
-[`src/main.rs`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/clients/rust/src/main.rs) connects with the
+[`src/main.rs`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/examples/clients/rust/src/main.rs) connects with the
 test certificates, creates, activates and fetches an AES key, then revokes
 and destroys it:
 
@@ -99,7 +99,7 @@ Error: ServerError("Operation Create failed: Operation denied by certificate pol
 ## More operations
 
 The client also has helpers for key pairs, Sign and RNG Retrieve. The
-project's test adapter, [`interop/nlnet`](https://github.com/keytend/keytend-kmip-server/tree/d401f07cd6eb5cab69fc8a046418e784774fc609/interop/nlnet), uses them and
+project's test adapter, [`interop/nlnet`](https://github.com/keytend/keytend-kmip-server/tree/802895e20231a5c04fc97b7a6b29f59232f280a6/interop/nlnet), uses them and
 runs negative checks (other principals, unlisted and missing certificates).
 With `KMIP_PKI` set as above, from any directory:
 
@@ -109,4 +109,4 @@ KMIP_PORT=5696 cargo run --locked --manifest-path "$CHECKOUT/interop/nlnet/Cargo
 
 Next: [beyond the test setup](/kmip-server/docs/clients/#beyond-the-test-setup).
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/clients/rust.md"><code>docs/clients/rust.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/docs/clients/rust.md"><code>docs/clients/rust.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>802895e</code>.</p>

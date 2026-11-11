@@ -25,7 +25,7 @@ request after HTTP 500, read
 [retrying](/kmip-server/docs/client-errors/#retrying-after-a-lost-response).
 
 The request files are in [`examples/https`](/kmip-server/docs/examples/https/), and
-[`kmip.sh`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/kmip.sh) there defines the shell functions
+[`kmip.sh`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/examples/https/kmip.sh) there defines the shell functions
 the commands use (bash or zsh):
 
 - `kmip FILE [NAME=VALUE …]` posts a request file with `curl` and the test
@@ -53,7 +53,7 @@ certificate name in `KMIP_PKI`) or `KMIP_URL` to use other ones.
 ## The JSON message
 
 The quick start's request,
-[`create.json`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/create.json), is a KMIP 2.1 Create of a
+[`create.json`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/examples/https/create.json), is a KMIP 2.1 Create of a
 256-bit AES key:
 
 ```json
@@ -103,7 +103,7 @@ has the full rules.
 ## XML
 
 The same Create in XML is
-[`create.xml`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/create.xml):
+[`create.xml`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/examples/https/create.xml):
 
 ```xml
 <RequestMessage>
@@ -152,8 +152,8 @@ elements; requests may use either form.
 ## Locate by Name
 
 Create a key with a Name
-([`create-named.json`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/create-named.json)), then find it
-again ([`locate.json`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/locate.json)). The time stamp
+([`create-named.json`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/examples/https/create-named.json)), then find it
+again ([`locate.json`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/examples/https/locate.json)). The time stamp
 keeps the Name unique, so the commands can run again:
 
 ```sh title="Locate by Name"
@@ -175,7 +175,7 @@ kmip locate.json NAME="$NAME" | field UniqueIdentifier
 
 A message can carry several batch items. They run in order, the batch stops
 at the first failure by default, and each item needs a Unique Batch Item ID.
-[`retire.json`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/retire.json) takes the key found above
+[`retire.json`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/examples/https/retire.json) takes the key found above
 through the steps an Active key needs: it activates it, revokes it and
 destroys it (a Pre-Active key could be destroyed directly). Its header says
 `BatchCount` 3, and its second item is:
@@ -220,9 +220,9 @@ offers, and [batches](/kmip-server/docs/messages/#batches) the batch options.
 ## Encrypt and Decrypt with AES-GCM
 
 The server can encrypt with a stored key, so the application need not hold it.
-[`create-active.json`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/create-active.json) creates an
+[`create-active.json`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/examples/https/create-active.json) creates an
 AES key with Extractable False and activates it in one batch. It is
-[`create.json`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/create.json) with a `BatchCount` of 2, a
+[`create.json`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/examples/https/create.json) with a `BatchCount` of 2, a
 `UniqueBatchItemID` on each item, one more attribute in the Create:
 
 ```json
@@ -259,7 +259,7 @@ a certificate whose operations include neither attribute changes nor Get, as
 in the server-side
 [role templates](/kmip-server/docs/configuration/#role-templates).
 
-[`encrypt.json`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/encrypt.json) encrypts `DATA` with the
+[`encrypt.json`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/examples/https/encrypt.json) encrypts `DATA` with the
 Additional Data `AAD`, which is authenticated but not encrypted; byte strings
 are hex in JSON. Its `RandomIV` lets the server choose the 12-byte IV (FIPS
 mode requires that), and the response returns the IV with the ciphertext and
@@ -282,7 +282,7 @@ echo "$CT $IV $TAG"
 
 Store the key identifier, IV, ciphertext and tag with the record. To decrypt,
 send all four back with the same Additional Data
-([`decrypt.json`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/decrypt.json)):
+([`decrypt.json`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/examples/https/decrypt.json)):
 
 ```sh frame="code"
 kmip decrypt.json KEY="$KEY" DATA="$CT" IV="$IV" TAG="$TAG" AAD="$AAD" | field Data | unhex
@@ -302,7 +302,7 @@ other modes are in [Encrypt and Decrypt](/kmip-server/docs/crypto-operations/#en
 
 ## Sign and verify with RSA
 
-[`create-key-pair.json`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/create-key-pair.json) creates
+[`create-key-pair.json`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/examples/https/create-key-pair.json) creates
 an RSA 3072 key pair whose private key may only sign and whose public key may
 only verify ([usage masks](/kmip-server/docs/lifecycle/#usage-masks)). Its Activation Date
 lies in the past, so both keys start Active; without it they would be
@@ -325,10 +325,10 @@ fbbeac58-4f7a-44bd-bbc0-2598e8a3078b 0107dd0f-66a4-4034-878d-76001e429958
 If either is `None`, the Create Key Pair failed: `field ResultReason <<<"$R"`
 says why.
 
-[`sign.json`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/sign.json) signs `DATA` under the private
+[`sign.json`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/examples/https/sign.json) signs `DATA` under the private
 key with RSASSA-PSS, SHA-256, MGF1 with SHA-256 and a 32-byte salt (explicit,
 because the KMIP defaults are refused in [FIPS mode](/kmip-server/docs/fips/)), and
-[`verify.json`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/verify.json) checks the signature with
+[`verify.json`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/examples/https/verify.json) checks the signature with
 the public key:
 
 ```sh frame="code"
@@ -400,4 +400,4 @@ Success
 
 Next: [beyond the test setup](/kmip-server/docs/clients/#beyond-the-test-setup).
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/clients/https.md"><code>docs/clients/https.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/docs/clients/https.md"><code>docs/clients/https.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>802895e</code>.</p>

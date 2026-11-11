@@ -9,8 +9,8 @@ Part of [connecting a client](/kmip-server/docs/clients/).
 
 [OpenKMIP libkmip](https://github.com/OpenKMIP/libkmip), tested at commit
 `6611941`, binary KMIP 1.0–1.4. The complete program is
-[`examples/clients/c/create_get.c`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/clients/c/create_get.c),
-with a [`Makefile`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/clients/c/Makefile) that builds libkmip at
+[`examples/clients/c/create_get.c`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/examples/clients/c/create_get.c),
+with a [`Makefile`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/examples/clients/c/Makefile) that builds libkmip at
 that commit next to it.
 
 ## Create and Get
@@ -72,7 +72,7 @@ if (result == KMIP_OK)  /* a new key is Pre-Active, so Destroy needs no Revoke *
     result = kmip_bio_destroy_symmetric_key_with_context(&k, bio, id, id_len);
 ```
 
-The project's test adapter, [`interop/libkmip.c`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/interop/libkmip.c),
+The project's test adapter, [`interop/libkmip.c`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/interop/libkmip.c),
 runs the same exchange in every 1.x version.
 
 ## Errors
@@ -110,4 +110,4 @@ options, and attach it with `SSL_set_fd`.
 
 Next: [beyond the test setup](/kmip-server/docs/clients/#beyond-the-test-setup).
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/clients/c.md"><code>docs/clients/c.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/docs/clients/c.md"><code>docs/clients/c.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>802895e</code>.</p>

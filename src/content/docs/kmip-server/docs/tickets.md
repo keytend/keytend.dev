@@ -181,4 +181,4 @@ Re-Provision of the certificate that obtained the ticket, revoke it.
 | Probing identifiers | Identifiers in a delegated request are resolved before the Rights are checked, so a holder can tell whether a delegator identifier outside its Objects exists. Values are never revealed. |
 | Draft 3.0 | Draft 3.0 adds Delegated Login with the 2.1 text; Login's Usage Limits are supported there too, and Login and Delegated Login are never processed asynchronously in any edition. |
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/tickets.md"><code>docs/tickets.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/docs/tickets.md"><code>docs/tickets.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>802895e</code>.</p>

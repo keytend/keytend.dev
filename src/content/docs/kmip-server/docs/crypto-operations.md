@@ -147,11 +147,11 @@ Derive Key refuses a missing required field, or one the method does not use
 ### Example: derive a key with HKDF over HTTPS
 
 Against the [quick-start server](/kmip-server/docs/quick-start/), with the
-[`kmip.sh`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/kmip.sh) functions loaded (`. examples/https/kmip.sh`
+[`kmip.sh`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/examples/https/kmip.sh) functions loaded (`. examples/https/kmip.sh`
 from the checkout).
-[`create-derivation-key.json`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/create-derivation-key.json)
+[`create-derivation-key.json`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/examples/https/create-derivation-key.json)
 creates and activates a non-extractable AES-256 key whose only usage is
-Derive Key. [`derive.json`](https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/examples/https/derive.json) derives a new
+Derive Key. [`derive.json`](https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/examples/https/derive.json) derives a new
 AES-256 Encrypt/Decrypt key from it with HKDF-SHA-256, with `SALT` and `INFO`
 as hex:
 
@@ -250,4 +250,4 @@ response leaves the client unsure whether its part was processed. Destroying
 or replacing the key ends its streams. RSA-OAEP accepts multipart input only
 up to one RSA block. Post-quantum signatures are single-part only.
 
-<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/d401f07cd6eb5cab69fc8a046418e784774fc609/docs/crypto-operations.md"><code>docs/crypto-operations.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>d401f07</code>.</p>
+<p class="kt-doc-source" data-pagefind-ignore>Imported from <a href="https://github.com/keytend/keytend-kmip-server/blob/802895e20231a5c04fc97b7a6b29f59232f280a6/docs/crypto-operations.md"><code>docs/crypto-operations.md</code></a> in <span class="kt-nw">keytend/keytend-kmip-server</span> at commit <code>802895e</code>.</p>
